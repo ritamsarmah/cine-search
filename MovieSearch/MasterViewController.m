@@ -11,9 +11,7 @@
 
 @implementation MasterViewController
 
-
 - (void)loadView {
-    // TODO: Add background view for improved UI
     [super loadView];
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     
@@ -59,11 +57,11 @@
 #pragma mark - Segues
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
+    if ([[segue identifier] isEqualToString:@"showMovie"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *movie = self.movies[indexPath.row];
+        Movie *movie = self.movies[indexPath.row];
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-        [controller setDetailItem:movie];
+        [controller setMovie:movie];
         controller.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
         controller.navigationItem.leftItemsSupplementBackButton = YES;
     }
@@ -75,16 +73,20 @@
     [self.loadingMovies startAnimating];
     self.loadingView.hidden = false;
     [_database search:searchBar.text completion:^(NSMutableArray *movies) {
-        self.movies = movies;
-        NSLog(@"%lu", self.movies.count);
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSRange range = NSMakeRange(0, 1);
-            NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
-            [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.loadingMovies stopAnimating];
-            self.loadingView.hidden = true;
-        });
+        if (movies.count != 0) {
+            self.movies = movies;
+            NSLog(@"%lu", self.movies.count);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSRange range = NSMakeRange(0, 1);
+                NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
+                [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.loadingMovies stopAnimating];
+                self.loadingView.hidden = true;
+            });
+        } else {
+            // TODO: Display alert message for no movies found
+        }
         
     }];
     [searchBar endEditing:true];
@@ -113,7 +115,14 @@
     Movie *movie = [_movies objectAtIndex:indexPath.row];
     
     cell.titleLabel.text = movie.title;
-    cell.releaseLabel.text = movie.releaseDate;
+    
+    if ([movie.releaseDate isEqualToString:@""]) {
+        cell.releaseLabel.text = @"Unknown release date";
+    } else {
+        cell.releaseLabel.text = movie.releaseDate;
+    }
+    
+    cell.ratingLabel.text = [movie.rating stringValue];
     
     // TODO: Change number to star rating design
     
@@ -125,7 +134,14 @@
         NSData *data = [[NSData alloc] initWithContentsOfURL:url];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (data != nil) {
-                cell.posterImageView.image = [UIImage imageWithData:data];
+                UIImage *posterImage = [UIImage imageWithData:data];
+                [UIView transitionWithView:cell.posterImageView
+                                  duration:0.2f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    cell.posterImageView.image = posterImage;
+                                } completion:nil];
+
             } else {
                 cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
             }

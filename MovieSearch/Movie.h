@@ -15,11 +15,13 @@
 @property (nonatomic, copy) NSString* releaseDate;
 @property (nonatomic) NSNumber* rating;
 @property (nonatomic, copy) NSString* posterURL;
+@property (nonatomic, copy) NSString* backdropURL;
 
 - (instancetype)initWithTitle:(NSString*)title
                      overview:(NSString*)overview
                   releaseDate:(NSString*)releaseDate
                        rating:(NSNumber*)rating
-                    posterURL:(NSString*)posterURL;
+                    posterURL:(NSString*)posterURL
+                  backdropURL:(NSString*)backdropURL;
 
 @end
