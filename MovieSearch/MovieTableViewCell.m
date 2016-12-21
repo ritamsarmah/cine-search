@@ -19,7 +19,8 @@
     
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
+        self.ratingView.layer.cornerRadius = 5;
+        self.ratingView.layer.masksToBounds = YES;
     }
     return self;
 }

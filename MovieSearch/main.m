@@ -12,8 +12,6 @@
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-//        MovieSearch* database = [[MovieSearch alloc] init];
-//        [database search:@"Twilight"];
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }

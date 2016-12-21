@@ -18,9 +18,10 @@
 - (void)configureView {
     // Update the user interface for the detail item.
     self.movieTitleLabel.text = self.movie.title;
-    
-    self.backdropImageView.image = nil;
-    
+    self.releaseLabel.text = [NSString stringWithFormat:@"Released %@", self.movie.releaseDate];
+    self.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [self.movie.rating doubleValue]];
+    self.overviewTextView.text = self.movie.overview;
+
     // Download poster image from URL
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
@@ -37,7 +38,7 @@
     });
     
     // Download backdrop image from URL
-    // TODO: Set to default image while loading async
+    self.backdropImageView.image = [UIImage imageNamed:@"BlankBackdrop"];
     NSURL *backdropURL = [[NSURL alloc] initWithString:self.movie.backdropURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
         NSData *data = [[NSData alloc] initWithContentsOfURL:backdropURL];
@@ -65,11 +66,13 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView transitionWithView:self.backdropImageView
-                                  duration:0.3f
+                                  duration:0.4f
                                    options:UIViewAnimationOptionTransitionCrossDissolve
                                 animations:^{
                                     self.backdropImageView.image = [UIImage imageWithCGImage:cgImage];
                                 } completion:nil];
+                
+                [self setNeedsStatusBarAppearanceUpdate];
 
             });
         }
@@ -79,7 +82,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.navigationController setNavigationBarHidden:true];
+    self.ratingView.layer.cornerRadius = 5;
+    self.ratingView.layer.masksToBounds = YES;
+    [self.navigationController setNavigationBarHidden:YES];
     [self configureView];
 }
 
@@ -88,7 +93,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 
 #pragma mark - Managing the detail item
 
@@ -101,5 +105,9 @@
     }
 }
 
+- (IBAction)back:(UIButton *)sender {
+    UINavigationController *navCon = [self.splitViewController.viewControllers objectAtIndex:0];
+    [navCon popViewControllerAnimated: YES];
+}
 
 @end

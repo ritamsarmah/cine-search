@@ -17,7 +17,7 @@
     
     CGRect size = CGRectMake(0, 0, 70, 70);
     UIView *view = [[UIView alloc] initWithFrame:size];
-    view.backgroundColor = [UIColor darkGrayColor];
+    view.backgroundColor = [UIColor lightGrayColor];
     view.alpha = 0.7;
     view.hidden = true;
     view.layer.cornerRadius = 5;
@@ -85,7 +85,26 @@
                 self.loadingView.hidden = true;
             });
         } else {
-            // TODO: Display alert message for no movies found
+            dispatch_async(dispatch_get_main_queue(), ^{
+            [self.loadingMovies stopAnimating];
+            self.loadingView.hidden = true;
+            UIAlertController *alert = [UIAlertController
+                                         alertControllerWithTitle:@"No Movies Found"
+                                         message:@"We couldn't any movies matching your search"
+                                         preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* yesButton = [UIAlertAction
+                                        actionWithTitle:@"OK"
+                                        style:UIAlertActionStyleDefault
+                            
+                                        handler:^(UIAlertAction * action) {
+                                            //Handle your yes please button action here
+                                        }];
+            
+            [alert addAction:yesButton];
+            
+            [self presentViewController:alert animated:true completion:nil];
+            });
         }
         
     }];
@@ -121,10 +140,8 @@
     } else {
         cell.releaseLabel.text = movie.releaseDate;
     }
-    
-    cell.ratingLabel.text = [movie.rating stringValue];
-    
-    // TODO: Change number to star rating design
+
+    cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
     
     // Download image from URL
     NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
@@ -141,7 +158,7 @@
                                 animations:^{
                                     cell.posterImageView.image = posterImage;
                                 } completion:nil];
-
+                
             } else {
                 cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
             }
