@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *overviewLabel;
 @property (weak, nonatomic) IBOutlet UIButton *trailerButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 - (IBAction)back:(UIButton *)sender;
 - (IBAction)favoriteClicked:(UIButton *)sender;
