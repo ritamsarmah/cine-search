@@ -45,15 +45,16 @@
             
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
-                for(id movie in movieResults) {
+                for (id movie in movieResults) {
                     NSString *title = [movie objectForKey:@"title"];
-                    NSLog(@"%@", title);
                     NSString *overview = [movie objectForKey:@"overview"];
                     NSString *releaseDate = [self formatDate:[movie objectForKey:@"release_date"]];
                     NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
                     NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
                     NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                    Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating posterURL:poster backdropURL:backdrop];
+                    NSArray *genres = [NSArray arrayWithObjects:[movie objectForKey:@"genre_ids"], nil];
+                    
+                    Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:genres posterURL:poster backdropURL:backdrop];
                     [movies addObject:newMovie];
                 }
                 completion(movies);

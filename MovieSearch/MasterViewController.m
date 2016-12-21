@@ -75,8 +75,6 @@
     [_database search:searchBar.text completion:^(NSMutableArray *movies) {
         if (movies.count != 0) {
             self.movies = movies;
-            NSLog(@"%lu", self.movies.count);
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSRange range = NSMakeRange(0, 1);
                 NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
@@ -109,7 +107,6 @@
         
     }];
     [searchBar endEditing:true];
-    NSLog(@"Searching for %@", searchBar.text);
 }
 
 #pragma mark - Table View

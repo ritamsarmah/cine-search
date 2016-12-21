@@ -18,9 +18,9 @@
 - (void)configureView {
     // Update the user interface for the detail item.
     self.movieTitleLabel.text = self.movie.title;
-    self.releaseLabel.text = [NSString stringWithFormat:@"Released %@", self.movie.releaseDate];
+    self.releaseLabel.text = [NSString stringWithFormat:@"Release date: %@", self.movie.releaseDate];
     self.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [self.movie.rating doubleValue]];
-    self.overviewTextView.text = self.movie.overview;
+    self.overviewLabel.text = self.movie.overview;
 
     // Download poster image from URL
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
@@ -82,6 +82,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.trailerButton.layer.cornerRadius = 5;
+    self.trailerButton.layer.masksToBounds = YES;
+    self.favoriteButton.layer.cornerRadius = 5;
+    self.favoriteButton.layer.masksToBounds = YES;
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
     [self.navigationController setNavigationBarHidden:YES];
