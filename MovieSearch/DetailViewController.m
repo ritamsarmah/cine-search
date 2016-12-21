@@ -22,6 +22,9 @@
     self.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [self.movie.rating doubleValue]];
     self.overviewLabel.text = self.movie.overview;
 
+    // Format and display genres label text
+    self.genreLabel.text = [self.movie.genres componentsJoinedByString:@" | "];
+    
     // TODO: Check cache for poster image instead of downloading from URL
     // Download poster image from URL
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
@@ -97,7 +100,9 @@
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
     [self.navigationController setNavigationBarHidden:YES];
+    
     [self configureView];
+
 }
 
 
@@ -111,9 +116,6 @@
 - (void)setMovie:(Movie *)newMovie {
     if (_movie != newMovie) {
         _movie = newMovie;
-        
-        // Update the view.
-        [self configureView];
     }
 }
 

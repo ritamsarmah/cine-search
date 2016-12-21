@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *posterImageView;
 @property (weak, nonatomic) IBOutlet UILabel *movieTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *releaseLabel;
+@property (weak, nonatomic) IBOutlet UILabel *genreLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *backdropImageView;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 @property (weak, nonatomic) IBOutlet UIView *ratingView;

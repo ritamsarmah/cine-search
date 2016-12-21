@@ -41,14 +41,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="Vgo-vs-43E">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" bounces="NO" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="Vgo-vs-43E">
                                 <rect key="frame" x="0.0" y="246" width="320" height="250"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="TNn-Lp-HpS">
                                         <rect key="frame" x="16" y="56" width="287" height="50"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Action | Adventure | Sci Fi | Fantasy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XtR-Hw-3dJ">
-                                                <rect key="frame" x="0.0" y="0.0" width="215" height="25"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genres" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XtR-Hw-3dJ">
+                                                <rect key="frame" x="0.0" y="0.0" width="44.5" height="25"/>
                                                 <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="18"/>
                                                 <color key="textColor" red="0.14877223968505859" green="0.54916626214981079" blue="0.89794868230819702" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -203,6 +203,7 @@
                     <connections>
                         <outlet property="backdropImageView" destination="g2h-kO-P7k" id="QWO-D9-CJE"/>
                         <outlet property="favoriteButton" destination="Th3-Zo-K6e" id="BuK-gE-2qG"/>
+                        <outlet property="genreLabel" destination="XtR-Hw-3dJ" id="hCv-DT-rdK"/>
                         <outlet property="movieTitleLabel" destination="9Sb-Qn-h0i" id="1nI-xG-kXc"/>
                         <outlet property="overviewLabel" destination="r3v-E1-tD3" id="D7D-sf-snu"/>
                         <outlet property="posterImageView" destination="2rA-QK-eEj" id="wHo-or-Jds"/>

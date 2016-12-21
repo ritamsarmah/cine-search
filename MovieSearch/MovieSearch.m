@@ -10,12 +10,42 @@
 
 @implementation MovieSearch
 
+- (instancetype)init {
+    self = [super init];
+    
+    if (self) {
+        _genres = @{ @28 : @"Action",
+                     @12 : @"Adventure",
+                     @16 : @"Animation",
+                     @35 : @"Comedy",
+                     @80 : @"Crime",
+                     @99 : @"Documentary",
+                     @18 : @"Drama",
+                     @10751 : @"Family",
+                     @14 : @"Fantasy",
+                     @36 : @"History",
+                     @27 : @"Horror",
+                     @10402 : @"Music",
+                     @9648 : @"Mystery",
+                     @10749 : @"Romance",
+                     @878 : @"Sci-Fi",
+                     @10770 : @"TV Movie",
+                     @53 : @"Thriller",
+                     @10752 : @"War",
+                     @37 : @"Western"
+                     };
+        
+    }
+    
+    return self;
+}
+
 // Returns mutable array of movies
 - (void)search:(NSString *)query completion:(void (^)(NSMutableArray*))completion{
     
     // Reformat search query for request
     NSString* newQuery = [query stringByReplacingOccurrencesOfString:@" "
-                                                         withString:@"+"];
+                                                          withString:@"+"];
     NSLog(@"%@", newQuery);
     NSMutableArray *movies = [NSMutableArray array];
     NSString *url = [NSString stringWithFormat:@"https://api.themoviedb.org/3/search/movie?query=%@&api_key=%@", newQuery, key];
@@ -32,7 +62,7 @@
         /* Prints movie data response to console
          NSString *movieData = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
          NSLog(@"%@", movieData); */
-         
+        
         if (NSClassFromString(@"NSJSONSerialization")) {
             NSError *error = nil;
             id results = [NSJSONSerialization
@@ -51,10 +81,18 @@
                     NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
                     NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
                     NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                    NSArray *genres = [NSArray arrayWithObjects:[movie objectForKey:@"genre_ids"], nil];
+                    NSArray *genreNumbers = [NSArray arrayWithArray:[movie objectForKey:@"genre_ids"]];
+                    NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
+                    for (NSNumber *genreID in genreNumbers) {
+                        if (self.genres[genreID] != nil) {
+                            [movieGenres addObject:self.genres[genreID]];
+                        }
+                    }
+                    NSLog(@"%@", movieGenres);
+                    
                     NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
                     
-                    Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:genres posterURL:poster backdropURL:backdrop idNumber:idNumber];
+                    Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:movieGenres posterURL:poster backdropURL:backdrop idNumber:idNumber];
                     [movies addObject:newMovie];
                 }
                 completion(movies);
