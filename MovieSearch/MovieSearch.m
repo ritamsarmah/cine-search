@@ -46,7 +46,6 @@
     // Reformat search query for request
     NSString* newQuery = [query stringByReplacingOccurrencesOfString:@" "
                                                           withString:@"+"];
-    NSLog(@"%@", newQuery);
     NSMutableArray *movies = [NSMutableArray array];
     NSString *url = [NSString stringWithFormat:@"https://api.themoviedb.org/3/search/movie?query=%@&api_key=%@", newQuery, key];
     
@@ -88,7 +87,6 @@
                             [movieGenres addObject:self.genres[genreID]];
                         }
                     }
-                    NSLog(@"%@", movieGenres);
                     
                     NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
                     
