@@ -17,7 +17,7 @@
     
     CGRect size = CGRectMake(0, 0, 70, 70);
     UIView *view = [[UIView alloc] initWithFrame:size];
-    view.backgroundColor = [UIColor lightGrayColor];
+    view.backgroundColor = [UIColor darkGrayColor];
     view.alpha = 0.7;
     view.hidden = true;
     view.layer.cornerRadius = 5;
@@ -38,9 +38,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.navigationController setNavigationBarHidden:true];
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.searchBar.delegate = self;
     _database = [[MovieSearch alloc] init];
+    _imageCache = [[NSMutableDictionary alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -51,8 +53,8 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    [self.imageCache removeAllObjects];
 }
-
 
 #pragma mark - Segues
 
@@ -61,15 +63,15 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Movie *movie = self.movies[indexPath.row];
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+        
         [controller setMovie:movie];
-        controller.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
-        controller.navigationItem.leftItemsSupplementBackButton = YES;
     }
 }
 
 #pragma mark - Search Bar
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [self.imageCache removeAllObjects];
     [self.loadingMovies startAnimating];
     self.loadingView.hidden = false;
     [_database search:searchBar.text completion:^(NSMutableArray *movies) {
@@ -84,24 +86,24 @@
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
-            [self.loadingMovies stopAnimating];
-            self.loadingView.hidden = true;
-            UIAlertController *alert = [UIAlertController
-                                         alertControllerWithTitle:@"No Movies Found"
-                                         message:@"We couldn't any movies matching your search"
-                                         preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction* yesButton = [UIAlertAction
-                                        actionWithTitle:@"OK"
-                                        style:UIAlertActionStyleDefault
-                            
-                                        handler:^(UIAlertAction * action) {
-                                            //Handle your yes please button action here
-                                        }];
-            
-            [alert addAction:yesButton];
-            
-            [self presentViewController:alert animated:true completion:nil];
+                [self.loadingMovies stopAnimating];
+                self.loadingView.hidden = true;
+                UIAlertController *alert = [UIAlertController
+                                            alertControllerWithTitle:@"Unable to find movie"
+                                            message:@"No movies matched your search"
+                                            preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* yesButton = [UIAlertAction
+                                            actionWithTitle:@"OK"
+                                            style:UIAlertActionStyleDefault
+                                            
+                                            handler:^(UIAlertAction * action) {
+                                                //Handle your yes please button action here
+                                            }];
+                
+                [alert addAction:yesButton];
+                
+                [self presentViewController:alert animated:true completion:nil];
             });
         }
         
@@ -127,6 +129,10 @@
     
     MovieTableViewCell *cell = (MovieTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor colorWithRed:0.00 green:0.72 blue:1.00 alpha:1.0];
+    [cell setSelectedBackgroundView:bgColorView];
+    
     // Display movie in the table cell
     Movie *movie = [_movies objectAtIndex:indexPath.row];
     
@@ -137,31 +143,42 @@
     } else {
         cell.releaseLabel.text = movie.releaseDate;
     }
-
+    
     cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
     
-    // Download image from URL
-    NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
-    cell.posterImageView.image = nil;
-    [cell.loadingPoster startAnimating];
-    dispatch_async(dispatch_get_global_queue(0,0), ^{
-        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (data != nil) {
-                UIImage *posterImage = [UIImage imageWithData:data];
-                [UIView transitionWithView:cell.posterImageView
-                                  duration:0.2f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    cell.posterImageView.image = posterImage;
-                                } completion:nil];
-                
-            } else {
-                cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
-            }
-            [cell.loadingPoster stopAnimating];
+    // Check if image cached, else download from URL
+    UIImage *posterImage = [self.imageCache objectForKey:movie.idNumber];
+    if ([self.imageCache objectForKey:movie.idNumber] != nil) {
+        [UIView transitionWithView:cell.posterImageView
+                          duration:0.2f
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+                            cell.posterImageView.image = posterImage;
+                        } completion:nil];
+    } else {
+        NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
+        cell.posterImageView.image = nil;
+        [cell.loadingPoster startAnimating];
+        dispatch_async(dispatch_get_global_queue(0,0), ^{
+            NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (data != nil) {
+                    UIImage *posterImage = [UIImage imageWithData:data];
+                    [UIView transitionWithView:cell.posterImageView
+                                      duration:0.2f
+                                       options:UIViewAnimationOptionTransitionCrossDissolve
+                                    animations:^{
+                                        cell.posterImageView.image = posterImage;
+                                    } completion:nil];
+                    self.imageCache[movie.idNumber] = posterImage;
+                    
+                } else {
+                    cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
+                }
+                [cell.loadingPoster stopAnimating];
+            });
         });
-    });
+    }
     
     return cell;
 }

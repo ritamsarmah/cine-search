@@ -10,7 +10,7 @@
 
 @implementation Movie
 
-- (instancetype)initWithTitle:(NSString *)title overview:(NSString *)overview releaseDate:(NSString *)releaseDate rating:(NSNumber *)rating genres:(NSArray *)genres posterURL:(NSString *)posterURL backdropURL:(NSString *)backdropURL{
+- (instancetype)initWithTitle:(NSString *)title overview:(NSString *)overview releaseDate:(NSString *)releaseDate rating:(NSNumber *)rating genres:(NSArray *)genres posterURL:(NSString *)posterURL backdropURL:(NSString *)backdropURL idNumber:(NSNumber *)idNumber{
     self = [super init];
     
     if (self) {
@@ -21,6 +21,7 @@
         _genres = genres;
         _posterURL = posterURL;
         _backdropURL = backdropURL;
+        _idNumber = idNumber;
     }
     
     return self;

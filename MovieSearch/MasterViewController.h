@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MovieTableViewCell.h"
-#import "Movie.h"
 #import "MovieSearch.h"
 
 @class DetailViewController;
@@ -22,6 +21,7 @@
 
 @property NSMutableArray *movies;
 @property MovieSearch *database;
+@property NSMutableDictionary *imageCache;
 
 @end
 

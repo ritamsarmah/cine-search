@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Movie.h"
+#import "MovieSearch.h"
 
 @interface DetailViewController : UIViewController
 
 @property (strong, nonatomic) Movie *movie;
+@property (weak, nonatomic) NSURL *trailerURL;
+@property MovieSearch *database;
+
 @property (weak, nonatomic) IBOutlet UIImageView *posterImageView;
 @property (weak, nonatomic) IBOutlet UILabel *movieTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *releaseLabel;
@@ -23,7 +26,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
 
 - (IBAction)back:(UIButton *)sender;
-@property (weak, nonatomic) IBOutlet UIButton *openTrailer;
+- (IBAction)favoriteClicked:(UIButton *)sender;
+- (IBAction)openTrailer:(UIButton *)sender;
+
 
 @end
 

@@ -14,5 +14,6 @@
 
 - (void)search:(NSString*)query completion:(void (^)(NSMutableArray*))completion;
 - (NSString *)formatDate:(NSString*)stringDate;
+- (void)getTrailerForID:(NSNumber *)idNumber completion:(void (^)(NSURL*))completion;
 
 @end
