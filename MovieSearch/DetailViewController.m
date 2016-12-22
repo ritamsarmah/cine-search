@@ -99,7 +99,7 @@
     
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
-    [self.navigationController setNavigationBarHidden:YES];
+    self.navigationController.navigationBar.hidden = true;
     
     [self configureView];
 

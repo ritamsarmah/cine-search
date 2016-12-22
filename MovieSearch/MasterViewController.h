@@ -18,10 +18,14 @@
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) UIView *loadingView;
 @property (weak, nonatomic) UIActivityIndicatorView *loadingMovies;
+@property (weak, nonatomic) NSTimer* searchTimer;
 
 @property NSMutableArray *movies;
 @property MovieSearch *database;
 @property NSMutableDictionary *imageCache;
+
+-(void) instantSearch;
+-(void) resetSearchTimer;
 
 @end
 

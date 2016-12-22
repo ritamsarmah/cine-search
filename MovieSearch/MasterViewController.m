@@ -38,7 +38,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.navigationController setNavigationBarHidden:true];
+    self.navigationController.navigationBar.hidden = true;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.searchBar.delegate = self;
     _database = [[MovieSearch alloc] init];
@@ -65,49 +65,86 @@
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         
         [controller setMovie:movie];
+        [self.searchBar endEditing:true];
     }
 }
 
 #pragma mark - Search Bar
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [self.imageCache removeAllObjects];
+    [self.searchTimer invalidate];
     [self.loadingMovies startAnimating];
     self.loadingView.hidden = false;
     [_database search:searchBar.text completion:^(NSMutableArray *movies) {
-        if (movies.count != 0) {
-            self.movies = movies;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSRange range = NSMakeRange(0, 1);
-                NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
-                [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.loadingMovies stopAnimating];
-                self.loadingView.hidden = true;
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.loadingMovies stopAnimating];
-                self.loadingView.hidden = true;
-                UIAlertController *alert = [UIAlertController
-                                            alertControllerWithTitle:@"Unable to find movie"
-                                            message:@"No movies matched your search"
-                                            preferredStyle:UIAlertControllerStyleAlert];
-                
-                UIAlertAction* yesButton = [UIAlertAction
-                                            actionWithTitle:@"OK"
-                                            style:UIAlertActionStyleDefault
-                                            
-                                            handler:^(UIAlertAction * action) {
-                                            }];
-                
-                [alert addAction:yesButton];
-                
-                [self presentViewController:alert animated:true completion:nil];
-            });
+        if (self.movies != movies) {
+            if (movies.count != 0) {
+                [self.imageCache removeAllObjects];
+                self.movies = movies;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSRange range = NSMakeRange(0, 1);
+                    NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
+                    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
+                    [self.loadingMovies stopAnimating];
+                    self.loadingView.hidden = true;
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.loadingMovies stopAnimating];
+                    self.loadingView.hidden = true;
+                    UIAlertController *alert = [UIAlertController
+                                                alertControllerWithTitle:@"Unable to find movie"
+                                                message:@"No movies matched your search"
+                                                preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction* yesButton = [UIAlertAction
+                                                actionWithTitle:@"OK"
+                                                style:UIAlertActionStyleDefault
+                                                
+                                                handler:^(UIAlertAction * action) {
+                                                }];
+                    
+                    [alert addAction:yesButton];
+                    
+                    [self presentViewController:alert animated:true completion:nil];
+                });
+            }
         }
         
     }];
     [searchBar endEditing:true];
+}
+
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    if ([self.searchTimer isValid]) {
+        self.searchTimer.fireDate = [NSDate dateWithTimeIntervalSinceNow:0.5f];
+    } else {
+        [self resetSearchTimer];
+    }
+}
+
+-(void)resetSearchTimer {
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.5f
+                                                      target:self
+                                                    selector:@selector(instantSearch)
+                                                    userInfo:nil
+                                                     repeats:NO];
+    self.searchTimer = timer;
+}
+
+- (void)instantSearch {
+    [_database search:self.searchBar.text completion:^(NSMutableArray *movies) {
+        if (self.movies != movies) {
+            if (movies.count != 0) {
+                [self.imageCache removeAllObjects];
+                self.movies = movies;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSRange range = NSMakeRange(0, 1);
+                    NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
+                    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
+                });
+            }
+        }
+    }];
 }
 
 #pragma mark - Table View
