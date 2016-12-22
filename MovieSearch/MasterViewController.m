@@ -98,7 +98,6 @@
                                             style:UIAlertActionStyleDefault
                                             
                                             handler:^(UIAlertAction * action) {
-                                                //Handle your yes please button action here
                                             }];
                 
                 [alert addAction:yesButton];
