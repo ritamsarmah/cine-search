@@ -38,10 +38,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.manager = [MovieSingleton sharedManager];
     self.navigationController.navigationBar.hidden = true;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.searchBar.delegate = self;
-    _database = [[MovieSearch alloc] init];
+    self.searchBar.keyboardAppearance = UIKeyboardAppearanceDark;
     _imageCache = [[NSMutableDictionary alloc] init];
 }
 
@@ -75,7 +76,7 @@
     [self.searchTimer invalidate];
     [self.loadingMovies startAnimating];
     self.loadingView.hidden = false;
-    [_database search:searchBar.text completion:^(NSMutableArray *movies) {
+    [self.manager.database search:searchBar.text completion:^(NSMutableArray *movies) {
         if (self.movies != movies) {
             if (movies.count != 0) {
                 [self.imageCache removeAllObjects];
@@ -132,7 +133,7 @@
 }
 
 - (void)instantSearch {
-    [_database search:self.searchBar.text completion:^(NSMutableArray *movies) {
+    [self.manager.database search:self.searchBar.text completion:^(NSMutableArray *movies) {
         if (self.movies != movies) {
             if (movies.count != 0) {
                 [self.imageCache removeAllObjects];
@@ -173,13 +174,7 @@
     Movie *movie = [_movies objectAtIndex:indexPath.row];
     
     cell.titleLabel.text = movie.title;
-    
-    if ([movie.releaseDate isEqualToString:@""]) {
-        cell.releaseLabel.text = @"Unknown release date";
-    } else {
-        cell.releaseLabel.text = movie.releaseDate;
-    }
-    
+    cell.releaseLabel.text = movie.releaseDate ?: @"TBA";
     cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
     
     // Check if image cached, else download from URL

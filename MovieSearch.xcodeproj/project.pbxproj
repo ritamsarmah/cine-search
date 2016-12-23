@@ -10,6 +10,9 @@
 		202942BD1E086A7500E0AC3E /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 202942BC1E086A7500E0AC3E /* Constants.m */; };
 		206F80DF1DD3DD01007E4727 /* MovieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 206F80DE1DD3DD01007E4727 /* MovieTableViewCell.m */; };
 		20E92FBD1E0B809F009957F2 /* FavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E92FBC1E0B809F009957F2 /* FavoritesViewController.m */; };
+		20E92FC01E0C52C4009957F2 /* FavoritesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E92FBF1E0C52C4009957F2 /* FavoritesManager.m */; };
+		20E92FEC1E0C7A73009957F2 /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E92FEB1E0C7A73009957F2 /* DiscoverViewController.m */; };
+		20E92FEF1E0C7B20009957F2 /* MovieSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E92FEE1E0C7B20009957F2 /* MovieSingleton.m */; };
 		20ED58AC1DCAA778000D811A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 20ED58AB1DCAA778000D811A /* main.m */; };
 		20ED58AF1DCAA778000D811A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 20ED58AE1DCAA778000D811A /* AppDelegate.m */; };
 		20ED58B21DCAA778000D811A /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20ED58B11DCAA778000D811A /* MasterViewController.m */; };
@@ -28,6 +31,12 @@
 		206F80DE1DD3DD01007E4727 /* MovieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieTableViewCell.m; sourceTree = "<group>"; };
 		20E92FBB1E0B809F009957F2 /* FavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesViewController.h; sourceTree = "<group>"; };
 		20E92FBC1E0B809F009957F2 /* FavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesViewController.m; sourceTree = "<group>"; };
+		20E92FBE1E0C52C4009957F2 /* FavoritesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesManager.h; sourceTree = "<group>"; };
+		20E92FBF1E0C52C4009957F2 /* FavoritesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesManager.m; sourceTree = "<group>"; };
+		20E92FEA1E0C7A73009957F2 /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
+		20E92FEB1E0C7A73009957F2 /* DiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverViewController.m; sourceTree = "<group>"; };
+		20E92FED1E0C7B20009957F2 /* MovieSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieSingleton.h; sourceTree = "<group>"; };
+		20E92FEE1E0C7B20009957F2 /* MovieSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieSingleton.m; sourceTree = "<group>"; };
 		20ED58A71DCAA778000D811A /* MovieSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20ED58AB1DCAA778000D811A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		20ED58AD1DCAA778000D811A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -80,6 +89,8 @@
 				20ED58B11DCAA778000D811A /* MasterViewController.m */,
 				20ED58B31DCAA778000D811A /* DetailViewController.h */,
 				20ED58B41DCAA778000D811A /* DetailViewController.m */,
+				20E92FEA1E0C7A73009957F2 /* DiscoverViewController.h */,
+				20E92FEB1E0C7A73009957F2 /* DiscoverViewController.m */,
 				20E92FBB1E0B809F009957F2 /* FavoritesViewController.h */,
 				20E92FBC1E0B809F009957F2 /* FavoritesViewController.m */,
 				206F80DD1DD3DD01007E4727 /* MovieTableViewCell.h */,
@@ -109,10 +120,14 @@
 		20ED58CA1DCAACB9000D811A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				20E92FBE1E0C52C4009957F2 /* FavoritesManager.h */,
+				20E92FBF1E0C52C4009957F2 /* FavoritesManager.m */,
 				20ED58C71DCAAB1A000D811A /* Movie.h */,
 				20ED58C81DCAAB1A000D811A /* Movie.m */,
 				20ED58C41DCAA8ED000D811A /* MovieSearch.h */,
 				20ED58C51DCAA8ED000D811A /* MovieSearch.m */,
+				20E92FED1E0C7B20009957F2 /* MovieSingleton.h */,
+				20E92FEE1E0C7B20009957F2 /* MovieSingleton.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -194,7 +209,10 @@
 				20ED58AF1DCAA778000D811A /* AppDelegate.m in Sources */,
 				202942BD1E086A7500E0AC3E /* Constants.m in Sources */,
 				20ED58B21DCAA778000D811A /* MasterViewController.m in Sources */,
+				20E92FC01E0C52C4009957F2 /* FavoritesManager.m in Sources */,
+				20E92FEF1E0C7B20009957F2 /* MovieSingleton.m in Sources */,
 				20E92FBD1E0B809F009957F2 /* FavoritesViewController.m in Sources */,
+				20E92FEC1E0C7A73009957F2 /* DiscoverViewController.m in Sources */,
 				20ED58AC1DCAA778000D811A /* main.m in Sources */,
 				20ED58C61DCAA8ED000D811A /* MovieSearch.m in Sources */,
 				20ED58B51DCAA778000D811A /* DetailViewController.m in Sources */,

@@ -18,7 +18,7 @@
 - (void)configureView {
     // Update the user interface for the detail item.
     self.movieTitleLabel.text = self.movie.title;
-    self.releaseLabel.text = [NSString stringWithFormat:@"Release date: %@", self.movie.releaseDate];
+    self.releaseLabel.text = [NSString stringWithFormat:@"Release date: %@", self.movie.releaseDate ?: @"TBA"];
     self.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [self.movie.rating doubleValue]];
     self.overviewLabel.text = self.movie.overview;
 
@@ -87,7 +87,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.database = [[MovieSearch alloc] init];
+    self.manager = [MovieSingleton sharedManager];
     
     self.trailerButton.layer.cornerRadius = 5;
     self.trailerButton.layer.masksToBounds = YES;
@@ -100,6 +100,7 @@
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
     self.navigationController.navigationBar.hidden = true;
+    self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self configureView];
 
@@ -124,13 +125,15 @@
     [navCon popViewControllerAnimated: YES];
 }
 
-- (IBAction)favoriteClicked:(UIButton *)sender {
+- (IBAction)favoritePressed:(UIButton *)sender {
     [UIView animateWithDuration:0.3/2.5 animations:^{
         sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
         if (self.favoriteButton.tintColor != [UIColor whiteColor]) {
             [self.favoriteButton setTintColor:[UIColor whiteColor]];
+            [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
         } else {
             [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
+            [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
         }
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.3/2.5 animations:^{
@@ -144,7 +147,7 @@
 }
 
 - (IBAction)openTrailer:(UIButton *)sender {
-    [self.database getTrailerForID:self.movie.idNumber completion:^(NSURL *trailerURL) {
+    [self.manager.database getTrailerForID:self.movie.idNumber completion:^(NSURL *trailerURL) {
         if (trailerURL != nil) {
         if ([[UIApplication sharedApplication] canOpenURL:trailerURL]) {
             [[UIApplication sharedApplication] openURL:trailerURL];
@@ -168,7 +171,7 @@
             [self presentViewController:alert animated:true completion:nil];
         }
     }];
-    
     // TODO: Check for trailer availability based on trailer
 }
+
 @end

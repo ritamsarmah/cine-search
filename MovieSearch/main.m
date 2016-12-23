@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
-#import "MovieSearch.h"
+#import "MovieSingleton.h"
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MovieTableViewCell.h"
-#import "MovieSearch.h"
+#import "MovieSingleton.h"
 
 @class DetailViewController;
 
@@ -21,7 +21,7 @@
 @property (weak, nonatomic) NSTimer* searchTimer;
 
 @property NSMutableArray *movies;
-@property MovieSearch *database;
+@property MovieSingleton *manager;
 @property NSMutableDictionary *imageCache;
 
 -(void) instantSearch;
