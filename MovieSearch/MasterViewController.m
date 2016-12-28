@@ -7,6 +7,8 @@
 //
 
 #import "MasterViewController.h"
+#import "MovieTableViewCell.h"
+#import "MovieSingleton.h"
 #import "DetailViewController.h"
 
 @implementation MasterViewController
@@ -113,6 +115,19 @@
         
     }];
     [searchBar endEditing:true];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:YES animated:YES];
+}
+
+
+-(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:NO animated:YES];
+}
+
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [self.searchBar endEditing:YES];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {

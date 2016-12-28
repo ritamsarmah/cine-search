@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MovieTableViewCell.h"
-#import "MovieSingleton.h"
 
 @class DetailViewController;
+@class MovieSingleton;
 
 @interface MasterViewController : UITableViewController<UISearchBarDelegate>
 

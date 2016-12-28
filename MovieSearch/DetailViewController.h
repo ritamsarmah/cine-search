@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MovieSingleton.h"
+
+@class MovieSingleton;
+@class Movie;
 
 @interface DetailViewController : UIViewController
 

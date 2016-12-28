@@ -7,6 +7,7 @@
 //
 
 #import "DetailViewController.h"
+#import "MovieSingleton.h"
 
 @interface DetailViewController ()
 
@@ -101,7 +102,6 @@
     self.ratingView.layer.masksToBounds = YES;
     self.navigationController.navigationBar.hidden = true;
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
     [self configureView];
 
 }

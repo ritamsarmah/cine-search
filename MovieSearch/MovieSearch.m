@@ -7,6 +7,7 @@
 //
 
 #import "MovieSearch.h"
+#import "Constants.h"
 
 @implementation MovieSearch
 
@@ -157,7 +158,7 @@
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSTimeInterval secondsInWeek = 604800;
     NSString *currentDate = [dateFormatter stringFromDate:[NSDate date]];
-    NSString *priorDate = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:-(5*secondsInWeek)]];
+    NSString *priorDate = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:-(2*secondsInWeek)]];
     
     NSMutableArray *movies = [NSMutableArray array];
     NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/discover/movie?primary_release_date.gte=%@&primary_release_date.lte=%@&api_key=%@", priorDate, currentDate, key];
