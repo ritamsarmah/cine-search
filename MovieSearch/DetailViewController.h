@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) Movie *movie;
 @property (weak, nonatomic) NSURL *trailerURL;
+@property (nonatomic) BOOL isFavorite;
 @property MovieSingleton *manager;
 
 @property (weak, nonatomic) IBOutlet UIImageView *posterImageView;

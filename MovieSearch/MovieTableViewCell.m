@@ -39,7 +39,6 @@
 
 - (IBAction)favoritePressed:(UIButton *)sender {
     RLMRealm *realm = RLMRealm.defaultRealm;
-    NSLog(@"%@",[RLMRealmConfiguration defaultConfiguration].fileURL);
     if (self.favoriteButton.tintColor != [UIColor whiteColor]) {
         // Remove from favorites list
         MovieID *movieToDelete = [MovieID objectForPrimaryKey:@(self.movieID.movieID)];

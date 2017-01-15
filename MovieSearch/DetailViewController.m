@@ -8,8 +8,13 @@
 
 #import "DetailViewController.h"
 #import "MovieSingleton.h"
+#import "MovieID.h"
+#import <Realm/Realm.h>
 
 @interface DetailViewController ()
+
+@property (nonatomic, strong) RLMResults *array;
+@property (nonatomic, strong) RLMNotificationToken *notification;
 
 @end
 
@@ -89,14 +94,12 @@
     [super viewDidLoad];
     
     self.manager = [MovieSingleton sharedManager];
+    self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     
     self.trailerButton.layer.cornerRadius = 5;
     self.trailerButton.layer.masksToBounds = YES;
     self.favoriteButton.layer.cornerRadius = 5;
     self.favoriteButton.layer.masksToBounds = YES;
-    
-    // TODO: Set favorite button tint based on favorites data
-    [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
     
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
@@ -106,6 +109,29 @@
     
     [self configureView];
     
+    __weak typeof(self) weakSelf = self;
+    self.notification = [self.array addNotificationBlock:^(RLMResults *data, RLMCollectionChange *changes, NSError *error) {
+        if (error) {
+            NSLog(@"Failed to open Realm on background worker: %@", error);
+            return;
+        }
+        
+        weakSelf.isFavorite = NO;
+        
+        for (MovieID *realmMovieID in weakSelf.array) {
+            if (realmMovieID.movieID == [weakSelf.movie.idNumber integerValue]) {
+                weakSelf.isFavorite = YES;
+            }
+        }
+        
+        if (!weakSelf.isFavorite) {
+            [weakSelf.favoriteButton setTintColor:[UIColor whiteColor]];
+            [weakSelf.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
+        } else {
+            [weakSelf.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
+            [weakSelf.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+        }
+    }];
 }
 
 #pragma mark - Managing the detail item
@@ -122,24 +148,52 @@
 }
 
 - (IBAction)favoritePressed:(UIButton *)sender {
-    [UIView animateWithDuration:0.3/2.5 animations:^{
-        sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
-        if (self.favoriteButton.tintColor != [UIColor whiteColor]) {
+    RLMRealm *realm = RLMRealm.defaultRealm;
+    if (self.favoriteButton.tintColor != [UIColor whiteColor]) {
+        // Remove from favorites list
+        MovieID *movieToDelete = [MovieID objectForPrimaryKey:@([self.movie.idNumber integerValue])];
+        
+        [realm beginWriteTransaction];
+        [realm deleteObject:movieToDelete];
+        [realm commitWriteTransaction];
+        
+        // Animate to empty heart
+        [UIView animateWithDuration:0.3/2.5 animations:^{
+            sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
             [self.favoriteButton setTintColor:[UIColor whiteColor]];
             [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
-        } else {
-            [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-            [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
-        }
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.3/2.5 animations:^{
-            sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.3/2.5 animations:^{
-                sender.transform = CGAffineTransformIdentity;
+                sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.3/2.5 animations:^{
+                    sender.transform = CGAffineTransformIdentity;
+                }];
             }];
         }];
-    }];
+        
+    } else {
+        // Add to favorites list
+        [realm beginWriteTransaction];
+        [MovieID createInRealm:realm withValue:@{@"movieID": @([self.movie.idNumber integerValue])}];
+        [realm commitWriteTransaction];
+        
+        // Animate to red filled heart
+        [UIView animateWithDuration:0.3/2.5 animations:^{
+            sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+            [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
+            [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.3/2.5 animations:^{
+                sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.3/2.5 animations:^{
+                    sender.transform = CGAffineTransformIdentity;
+                }];
+            }];
+        }];
+        
+    }
 }
 
 - (IBAction)openTrailer:(UIButton *)sender {

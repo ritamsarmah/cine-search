@@ -175,7 +175,10 @@
 -(void)openMovie:(UITapGestureRecognizer *)sender {
     UIImageView *imageView = (UIImageView *)sender.view;
     NSLog(@"%lu", imageView.tag);
-    Movie *movie = self.bannerMovies[imageView.tag];
+    Movie *movie = self.bannerMovies[(NSUInteger)imageView.tag];
+    if (movie == nil) {
+        NSLog(@"nil movie over here");
+    }
     DetailViewController *controller = (DetailViewController *)[self detailViewController];
     [controller setMovie:movie];
     [self showDetailViewController:controller sender:self];

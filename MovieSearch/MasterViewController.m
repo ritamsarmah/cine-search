@@ -22,9 +22,9 @@
     UIView *view = [[UIView alloc] initWithFrame:size];
     view.backgroundColor = [UIColor darkGrayColor];
     view.alpha = 0.7;
-    view.hidden = true;
+    view.hidden = YES;
     view.layer.cornerRadius = 5;
-    view.layer.masksToBounds = true;
+    view.layer.masksToBounds = YES;
     
     [self.view addSubview:view];
     [self.view addSubview:activityIndicator];
@@ -69,7 +69,14 @@
         Movie *movie = self.movies[indexPath.row];
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         [controller setMovie:movie];
-        [self.searchBar endEditing:true];
+        
+        if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
+            controller.isFavorite = YES;
+        } else {
+            controller.isFavorite = NO;
+        }
+        
+        [self.searchBar endEditing:YES];
     }
 }
 
@@ -78,7 +85,7 @@
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [self.searchTimer invalidate];
     [self.loadingMovies startAnimating];
-    self.loadingView.hidden = false;
+    self.loadingView.hidden = NO;
     [self.manager.database search:searchBar.text completion:^(NSMutableArray *movies) {
         if (self.movies != movies) {
             if (movies.count != 0) {
@@ -193,17 +200,13 @@
     cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
     cell.movieID = [[MovieID alloc] initWithID:[movie.idNumber intValue]];
     
-    // Set favorites icon based on database
-    RLMResults *favorites = [MovieID allObjects];
-    
-    [cell.favoriteButton setTintColor:[UIColor whiteColor]];
-    [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
-    
-    for (MovieID *movieID in favorites) {
-        if (movieID.movieID == [movie.idNumber integerValue]) {
-            [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-            [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
-        }
+    // Set favorites icon
+    if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
+        [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
+        [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+    } else {
+        [cell.favoriteButton setTintColor:[UIColor whiteColor]];
+        [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
     }
     
     // Check if image cached, else download from URL
@@ -240,6 +243,17 @@
         [task resume];
     }
     return cell;
+}
+
+- (BOOL)isMovieInFavorites:(NSInteger)movieID {
+    RLMResults *favorites = [MovieID allObjects];
+    
+    for (MovieID *realmMovieID in favorites) {
+        if (realmMovieID.movieID == movieID) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end

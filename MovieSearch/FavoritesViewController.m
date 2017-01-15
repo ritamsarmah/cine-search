@@ -30,14 +30,11 @@ static NSString * const kTableName = @"table";
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.navigationController.navigationBar.hidden = NO;
-    NSLog(@"appear called");
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    NSLog(@"disappear called");
     self.navigationController.navigationBar.hidden = YES;
-    
 }
 
 - (void)viewDidLoad
