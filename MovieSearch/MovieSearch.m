@@ -116,8 +116,8 @@
 }
 
 /* Retures movie data for ID */
-- (void)getMovieForID:(int)idNumber completion:(void (^)(Movie *))completion {
-    NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%d?api_key=%@&append_to_response=release_dates", idNumber, key];
+- (void)getMovieForID:(NSInteger)idNumber completion:(void (^)(Movie *))completion {
+    NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%lu?api_key=%@&append_to_response=release_dates", idNumber, key];
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:stringURL]];

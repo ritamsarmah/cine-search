@@ -15,7 +15,6 @@
 
 @implementation DetailViewController
 
-
 - (void)configureView {
     // Update the user interface for the detail item.
     self.movieTitleLabel.text = self.movie.title;
@@ -86,7 +85,6 @@
     });
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -102,16 +100,12 @@
     
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
-    self.navigationController.navigationBar.hidden = true;
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    self.navigationController.navigationBar.hidden = YES;
+    
     [self configureView];
     
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Managing the detail item

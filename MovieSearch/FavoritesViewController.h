@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "MovieSingleton.h"
 
+@class DetailViewController;
+
 @interface FavoritesViewController : UITableViewController
 
+@property (strong, nonatomic) DetailViewController *detailViewController;
 @property MovieSingleton *manager;
 @property NSMutableDictionary *imageCache;
 

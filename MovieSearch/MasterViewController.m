@@ -42,11 +42,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.manager = [MovieSingleton sharedManager];
-    self.navigationController.navigationBar.hidden = true;
+    self.navigationController.navigationBar.hidden = YES;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.searchBar.delegate = self;
     self.searchBar.keyboardAppearance = UIKeyboardAppearanceDark;
-    _imageCache = [[NSMutableDictionary alloc] init];
+    self.imageCache = [[NSMutableDictionary alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -68,7 +68,6 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Movie *movie = self.movies[indexPath.row];
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-        
         [controller setMovie:movie];
         [self.searchBar endEditing:true];
     }
@@ -222,19 +221,21 @@
         NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
         
         NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            if (data != nil) {
-                UIImage *posterImage = [UIImage imageWithData:data];
-                [UIView transitionWithView:cell.posterImageView
-                                  duration:0.2f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    cell.posterImageView.image = posterImage;
-                                } completion:nil];
-                self.imageCache[movie.idNumber] = posterImage;
-            } else {
-                cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
-            }
-            [cell.loadingPoster stopAnimating];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (data != nil) {
+                    UIImage *posterImage = [UIImage imageWithData:data];
+                    [UIView transitionWithView:cell.posterImageView
+                                      duration:0.2f
+                                       options:UIViewAnimationOptionTransitionCrossDissolve
+                                    animations:^{
+                                        cell.posterImageView.image = posterImage;
+                                    } completion:nil];
+                    self.imageCache[movie.idNumber] = posterImage;
+                } else {
+                    cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
+                }
+                [cell.loadingPoster stopAnimating];
+            });
         }];
         [task resume];
     }

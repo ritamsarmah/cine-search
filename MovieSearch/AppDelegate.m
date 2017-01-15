@@ -21,8 +21,10 @@
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     UISplitViewController *discoverSplitViewController = tabBarController.viewControllers[0];
     UISplitViewController *searchSplitViewController = tabBarController.viewControllers[1];
+    UISplitViewController *favoritesSplitViewController = tabBarController.viewControllers[2];
     discoverSplitViewController.delegate = self;
     searchSplitViewController.delegate = self;
+    favoritesSplitViewController.delegate = self;
     return YES;
 }
 
