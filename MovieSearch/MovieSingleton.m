@@ -12,13 +12,15 @@
 
 @synthesize database;
 
-+ (id)sharedManager {
-    static MovieSingleton *sharedMyManager = nil;
-    @synchronized(self) {
-        if (sharedMyManager == nil)
-            sharedMyManager = [[self alloc] init];
-    }
-    return sharedMyManager;
++ (instancetype)sharedManager {
+    static id sharedInstance = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    
+    return sharedInstance;
 }
 
 - (instancetype)init

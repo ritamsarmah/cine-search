@@ -8,6 +8,7 @@
 
 #import "DiscoverViewController.h"
 #import "MovieSingleton.h"
+#import "DetailViewController.h"
 
 @interface DiscoverViewController () {
     int x;
@@ -33,11 +34,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.manager = [MovieSingleton sharedManager];
     self.imageScrollView.delegate = self;
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self.loadingMovies startAnimating];
     isAutoScrolling = NO;
+    
+    self.detailViewController = [(DetailViewController *)[DetailViewController alloc] init];
     
     [self.manager.database getNowPlaying:^(NSMutableArray *movies) {
         if (self.moviesNowPlaying != movies) {
@@ -92,7 +96,7 @@
                 UIGraphicsBeginImageContext(backdrop.size);
                 CGRect rect = CGRectMake(0, 0, backdrop.size.width, backdrop.size.height);
                 [backdrop drawInRect:rect];
-                [title drawInRect:CGRectMake(20, backdrop.size.height*(7.0/9.0), backdrop.size.width, backdrop.size.height) withAttributes:attributes];
+                [title drawInRect:CGRectMake(20, backdrop.size.height*(7.0/9.0), backdrop.size.width*(8.0/9.0), backdrop.size.height) withAttributes:attributes];
                 UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
                 UIGraphicsEndImageContext();
                 
@@ -152,10 +156,8 @@
 }
 
 -(void)nextImage {
-    NSLog(@"Transitioning to %d", x);
     isAutoScrolling = YES;
-    if (x == 1600) {
-        NSLog(@"Entering special");
+    if (x == max) {
         [self.imageScrollView setContentOffset:CGPointMake(0, 0) animated:NO];
         [UIView animateWithDuration:0.7f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [self.imageScrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
@@ -174,10 +176,12 @@
     UIImageView *imageView = (UIImageView *)sender.view;
     NSLog(@"%lu", imageView.tag);
     Movie *movie = self.bannerMovies[imageView.tag];
+    DetailViewController *controller = (DetailViewController *)[self detailViewController];
+    [controller setMovie:movie];
+    [self showDetailViewController:controller sender:self];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"%d", x);
     if (scrollView.contentOffset.x == max && !isAutoScrolling) {
         [scrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
     }
@@ -187,6 +191,5 @@
         x = scrollView.contentOffset.x;
     }
 }
-
 
 @end

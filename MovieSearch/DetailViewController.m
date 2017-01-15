@@ -22,11 +22,10 @@
     self.releaseLabel.text = [NSString stringWithFormat:@"Release date: %@", self.movie.releaseDate ?: @"TBA"];
     self.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [self.movie.rating doubleValue]];
     self.overviewLabel.text = self.movie.overview;
-
+    
     // Format and display genres label text
     self.genreLabel.text = [self.movie.genres componentsJoinedByString:@" | "];
     
-    // TODO: Check cache for poster image instead of downloading from URL
     // Download poster image from URL
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
@@ -34,8 +33,12 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (data != nil) {
                 UIImage *posterImage = [UIImage imageWithData:data];
-                self.posterImageView.image = posterImage;
-                
+                [UIView transitionWithView:self.posterImageView
+                                  duration:0.4f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    self.posterImageView.image = posterImage;
+                                } completion:nil];
             } else {
                 self.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
             }
@@ -78,7 +81,6 @@
                                 } completion:nil];
                 
                 [self setNeedsStatusBarAppearanceUpdate];
-
             });
         }
     });
@@ -103,7 +105,7 @@
     self.navigationController.navigationBar.hidden = true;
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self configureView];
-
+    
 }
 
 
@@ -147,15 +149,21 @@
 }
 
 - (IBAction)openTrailer:(UIButton *)sender {
-    [self.manager.database getTrailerForID:self.movie.idNumber completion:^(NSURL *trailerURL) {
-        if (trailerURL != nil) {
-        if ([[UIApplication sharedApplication] canOpenURL:trailerURL]) {
-            [[UIApplication sharedApplication] openURL:trailerURL];
-        }
+    [self.manager.database getTrailerForID:self.movie.idNumber completion:^(NSString *trailer) {
+        if (trailer != nil) {
+            NSURL *appTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"youtube:///watch?v=%@", trailer]];
+            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", trailer]];
+            
+            if ([[UIApplication sharedApplication] canOpenURL:appTrailer]) {
+                [[UIApplication sharedApplication] openURL:appTrailer];
+            }
+            else {
+                [[UIApplication sharedApplication] openURL:webTrailer];
+            }
         } else {
             UIAlertController *alert = [UIAlertController
-                                        alertControllerWithTitle:@"Unable to find trailer"
-                                        message:@"A trailer for this movie is not available"
+                                        alertControllerWithTitle:@"Trailer not found"
+                                        message:@"Search YouTube for movie trailer?"
                                         preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction* yesButton = [UIAlertAction
@@ -163,15 +171,34 @@
                                         style:UIAlertActionStyleDefault
                                         
                                         handler:^(UIAlertAction * action) {
-                                            //Handle your yes please button action here
+                                            NSString* query = [self.movie.title stringByReplacingOccurrencesOfString:@" "
+                                                                                                          withString:@"+"];
+                                            
+                                            NSURL *appTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"youtube:///results?q=%@+trailer", query]];
+                                            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/results?q=%@+trailer", query]];
+                                            
+                                            if ([[UIApplication sharedApplication] canOpenURL:appTrailer]) {
+                                                [[UIApplication sharedApplication] openURL:appTrailer];
+                                            }
+                                            else {
+                                                [[UIApplication sharedApplication] openURL:webTrailer];
+                                            }
                                         }];
             
+            UIAlertAction* cancelButton = [UIAlertAction
+                                           actionWithTitle:@"Cancel"
+                                           style:UIAlertActionStyleCancel
+                                           
+                                           handler:^(UIAlertAction * action) {
+                                               
+                                           }];
+            
+            [alert addAction:cancelButton];
             [alert addAction:yesButton];
             
             [self presentViewController:alert animated:true completion:nil];
         }
     }];
-    // TODO: Check for trailer availability based on trailer
 }
 
 @end

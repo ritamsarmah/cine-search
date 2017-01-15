@@ -15,6 +15,6 @@
 
 @property (nonatomic, retain) MovieSearch *database;
 
-+ (id) sharedManager;
++ (instancetype) sharedManager;
 
 @end

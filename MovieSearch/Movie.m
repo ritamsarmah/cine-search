@@ -10,6 +10,8 @@
 
 @implementation Movie
 
+// TODO: Add certification
+
 - (instancetype)initWithTitle:(NSString *)title overview:(NSString *)overview releaseDate:(NSString *)releaseDate rating:(NSNumber *)rating genres:(NSArray *)genres posterURL:(NSString *)posterURL backdropURL:(NSString *)backdropURL idNumber:(NSNumber *)idNumber{
     self = [super init];
     

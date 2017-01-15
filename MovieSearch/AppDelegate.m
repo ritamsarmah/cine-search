@@ -19,10 +19,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-    UISplitViewController *splitViewController = tabBarController.viewControllers[1];
-    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-    navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
-    splitViewController.delegate = self;
+    UISplitViewController *discoverSplitViewController = tabBarController.viewControllers[0];
+    UISplitViewController *searchSplitViewController = tabBarController.viewControllers[1];
+    discoverSplitViewController.delegate = self;
+    searchSplitViewController.delegate = self;
     return YES;
 }
 

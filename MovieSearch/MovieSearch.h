@@ -15,7 +15,8 @@
 
 - (void)search:(NSString*)query completion:(void (^)(NSMutableArray*))completion;
 - (NSString *)formatDate:(NSString*)stringDate;
-- (void)getTrailerForID:(NSNumber *)idNumber completion:(void (^)(NSURL*))completion;
+- (void)getMovieForID:(int)idNumber completion:(void (^)(Movie *))completion;
+- (void)getTrailerForID:(NSNumber *)idNumber completion:(void (^)(NSString *))completion;
 - (void)getNowPlaying:(void (^)(NSMutableArray *))completion;
 
 @end

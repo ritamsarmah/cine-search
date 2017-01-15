@@ -10,6 +10,7 @@
 #import "MovieTableViewCell.h"
 #import "MovieSingleton.h"
 #import "DetailViewController.h"
+#import <Realm/Realm.h>
 
 @implementation MasterViewController
 
@@ -51,6 +52,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
     [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
 
 
@@ -95,7 +97,7 @@
                     [self.loadingMovies stopAnimating];
                     self.loadingView.hidden = true;
                     UIAlertController *alert = [UIAlertController
-                                                alertControllerWithTitle:@"Unable to find movie"
+                                                alertControllerWithTitle:@"Movie not found"
                                                 message:@"No movies matched your search"
                                                 preferredStyle:UIAlertControllerStyleAlert];
                     
@@ -174,7 +176,6 @@
     return self.movies.count;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"MovieCell";
@@ -191,10 +192,25 @@
     cell.titleLabel.text = movie.title;
     cell.releaseLabel.text = movie.releaseDate ?: @"TBA";
     cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
+    cell.movieID = [[MovieID alloc] initWithID:[movie.idNumber intValue]];
+    
+    // Set favorites icon based on database
+    RLMResults *favorites = [MovieID allObjects];
+    
+    [cell.favoriteButton setTintColor:[UIColor whiteColor]];
+    [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
+    
+    for (MovieID *movieID in favorites) {
+        if (movieID.movieID == [movie.idNumber integerValue]) {
+            [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
+            [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+        }
+    }
     
     // Check if image cached, else download from URL
+    cell.posterImageView.image = nil;
     UIImage *posterImage = [self.imageCache objectForKey:movie.idNumber];
-    if ([self.imageCache objectForKey:movie.idNumber] != nil) {
+    if (posterImage != nil) {
         [UIView transitionWithView:cell.posterImageView
                           duration:0.2f
                            options:UIViewAnimationOptionTransitionCrossDissolve
@@ -202,30 +218,26 @@
                             cell.posterImageView.image = posterImage;
                         } completion:nil];
     } else {
-        NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
-        cell.posterImageView.image = nil;
         [cell.loadingPoster startAnimating];
-        dispatch_async(dispatch_get_global_queue(0,0), ^{
-            NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (data != nil) {
-                    UIImage *posterImage = [UIImage imageWithData:data];
-                    [UIView transitionWithView:cell.posterImageView
-                                      duration:0.2f
-                                       options:UIViewAnimationOptionTransitionCrossDissolve
-                                    animations:^{
-                                        cell.posterImageView.image = posterImage;
-                                    } completion:nil];
-                    self.imageCache[movie.idNumber] = posterImage;
-                    
-                } else {
-                    cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
-                }
-                [cell.loadingPoster stopAnimating];
-            });
-        });
+        NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
+        
+        NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (data != nil) {
+                UIImage *posterImage = [UIImage imageWithData:data];
+                [UIView transitionWithView:cell.posterImageView
+                                  duration:0.2f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    cell.posterImageView.image = posterImage;
+                                } completion:nil];
+                self.imageCache[movie.idNumber] = posterImage;
+            } else {
+                cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
+            }
+            [cell.loadingPoster stopAnimating];
+        }];
+        [task resume];
     }
-    
     return cell;
 }
 

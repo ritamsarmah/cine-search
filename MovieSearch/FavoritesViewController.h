@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MovieSingleton.h"
 
 @interface FavoritesViewController : UITableViewController
+
+@property MovieSingleton *manager;
+@property NSMutableDictionary *imageCache;
 
 @end
