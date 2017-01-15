@@ -29,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *trailerButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *posterLoadingIndicator;
 
 - (IBAction)back:(UIButton *)sender;
 - (IBAction)favoritePressed:(UIButton *)sender;

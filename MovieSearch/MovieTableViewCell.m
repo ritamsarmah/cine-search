@@ -40,13 +40,6 @@
 - (IBAction)favoritePressed:(UIButton *)sender {
     RLMRealm *realm = RLMRealm.defaultRealm;
     if (self.favoriteButton.tintColor != [UIColor whiteColor]) {
-        // Remove from favorites list
-        MovieID *movieToDelete = [MovieID objectForPrimaryKey:@(self.movieID.movieID)];
-        
-        [realm beginWriteTransaction];
-        [realm deleteObject:movieToDelete];
-        [realm commitWriteTransaction];
-        
         // Animate to empty heart
         [UIView animateWithDuration:0.3/2.5 animations:^{
             sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
@@ -62,12 +55,14 @@
             }];
         }];
         
-    } else {
-        // Add to favorites list
+        // Remove from favorites list
+        MovieID *movieToDelete = [MovieID objectForPrimaryKey:@(self.movieID.movieID)];
+        
         [realm beginWriteTransaction];
-        [MovieID createInRealm:realm withValue:@{@"movieID": @(self.movieID.movieID)}];
+        [realm deleteObject:movieToDelete];
         [realm commitWriteTransaction];
         
+    } else {
         // Animate to red filled heart
         [UIView animateWithDuration:0.3/2.5 animations:^{
             sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
@@ -82,6 +77,11 @@
                 }];
             }];
         }];
+        
+        // Add to favorites list
+        [realm beginWriteTransaction];
+        [MovieID createInRealm:realm withValue:@{@"movieID": @(self.movieID.movieID)}];
+        [realm commitWriteTransaction];
         
     }
     

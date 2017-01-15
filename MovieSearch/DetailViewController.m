@@ -31,6 +31,7 @@
     self.genreLabel.text = [self.movie.genres componentsJoinedByString:@" | "];
     
     // Download poster image from URL
+    [self.posterLoadingIndicator startAnimating];
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
         NSData *data = [[NSData alloc] initWithContentsOfURL:posterURL];
@@ -46,6 +47,7 @@
             } else {
                 self.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
             }
+            [self.posterLoadingIndicator stopAnimating];
         });
     });
     
@@ -83,7 +85,7 @@
                                 animations:^{
                                     self.backdropImageView.image = [UIImage imageWithCGImage:cgImage];
                                 } completion:nil];
-                
+                [self.posterLoadingIndicator stopAnimating];
                 [self setNeedsStatusBarAppearanceUpdate];
             });
         }
@@ -150,13 +152,6 @@
 - (IBAction)favoritePressed:(UIButton *)sender {
     RLMRealm *realm = RLMRealm.defaultRealm;
     if (self.favoriteButton.tintColor != [UIColor whiteColor]) {
-        // Remove from favorites list
-        MovieID *movieToDelete = [MovieID objectForPrimaryKey:@([self.movie.idNumber integerValue])];
-        
-        [realm beginWriteTransaction];
-        [realm deleteObject:movieToDelete];
-        [realm commitWriteTransaction];
-        
         // Animate to empty heart
         [UIView animateWithDuration:0.3/2.5 animations:^{
             sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
@@ -172,12 +167,14 @@
             }];
         }];
         
-    } else {
-        // Add to favorites list
+        // Remove from favorites list
+        MovieID *movieToDelete = [MovieID objectForPrimaryKey:@([self.movie.idNumber integerValue])];
+        
         [realm beginWriteTransaction];
-        [MovieID createInRealm:realm withValue:@{@"movieID": @([self.movie.idNumber integerValue])}];
+        [realm deleteObject:movieToDelete];
         [realm commitWriteTransaction];
         
+    } else {
         // Animate to red filled heart
         [UIView animateWithDuration:0.3/2.5 animations:^{
             sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
@@ -193,6 +190,10 @@
             }];
         }];
         
+        // Add to favorites list
+        [realm beginWriteTransaction];
+        [MovieID createInRealm:realm withValue:@{@"movieID": @([self.movie.idNumber integerValue])}];
+        [realm commitWriteTransaction];
     }
 }
 

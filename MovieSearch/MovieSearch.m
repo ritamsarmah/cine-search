@@ -144,12 +144,12 @@
                 NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
                 NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
                 NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                NSArray *genreNumbers = [NSArray arrayWithArray:[movie objectForKey:@"genre_ids"]];
-                // TODO: Add certification into movie
+                NSArray *genreResults = [NSArray arrayWithArray:[movie objectForKey:@"genres"]];
                 NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
-                for (NSNumber *genreID in genreNumbers) {
-                    if (self.genres[genreID] != nil) {
-                        [movieGenres addObject:self.genres[genreID]];
+                // TODO: Add certification to movie
+                for (id genre in genreResults) {
+                    if (self.genres[[genre objectForKey:@"id"]] != nil) {
+                        [movieGenres addObject:self.genres[[genre objectForKey:@"id"]]];
                     }
                 }
                 
