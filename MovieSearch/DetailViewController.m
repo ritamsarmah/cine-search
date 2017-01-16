@@ -10,6 +10,7 @@
 #import "MovieSingleton.h"
 #import "MovieID.h"
 #import <Realm/Realm.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <MXParallaxHeader/MXParallaxHeader.h>
 
 @interface DetailViewController ()
@@ -37,23 +38,20 @@
     // Download poster image from URL
     [self.posterLoadingIndicator startAnimating];
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
-    dispatch_async(dispatch_get_global_queue(0,0), ^{
-        NSData *data = [[NSData alloc] initWithContentsOfURL:posterURL];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (data != nil) {
-                UIImage *posterImage = [UIImage imageWithData:data];
-                [UIView transitionWithView:self.posterImageView
-                                  duration:0.4f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    self.posterImageView.image = posterImage;
-                                } completion:nil];
-            } else {
-                self.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
-            }
-            [self.posterLoadingIndicator stopAnimating];
-        });
-    });
+    
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    
+    [manager downloadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        [self.posterLoadingIndicator stopAnimating];
+        if (image) {
+            [UIView transitionWithView:self.posterImageView
+                              duration:0.4
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                self.posterImageView.image = image;
+                            } completion:nil];
+        }
+    }];
     
     // Download backdrop image from URL
     self.backdropImageView.image = [UIImage imageNamed:@"BlankBackdrop"];
@@ -63,15 +61,12 @@
     self.scrollView.parallaxHeader.mode = MXParallaxHeaderModeFill;
     self.scrollView.parallaxHeader.minimumHeight = 64;
     
-    
     NSURL *backdropURL = [[NSURL alloc] initWithString:self.movie.backdropURL];
-    dispatch_async(dispatch_get_global_queue(0,0), ^{
-        NSData *data = [[NSData alloc] initWithContentsOfURL:backdropURL];
-        if (data != nil) {
-            
-            UIImage *backdropImage = [UIImage imageWithData:data];
+    [manager downloadImageWithURL:backdropURL options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        [self.posterLoadingIndicator stopAnimating];
+        if (image) {
             CIContext *context = [CIContext contextWithOptions:nil];
-            CIImage *inputImage = [CIImage imageWithCGImage:backdropImage.CGImage];
+            CIImage *inputImage = [CIImage imageWithCGImage:image.CGImage];
             
             CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
             [filter setValue:inputImage forKey:kCIInputImageKey];
@@ -79,26 +74,15 @@
             CIImage *result = [filter valueForKey:kCIOutputImageKey];
             
             CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
-//            CALayer *maskLayer = [CALayer layer];
-//            maskLayer.frame = backdropImageView.bounds;
-//            maskLayer.shadowPath = CGPathCreateWithRect(CGRectInset(backdropImageView.bounds, 5, 5), nil);
-//            maskLayer.shadowOpacity = 1;
-//            maskLayer.shadowOffset = CGSizeZero;
-//            maskLayer.shadowColor = [UIColor whiteColor].CGColor;
-//            
-//            backdropImageView.layer.mask = maskLayer;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [UIView transitionWithView:self.backdropImageView
-                                  duration:0.4f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    self.backdropImageView.image = [UIImage imageWithCGImage:cgImage];
-                                } completion:nil];
-                [self.posterLoadingIndicator stopAnimating];
-                [self setNeedsStatusBarAppearanceUpdate];
-            });
+            [UIView transitionWithView:self.backdropImageView
+                              duration:0.4
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                self.backdropImageView.image = [UIImage imageWithCGImage:cgImage];
+                            } completion:nil];
+            [self setNeedsStatusBarAppearanceUpdate];
         }
-    });
+    }];
 }
 
 - (void)viewDidLoad {
