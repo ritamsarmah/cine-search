@@ -10,7 +10,9 @@
 #import "DetailViewController.h"
 #import "MovieTableViewCell.h"
 #import "MovieID.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <Realm/Realm.h>
+
 
 static NSString * const CellIdentifier = @"MovieCell";
 static NSString * const kTableName = @"table";
@@ -45,7 +47,15 @@ static NSString * const kTableName = @"table";
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     self.manager = [[MovieSingleton alloc] init];
-    self.imageCache = [[NSMutableDictionary alloc] init];
+    self.moviesForID = [[NSMutableDictionary alloc] init];
+    
+    for (MovieID *movieID in self.array) {
+        if ([self.moviesForID objectForKey:@(movieID.movieID)] == nil) {
+            [self.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
+                [self.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
+            }];
+        }
+    }
     
     // Set realm notification block
     __weak typeof(self) weakSelf = self;
@@ -60,6 +70,14 @@ static NSString * const kTableName = @"table";
         if (!changes) {
             [tv reloadData];
             return;
+        }
+        
+        for (MovieID *movieID in data) {
+            if ([weakSelf.moviesForID objectForKey:@(movieID.movieID)] == nil) {
+                [weakSelf.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
+                    [weakSelf.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
+                }];
+            }
         }
         
         // changes is non-nil, so we just need to update the tableview
@@ -80,60 +98,38 @@ static NSString * const kTableName = @"table";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MovieTableViewCell *cell = (MovieTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    UIView *bgColorView = [[UIView alloc] init];
-    bgColorView.backgroundColor = [UIColor colorWithRed:0.00 green:0.72 blue:1.00 alpha:1.0];
-    [cell setSelectedBackgroundView:bgColorView];
     
-    MovieID *object = self.array[indexPath.row];
-    __block Movie *movie;
-    cell.movieID = object;
-    [self.manager.database getMovieForID:object.movieID completion:^(Movie *movieForObject) {
-        movie = movieForObject;
-    }];
+    MovieID *key = self.array[indexPath.row];
+    cell.movieID = key;
+    cell.tag = indexPath.row;
     
-    while (movie == nil) {} // Waits for completion block to set movie TODO: Rewrite this
-    
-    // Set labels based on movie data
-    cell.titleLabel.text = movie.title;
-    cell.releaseLabel.text = movie.releaseDate ?: @"TBA";
-    cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
-    
-    // Check if image cached, else download from URL
-    cell.posterImageView.image = nil;
-    UIImage *posterImage = [self.imageCache objectForKey:movie.idNumber];
-    if (posterImage != nil) {
-        [UIView transitionWithView:cell.posterImageView
-                          duration:0.2f
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                            cell.posterImageView.image = posterImage;
-                        } completion:nil];
-    } else {
-        [cell.loadingPoster startAnimating];
-        NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
-        
-        NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (data != nil) {
-                    UIImage *posterImage = [UIImage imageWithData:data];
-                    [UIView transitionWithView:cell.posterImageView
-                                      duration:0.2f
-                                       options:UIViewAnimationOptionTransitionCrossDissolve
-                                    animations:^{
-                                        cell.posterImageView.image = posterImage;
-                                    } completion:nil];
-                    self.imageCache[movie.idNumber] = posterImage;
-                } else {
-                    cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
-                }
-                [cell.loadingPoster stopAnimating];
-            });
-        }];
-        [task resume];
-    }
-    
+    // Set favorites icon
     [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
     [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+    
+    if (self.moviesForID[@(key.movieID)] != nil) {
+        Movie *movie = self.moviesForID[@(key.movieID)];
+        cell.titleLabel.text = movie.title;
+        cell.releaseLabel.text = movie.releaseDate ?: @"TBA";
+        cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
+        
+        // Download poster image
+        cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
+        NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
+        
+        SDWebImageManager *manager = [SDWebImageManager sharedManager];
+        
+        [manager downloadImageWithURL:url options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            if (image) {
+                [UIView transitionWithView:cell.posterImageView
+                                  duration:0.2
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    cell.posterImageView.image = image;
+                                } completion:nil];
+            }
+        }];
+    }
     
     return cell;
 }

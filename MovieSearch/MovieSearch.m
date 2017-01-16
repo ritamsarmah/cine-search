@@ -45,8 +45,12 @@
 - (void)search:(NSString *)query completion:(void (^)(NSMutableArray*))completion{
     
     // Reformat search query for request
-    NSString* newQuery = [query stringByReplacingOccurrencesOfString:@" "
-                                                          withString:@"+"];
+    NSCharacterSet *illegal = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ñé "] invertedSet];
+    NSString* newQuery = [[query componentsSeparatedByCharactersInSet:illegal]
+                          componentsJoinedByString:@""];
+    newQuery = [newQuery stringByReplacingOccurrencesOfString:@" "
+                                                   withString:@"+"];
+    
     NSMutableArray *movies = [NSMutableArray array];
     NSString *url = [NSString stringWithFormat:@"https://api.themoviedb.org/3/search/movie?query=%@&api_key=%@", newQuery, key];
     // TODO: &append_to_response=release_dates for certifications

@@ -10,6 +10,7 @@
 #import "MovieTableViewCell.h"
 #import "MovieSingleton.h"
 #import "DetailViewController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <Realm/Realm.h>
 
 @implementation MasterViewController
@@ -46,19 +47,12 @@
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.searchBar.delegate = self;
     self.searchBar.keyboardAppearance = UIKeyboardAppearanceDark;
-    self.imageCache = [[NSMutableDictionary alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
     [super viewWillAppear:animated];
     [self.tableView reloadData];
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    [self.imageCache removeAllObjects];
 }
 
 #pragma mark - Segues
@@ -86,22 +80,24 @@
     [self.searchTimer invalidate];
     [self.loadingMovies startAnimating];
     self.loadingView.hidden = NO;
+    [searchBar endEditing:YES];
+    [self.tableView setUserInteractionEnabled:NO];
     [self.manager.database search:searchBar.text completion:^(NSMutableArray *movies) {
         if (self.movies != movies) {
             if (movies.count != 0) {
-                [self.imageCache removeAllObjects];
                 self.movies = movies;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSRange range = NSMakeRange(0, 1);
                     NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
                     [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
                     [self.loadingMovies stopAnimating];
+                    [self.tableView setUserInteractionEnabled:YES];
                     self.loadingView.hidden = true;
                 });
             } else {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.loadingMovies stopAnimating];
-                    self.loadingView.hidden = true;
+                    self.loadingView.hidden = YES;
                     UIAlertController *alert = [UIAlertController
                                                 alertControllerWithTitle:@"Movie not found"
                                                 message:@"No movies matched your search"
@@ -117,12 +113,13 @@
                     [alert addAction:yesButton];
                     
                     [self presentViewController:alert animated:true completion:nil];
+                    [self.tableView setUserInteractionEnabled:YES];
                 });
             }
         }
         
     }];
-    [searchBar endEditing:true];
+    
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
@@ -159,7 +156,6 @@
     [self.manager.database search:self.searchBar.text completion:^(NSMutableArray *movies) {
         if (self.movies != movies) {
             if (movies.count != 0) {
-                [self.imageCache removeAllObjects];
                 self.movies = movies;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSRange range = NSMakeRange(0, 1);
@@ -188,20 +184,17 @@
     
     MovieTableViewCell *cell = (MovieTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    UIView *bgColorView = [[UIView alloc] init];
-    bgColorView.backgroundColor = [UIColor colorWithRed:0.00 green:0.72 blue:1.00 alpha:1.0];
-    [cell setSelectedBackgroundView:bgColorView];
-    
-    // Display movie in the table cell
+    // Set movieID for cell
     Movie *movie = [_movies objectAtIndex:indexPath.row];
+    cell.movieID = [[MovieID alloc] initWithID:[movie.idNumber intValue]];
     
+    // Set labels based on movie data
     cell.titleLabel.text = movie.title;
     cell.releaseLabel.text = movie.releaseDate ?: @"TBA";
     cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
-    cell.movieID = [[MovieID alloc] initWithID:[movie.idNumber intValue]];
     
     // Set favorites icon
-    if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
+    if ([cell isMovieInFavorites:[movie.idNumber integerValue]]) {
         [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
         [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
     } else {
@@ -209,39 +202,23 @@
         [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
     }
     
-    // Check if image cached, else download from URL
-    cell.posterImageView.image = nil;
-    UIImage *posterImage = [self.imageCache objectForKey:movie.idNumber];
-    if (posterImage != nil) {
-        [UIView transitionWithView:cell.posterImageView
-                          duration:0.2f
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                            cell.posterImageView.image = posterImage;
-                        } completion:nil];
-    } else {
-        [cell.loadingPoster startAnimating];
-        NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
-        
-        NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (data != nil) {
-                    UIImage *posterImage = [UIImage imageWithData:data];
-                    [UIView transitionWithView:cell.posterImageView
-                                      duration:0.2f
-                                       options:UIViewAnimationOptionTransitionCrossDissolve
-                                    animations:^{
-                                        cell.posterImageView.image = posterImage;
-                                    } completion:nil];
-                    self.imageCache[movie.idNumber] = posterImage;
-                } else {
-                    cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
-                }
-                [cell.loadingPoster stopAnimating];
-            });
-        }];
-        [task resume];
-    }
+    // Download poster image
+    cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
+    NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
+    
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    
+    [manager downloadImageWithURL:url options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        if (image) {
+            [UIView transitionWithView:cell.posterImageView
+                              duration:0.2
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                cell.posterImageView.image = image;
+                            } completion:nil];
+        }
+    }];
+    
     return cell;
 }
 

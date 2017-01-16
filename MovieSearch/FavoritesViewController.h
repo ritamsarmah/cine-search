@@ -14,7 +14,7 @@
 @interface FavoritesViewController : UITableViewController
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
+@property NSMutableDictionary *moviesForID;
 @property MovieSingleton *manager;
-@property NSMutableDictionary *imageCache;
 
 @end

@@ -7,6 +7,8 @@
 //
 
 #import "MovieTableViewCell.h"
+#import "MovieSingleton.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation MovieTableViewCell
 
@@ -14,8 +16,11 @@
     [super awakeFromNib];
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
-    [self.favoriteButton setTintColor:[UIColor whiteColor]];
-    [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
+    
+    UIView *selectedBackgroundView = [[UIView alloc] initWithFrame:self.bounds];
+    selectedBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    selectedBackgroundView.backgroundColor = [UIColor colorWithRed:0.00 green:0.72 blue:1.00 alpha:1.0];
+    self.selectedBackgroundView = selectedBackgroundView;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -85,9 +90,17 @@
         
     }
     
-    
 }
 
-
+- (BOOL)isMovieInFavorites:(NSInteger)movieID {
+    RLMResults *favorites = [MovieID allObjects];
+    
+    for (MovieID *realmMovieID in favorites) {
+        if (realmMovieID.movieID == movieID) {
+            return YES;
+        }
+    }
+    return NO;
+}
 
 @end
