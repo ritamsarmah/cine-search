@@ -138,7 +138,6 @@ static NSString * const kTableName = @"table";
 
 #pragma mark - Segues
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSLog(@"Preparing for segue");
     if ([[segue identifier] isEqualToString:@"showFavoriteMovie"]) {
         MovieTableViewCell *cell = (MovieTableViewCell *)sender;
         __block Movie *movie;

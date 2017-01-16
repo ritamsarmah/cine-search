@@ -31,11 +31,15 @@
     // Format and display genres label text
     self.genreLabel.text = [self.movie.genres componentsJoinedByString:@" | "];
     
+    // Set up parallax header
+    self.scrollView.parallaxHeader.view = self.headerView;
+    
     // Download poster image from URL
     [self.posterLoadingIndicator startAnimating];
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
         NSData *data = [[NSData alloc] initWithContentsOfURL:posterURL];
+        NSLog(@"%@", posterURL);
         dispatch_async(dispatch_get_main_queue(), ^{
             if (data != nil) {
                 UIImage *posterImage = [UIImage imageWithData:data];
@@ -53,34 +57,31 @@
     });
     
     // Download backdrop image from URL
+    self.backdropImageView.image = [UIImage imageNamed:@"BlankBackdrop"];
+    self.backdropImageView.contentMode = UIViewContentModeScaleAspectFill;
     
-    UIImageView *backdropImageView = [UIImageView new];
-    backdropImageView.image = [UIImage imageNamed:@"BlankBackdrop"];
-    backdropImageView.contentMode = UIViewContentModeScaleAspectFill;
-
-    self.scrollView.parallaxHeader.view = backdropImageView;
     self.scrollView.parallaxHeader.height = self.view.frame.size.height/3;
+    NSLog(@"%f", self.view.frame.size.height/3);
     self.scrollView.parallaxHeader.mode = MXParallaxHeaderModeFill;
-    self.scrollView.par
-    self.scrollView.parallaxHeader.minimumHeight = 90;
+    self.scrollView.parallaxHeader.minimumHeight = 76;
     
     
     NSURL *backdropURL = [[NSURL alloc] initWithString:self.movie.backdropURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
         NSData *data = [[NSData alloc] initWithContentsOfURL:backdropURL];
+        NSLog(@"%@", backdropURL);
         
         if (data != nil) {
             UIImage *backdropImage = [UIImage imageWithData:data];
-//            CIContext *context = [CIContext contextWithOptions:nil];
-//            CIImage *inputImage = [CIImage imageWithCGImage:backdropImage.CGImage];
-//            
-//            CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
-//            [filter setValue:inputImage forKey:kCIInputImageKey];
-//            [filter setValue:[NSNumber numberWithFloat:5.0f] forKey:@"inputRadius"];
-//            CIImage *result = [filter valueForKey:kCIOutputImageKey];
-//            
-//            CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
-//            
+            CIContext *context = [CIContext contextWithOptions:nil];
+            CIImage *inputImage = [CIImage imageWithCGImage:backdropImage.CGImage];
+            
+            CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+            [filter setValue:inputImage forKey:kCIInputImageKey];
+            [filter setValue:[NSNumber numberWithFloat:5.0f] forKey:@"inputRadius"];
+            CIImage *result = [filter valueForKey:kCIOutputImageKey];
+            
+            CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
 //            CALayer *maskLayer = [CALayer layer];
 //            maskLayer.frame = backdropImageView.bounds;
 //            maskLayer.shadowPath = CGPathCreateWithRect(CGRectInset(backdropImageView.bounds, 5, 5), nil);
@@ -89,17 +90,15 @@
 //            maskLayer.shadowColor = [UIColor whiteColor].CGColor;
 //            
 //            backdropImageView.layer.mask = maskLayer;
-            
             dispatch_async(dispatch_get_main_queue(), ^{
-//                [UIView transitionWithView:backdropImageView
-//                                  duration:0.4f
-//                                   options:UIViewAnimationOptionTransitionCrossDissolve
-//                                animations:^{
-//                                    backdropImageView.image = [UIImage imageWithCGImage:cgImage];
-//                                } completion:nil];
-//                [self.posterLoadingIndicator stopAnimating];
+                [UIView transitionWithView:self.backdropImageView
+                                  duration:0.4f
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    self.backdropImageView.image = [UIImage imageWithCGImage:cgImage];
+                                } completion:nil];
+                [self.posterLoadingIndicator stopAnimating];
                 [self setNeedsStatusBarAppearanceUpdate];
-                backdropImageView.image = backdropImage;
             });
         }
     });
@@ -110,16 +109,16 @@
     
     self.manager = [MovieSingleton sharedManager];
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
+    self.scrollView.delegate = self;
     
     self.trailerButton.layer.cornerRadius = 5;
     self.trailerButton.layer.masksToBounds = YES;
     self.favoriteButton.layer.cornerRadius = 5;
     self.favoriteButton.layer.masksToBounds = YES;
-    
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
-    self.automaticallyAdjustsScrollViewInsets = NO;
     
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationController.navigationBar.hidden = YES;
     
     [self configureView];
@@ -147,6 +146,12 @@
             [weakSelf.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
         }
     }];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    self.posterImageView.alpha = scrollView.parallaxHeader.progress;
 }
 
 #pragma mark - Managing the detail item
