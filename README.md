@@ -1,8 +1,8 @@
 # Movie Search
 Discover and search for the latest movies using Movie Search for iPhone. Uses [The Movie Database API](https://www.themoviedb.org/documentation/api) to find and retrieve movie information.
 
-<img src="https://cloud.githubusercontent.com/assets/17148467/21966242/ca27bb56-db24-11e6-8073-4ee401a241d3.png" height="534" width="300">
-<img src="https://cloud.githubusercontent.com/assets/17148467/21966243/ca28f106-db24-11e6-8a31-a415847df25e.png" height="534" width="300">
+<img src="https://cloud.githubusercontent.com/assets/17148467/21996055/428353b8-dbdd-11e6-8e3a-1ea1865884b6.png" height="534" width="300">
+<img src="https://cloud.githubusercontent.com/assets/17148467/21996054/4281c926-dbdd-11e6-9bf8-0570c55885b8.png" height="534" width="300">
 
 ## Getting Started
 1. Install Xcode.
@@ -22,11 +22,13 @@ Discover and search for the latest movies using Movie Search for iPhone. Uses [T
     // Constants.m
     NSString *const key = @"your-key-here";
     ```
-    
+
 6. Build and run.
 
-## Dependencies 
+## Dependencies
 - [Realm](https://github.com/realm/realm-cocoa)
+- [MKParallaxHeader](https://github.com/maxep/MXParallaxHeader)
+- [SDWebImage](https://github.com/rs/SDWebImage)
 
 ## Known Issues & Bugs
 - Discover tab is incomplete
