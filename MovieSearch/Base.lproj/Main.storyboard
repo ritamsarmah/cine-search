@@ -559,7 +559,7 @@
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a66-TQ-i2B">
-                                <rect key="frame" x="8" y="28" width="40" height="40"/>
+                                <rect key="frame" x="8" y="23" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="QMj-F4-Kup"/>
                                     <constraint firstAttribute="height" constant="40" id="Rjb-1e-kqw"/>
@@ -635,7 +635,7 @@
                         <color key="backgroundColor" red="0.1050081262" green="0.1162193337" blue="0.13881230350000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="feO-a9-lpm" firstAttribute="top" secondItem="6cM-bC-1KQ" secondAttribute="bottom" constant="20" id="7Rx-IA-dip"/>
-                            <constraint firstItem="a66-TQ-i2B" firstAttribute="top" secondItem="etQ-yj-j2h" secondAttribute="bottom" constant="8" symbolic="YES" id="Eup-ki-yks"/>
+                            <constraint firstItem="a66-TQ-i2B" firstAttribute="top" secondItem="etQ-yj-j2h" secondAttribute="bottom" constant="3" id="Eup-ki-yks"/>
                             <constraint firstItem="6a9-dH-WUd" firstAttribute="leading" secondItem="vzD-Ts-Drd" secondAttribute="leading" id="G31-Xg-A5A"/>
                             <constraint firstItem="6cM-bC-1KQ" firstAttribute="leading" secondItem="vzD-Ts-Drd" secondAttribute="leadingMargin" id="Oc4-Wc-5Ug"/>
                             <constraint firstItem="a66-TQ-i2B" firstAttribute="leading" secondItem="vzD-Ts-Drd" secondAttribute="leading" constant="8" id="QVC-rA-Kcm"/>
@@ -659,6 +659,7 @@
                         <outlet property="movieTitleLabel" destination="Lhs-6n-4To" id="qS0-GO-brm"/>
                         <outlet property="overviewLabel" destination="2sG-my-td0" id="rU9-Mp-AAJ"/>
                         <outlet property="posterImageView" destination="7pS-8H-BiQ" id="6kb-eh-D67"/>
+                        <outlet property="posterLoadingIndicator" destination="ZMw-NZ-fj9" id="8aL-HN-B6v"/>
                         <outlet property="ratingLabel" destination="agS-Zt-n3N" id="q37-N0-7W8"/>
                         <outlet property="ratingView" destination="5E6-X9-wdh" id="w4a-cd-ZNl"/>
                         <outlet property="releaseLabel" destination="akq-0k-HhL" id="7ff-SR-FHJ"/>
@@ -675,21 +676,26 @@
                             <rect key="frame" x="-8" y="-8" width="372" height="216"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7pS-8H-BiQ">
-                            <rect key="frame" x="124" y="30" width="110" height="164"/>
+                            <rect key="frame" x="123" y="26" width="110" height="164"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="7pS-8H-BiQ" secondAttribute="height" multiplier="125:187" id="mN4-lj-eOZ"/>
                             </constraints>
                         </imageView>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="ZMw-NZ-fj9">
+                            <rect key="frame" x="168" y="98" width="20" height="20"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="ZMw-NZ-fj9" firstAttribute="centerY" secondItem="HEt-Kt-5gp" secondAttribute="centerY" constant="8" id="8JT-bN-syy"/>
                         <constraint firstAttribute="bottom" secondItem="7ia-P2-Ueg" secondAttribute="bottom" constant="-8" id="ArC-6Q-wvD"/>
                         <constraint firstItem="7ia-P2-Ueg" firstAttribute="top" secondItem="HEt-Kt-5gp" secondAttribute="top" constant="-8" id="CO0-ip-5BK"/>
-                        <constraint firstItem="7pS-8H-BiQ" firstAttribute="centerX" secondItem="HEt-Kt-5gp" secondAttribute="centerX" constant="1" id="FHT-jV-tvk"/>
+                        <constraint firstItem="7pS-8H-BiQ" firstAttribute="centerX" secondItem="HEt-Kt-5gp" secondAttribute="centerX" id="FHT-jV-tvk"/>
                         <constraint firstItem="7ia-P2-Ueg" firstAttribute="leading" secondItem="HEt-Kt-5gp" secondAttribute="leading" constant="-8" id="I75-X5-qez"/>
+                        <constraint firstItem="ZMw-NZ-fj9" firstAttribute="centerX" secondItem="HEt-Kt-5gp" secondAttribute="centerX" id="JES-Gn-Bs7"/>
                         <constraint firstAttribute="trailing" secondItem="7ia-P2-Ueg" secondAttribute="trailing" constant="-8" id="Kfk-QQ-90m"/>
-                        <constraint firstItem="7pS-8H-BiQ" firstAttribute="top" secondItem="HEt-Kt-5gp" secondAttribute="top" constant="30" id="hxC-Bf-aqp"/>
-                        <constraint firstItem="7pS-8H-BiQ" firstAttribute="centerY" secondItem="HEt-Kt-5gp" secondAttribute="centerY" constant="12" id="z8U-b5-Gga"/>
+                        <constraint firstItem="7pS-8H-BiQ" firstAttribute="top" secondItem="HEt-Kt-5gp" secondAttribute="top" constant="26" id="hxC-Bf-aqp"/>
+                        <constraint firstItem="7pS-8H-BiQ" firstAttribute="centerY" secondItem="HEt-Kt-5gp" secondAttribute="centerY" constant="8" id="z8U-b5-Gga"/>
                     </constraints>
                 </view>
                 <swipeGestureRecognizer direction="right" id="one-eB-ROG"/>

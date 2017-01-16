@@ -61,17 +61,15 @@
     self.backdropImageView.contentMode = UIViewContentModeScaleAspectFill;
     
     self.scrollView.parallaxHeader.height = self.view.frame.size.height/3;
-    NSLog(@"%f", self.view.frame.size.height/3);
     self.scrollView.parallaxHeader.mode = MXParallaxHeaderModeFill;
-    self.scrollView.parallaxHeader.minimumHeight = 76;
+    self.scrollView.parallaxHeader.minimumHeight = 64;
     
     
     NSURL *backdropURL = [[NSURL alloc] initWithString:self.movie.backdropURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
         NSData *data = [[NSData alloc] initWithContentsOfURL:backdropURL];
-        NSLog(@"%@", backdropURL);
-        
         if (data != nil) {
+            
             UIImage *backdropImage = [UIImage imageWithData:data];
             CIContext *context = [CIContext contextWithOptions:nil];
             CIImage *inputImage = [CIImage imageWithCGImage:backdropImage.CGImage];

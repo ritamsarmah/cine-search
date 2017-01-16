@@ -28,12 +28,14 @@ static NSString * const kTableName = @"table";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    self.title = @"Favorites";
     self.navigationController.navigationBar.hidden = NO;
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    self.title = @"";
     self.navigationController.navigationBar.hidden = YES;
 }
 
@@ -146,6 +148,7 @@ static NSString * const kTableName = @"table";
         }];
         
         self.navigationController.navigationBar.hidden = YES;
+        self.title = @"";
         
         while (movie == nil) {}
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
