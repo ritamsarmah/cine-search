@@ -7,4 +7,5 @@ target 'MovieSearch' do
 
   # Pods for MovieSearch
 	pod 'Realm'
+	pod 'MXParallaxHeader'
 end

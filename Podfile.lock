@@ -1,14 +1,17 @@
 PODS:
+  - MXParallaxHeader (0.6.0)
   - Realm (2.2.0):
     - Realm/Headers (= 2.2.0)
   - Realm/Headers (2.2.0)
 
 DEPENDENCIES:
+  - MXParallaxHeader
   - Realm
 
 SPEC CHECKSUMS:
+  MXParallaxHeader: 2997592b8349baf8557ae0e4346f6b17e141de39
   Realm: d95b8fb34c83f1e764b66d319277a62c2b6e4bf5
 
-PODFILE CHECKSUM: e675969257c13d35c590da0e081135c699b5745c
+PODFILE CHECKSUM: 93727bef6ab115097e497ca822d76c0616b6ef64
 
 COCOAPODS: 1.2.0.rc.1

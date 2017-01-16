@@ -10,6 +10,7 @@
 #import "MovieSingleton.h"
 #import "MovieID.h"
 #import <Realm/Realm.h>
+#import <MXParallaxHeader/MXParallaxHeader.h>
 
 @interface DetailViewController ()
 
@@ -52,41 +53,53 @@
     });
     
     // Download backdrop image from URL
-    self.backdropImageView.image = [UIImage imageNamed:@"BlankBackdrop"];
+    
+    UIImageView *backdropImageView = [UIImageView new];
+    backdropImageView.image = [UIImage imageNamed:@"BlankBackdrop"];
+    backdropImageView.contentMode = UIViewContentModeScaleAspectFill;
+
+    self.scrollView.parallaxHeader.view = backdropImageView;
+    self.scrollView.parallaxHeader.height = self.view.frame.size.height/3;
+    self.scrollView.parallaxHeader.mode = MXParallaxHeaderModeFill;
+    self.scrollView.par
+    self.scrollView.parallaxHeader.minimumHeight = 90;
+    
+    
     NSURL *backdropURL = [[NSURL alloc] initWithString:self.movie.backdropURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
         NSData *data = [[NSData alloc] initWithContentsOfURL:backdropURL];
         
         if (data != nil) {
             UIImage *backdropImage = [UIImage imageWithData:data];
-            CIContext *context = [CIContext contextWithOptions:nil];
-            CIImage *inputImage = [CIImage imageWithCGImage:backdropImage.CGImage];
-            
-            CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
-            [filter setValue:inputImage forKey:kCIInputImageKey];
-            [filter setValue:[NSNumber numberWithFloat:5.0f] forKey:@"inputRadius"];
-            CIImage *result = [filter valueForKey:kCIOutputImageKey];
-            
-            CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
-            
-            CALayer *maskLayer = [CALayer layer];
-            maskLayer.frame = self.backdropImageView.bounds;
-            maskLayer.shadowPath = CGPathCreateWithRect(CGRectInset(self.backdropImageView.bounds, 5, 5), nil);
-            maskLayer.shadowOpacity = 1;
-            maskLayer.shadowOffset = CGSizeZero;
-            maskLayer.shadowColor = [UIColor whiteColor].CGColor;
-            
-            self.backdropImageView.layer.mask = maskLayer;
+//            CIContext *context = [CIContext contextWithOptions:nil];
+//            CIImage *inputImage = [CIImage imageWithCGImage:backdropImage.CGImage];
+//            
+//            CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+//            [filter setValue:inputImage forKey:kCIInputImageKey];
+//            [filter setValue:[NSNumber numberWithFloat:5.0f] forKey:@"inputRadius"];
+//            CIImage *result = [filter valueForKey:kCIOutputImageKey];
+//            
+//            CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
+//            
+//            CALayer *maskLayer = [CALayer layer];
+//            maskLayer.frame = backdropImageView.bounds;
+//            maskLayer.shadowPath = CGPathCreateWithRect(CGRectInset(backdropImageView.bounds, 5, 5), nil);
+//            maskLayer.shadowOpacity = 1;
+//            maskLayer.shadowOffset = CGSizeZero;
+//            maskLayer.shadowColor = [UIColor whiteColor].CGColor;
+//            
+//            backdropImageView.layer.mask = maskLayer;
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [UIView transitionWithView:self.backdropImageView
-                                  duration:0.4f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    self.backdropImageView.image = [UIImage imageWithCGImage:cgImage];
-                                } completion:nil];
-                [self.posterLoadingIndicator stopAnimating];
+//                [UIView transitionWithView:backdropImageView
+//                                  duration:0.4f
+//                                   options:UIViewAnimationOptionTransitionCrossDissolve
+//                                animations:^{
+//                                    backdropImageView.image = [UIImage imageWithCGImage:cgImage];
+//                                } completion:nil];
+//                [self.posterLoadingIndicator stopAnimating];
                 [self setNeedsStatusBarAppearanceUpdate];
+                backdropImageView.image = backdropImage;
             });
         }
     });
