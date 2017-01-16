@@ -7,6 +7,7 @@
 //
 
 #import "MovieTableViewCell.h"
+#import "MovieSingleton.h"
 
 @implementation MovieTableViewCell
 
@@ -14,8 +15,7 @@
     [super awakeFromNib];
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
-    [self.favoriteButton setTintColor:[UIColor whiteColor]];
-    [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -85,9 +85,17 @@
         
     }
     
-    
 }
 
-
+- (BOOL)isMovieInFavorites:(NSInteger)movieID {
+    RLMResults *favorites = [MovieID allObjects];
+    
+    for (MovieID *realmMovieID in favorites) {
+        if (realmMovieID.movieID == movieID) {
+            return YES;
+        }
+    }
+    return NO;
+}
 
 @end

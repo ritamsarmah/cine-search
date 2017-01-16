@@ -21,7 +21,6 @@
 
 @property NSMutableArray *movies;
 @property MovieSingleton *manager;
-@property NSMutableDictionary *imageCache;
 
 -(void) instantSearch;
 -(void) resetSearchTimer;

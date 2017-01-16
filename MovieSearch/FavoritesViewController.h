@@ -15,6 +15,5 @@
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property MovieSingleton *manager;
-@property NSMutableDictionary *imageCache;
 
 @end

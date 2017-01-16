@@ -10,7 +10,9 @@
 #import "DetailViewController.h"
 #import "MovieTableViewCell.h"
 #import "MovieID.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 #import <Realm/Realm.h>
+
 
 static NSString * const CellIdentifier = @"MovieCell";
 static NSString * const kTableName = @"table";
@@ -45,7 +47,6 @@ static NSString * const kTableName = @"table";
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     self.manager = [[MovieSingleton alloc] init];
-    self.imageCache = [[NSMutableDictionary alloc] init];
     
     // Set realm notification block
     __weak typeof(self) weakSelf = self;
@@ -98,42 +99,31 @@ static NSString * const kTableName = @"table";
     cell.releaseLabel.text = movie.releaseDate ?: @"TBA";
     cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
     
-    // Check if image cached, else download from URL
-    cell.posterImageView.image = nil;
-    UIImage *posterImage = [self.imageCache objectForKey:movie.idNumber];
-    if (posterImage != nil) {
-        [UIView transitionWithView:cell.posterImageView
-                          duration:0.2f
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{
-                            cell.posterImageView.image = posterImage;
-                        } completion:nil];
+    // Set favorites icon
+    if ([cell isMovieInFavorites:[movie.idNumber integerValue]]) {
+        [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
+        [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
     } else {
-        [cell.loadingPoster startAnimating];
-        NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
-        
-        NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (data != nil) {
-                    UIImage *posterImage = [UIImage imageWithData:data];
-                    [UIView transitionWithView:cell.posterImageView
-                                      duration:0.2f
-                                       options:UIViewAnimationOptionTransitionCrossDissolve
-                                    animations:^{
-                                        cell.posterImageView.image = posterImage;
-                                    } completion:nil];
-                    self.imageCache[movie.idNumber] = posterImage;
-                } else {
-                    cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
-                }
-                [cell.loadingPoster stopAnimating];
-            });
-        }];
-        [task resume];
+        [cell.favoriteButton setTintColor:[UIColor whiteColor]];
+        [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
     }
     
-    [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-    [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+    // Download poster image
+    cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
+    NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
+    
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    
+    [manager downloadImageWithURL:url options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        if (image) {
+            [UIView transitionWithView:cell.posterImageView
+                              duration:0.2
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                cell.posterImageView.image = image;
+                            } completion:nil];
+        }
+    }];
     
     return cell;
 }

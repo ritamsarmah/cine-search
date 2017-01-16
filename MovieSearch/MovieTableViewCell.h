@@ -16,10 +16,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *releaseLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 @property (weak, nonatomic) IBOutlet UIView *ratingView;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingPoster;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
 
 @property (nonatomic) MovieID *movieID;
 
 - (IBAction)favoritePressed:(UIButton *)sender;
+- (BOOL)isMovieInFavorites:(NSInteger)movieID;
+
 @end
