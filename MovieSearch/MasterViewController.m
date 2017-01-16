@@ -184,10 +184,6 @@
     
     MovieTableViewCell *cell = (MovieTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    UIView *bgColorView = [[UIView alloc] init];
-    bgColorView.backgroundColor = [UIColor colorWithRed:0.00 green:0.72 blue:1.00 alpha:1.0];
-    [cell setSelectedBackgroundView:bgColorView];
-    
     // Set movieID for cell
     Movie *movie = [_movies objectAtIndex:indexPath.row];
     cell.movieID = [[MovieID alloc] initWithID:[movie.idNumber intValue]];
