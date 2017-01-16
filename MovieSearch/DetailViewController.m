@@ -39,7 +39,6 @@
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
     dispatch_async(dispatch_get_global_queue(0,0), ^{
         NSData *data = [[NSData alloc] initWithContentsOfURL:posterURL];
-        NSLog(@"%@", posterURL);
         dispatch_async(dispatch_get_main_queue(), ^{
             if (data != nil) {
                 UIImage *posterImage = [UIImage imageWithData:data];

@@ -9,6 +9,8 @@
 #import "DiscoverViewController.h"
 #import "MovieSingleton.h"
 #import "DetailViewController.h"
+#import "MovieID.h"
+#import <Realm/Realm.h>
 
 @interface DiscoverViewController () {
     int x;
@@ -32,10 +34,24 @@
     self.loadingMovies.center = self.view.center;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.title = @"Discover";
+    self.navigationController.navigationBar.hidden = NO;
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.title = @"";
+    self.navigationController.navigationBar.hidden = YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.manager = [MovieSingleton sharedManager];
+    self.bannerMovies = [NSMutableArray arrayWithCapacity:4];
     self.imageScrollView.delegate = self;
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self.loadingMovies startAnimating];
@@ -173,15 +189,23 @@
 }
 
 -(void)openMovie:(UITapGestureRecognizer *)sender {
-    UIImageView *imageView = (UIImageView *)sender.view;
-    NSLog(@"%lu", imageView.tag);
-    Movie *movie = self.bannerMovies[(NSUInteger)imageView.tag];
-    if (movie == nil) {
-        NSLog(@"nil movie over here");
+    [self performSegueWithIdentifier:@"showDiscoverDetail" sender:sender];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"showDiscoverDetail"]) {
+        UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
+        UIImageView *imageView = (UIImageView *)recognizer.view;
+        Movie *movie = self.bannerMovies[imageView.tag-1];
+        DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+        [controller setMovie:movie];
+        
+        if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
+            controller.isFavorite = YES;
+        } else {
+            controller.isFavorite = NO;
+        }
     }
-    DetailViewController *controller = (DetailViewController *)[self detailViewController];
-    [controller setMovie:movie];
-    [self showDetailViewController:controller sender:self];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -193,6 +217,17 @@
     } else {
         x = scrollView.contentOffset.x;
     }
+}
+
+- (BOOL)isMovieInFavorites:(NSInteger)movieID {
+    RLMResults *favorites = [MovieID allObjects];
+    
+    for (MovieID *realmMovieID in favorites) {
+        if (realmMovieID.movieID == movieID) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 @end
