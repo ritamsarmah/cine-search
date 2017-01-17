@@ -50,9 +50,12 @@ static NSString * const kTableName = @"table";
     self.moviesForID = [[NSMutableDictionary alloc] init];
     
     for (MovieID *movieID in self.array) {
-        if ([self.moviesForID objectForKey:@(movieID.movieID)] == nil) {
+        if (!self.moviesForID[@(movieID.movieID)]) {
             [self.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
                 [self.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView reloadData];
+                });
             }];
         }
     }
@@ -76,6 +79,9 @@ static NSString * const kTableName = @"table";
             if ([weakSelf.moviesForID objectForKey:@(movieID.movieID)] == nil) {
                 [weakSelf.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
                     [weakSelf.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.tableView reloadData];
+                    });
                 }];
             }
         }
@@ -138,17 +144,12 @@ static NSString * const kTableName = @"table";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showFavoriteMovie"]) {
         MovieTableViewCell *cell = (MovieTableViewCell *)sender;
-        __block Movie *movie;
-        [self.manager.database getMovieForID:cell.movieID.movieID completion:^(Movie *movieForObject) {
-            movie = movieForObject;
-        }];
-        
+
         self.navigationController.navigationBar.hidden = YES;
         self.title = @"";
         
-        while (movie == nil) {}
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-        [controller setMovie:movie];
+        [controller setMovie:self.moviesForID[@(cell.movieID.movieID)]];
     }
 }
 
