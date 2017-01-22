@@ -11,12 +11,16 @@
 #import "DetailViewController.h"
 #import "MovieID.h"
 #import <Realm/Realm.h>
+#import "AFTableViewCell.h"
 
 @interface DiscoverViewController () {
     int x;
     int max;
     BOOL isAutoScrolling;
 }
+
+@property (nonatomic, strong) NSArray *colorArray;
+@property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
 
 @end
 
@@ -27,6 +31,31 @@
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [self.view addSubview:activityIndicator];
     self.loadingMovies = activityIndicator;
+    
+    const NSInteger numberOfTableViewRows = 1;
+    const NSInteger numberOfCollectionViewCells = 10;
+    
+    NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:numberOfTableViewRows];
+    
+    for (NSInteger tableViewRow = 0; tableViewRow < numberOfTableViewRows; tableViewRow++) {
+        NSMutableArray *colorArray = [NSMutableArray arrayWithCapacity:numberOfCollectionViewCells];
+        
+        for (NSInteger collectionViewItem = 0; collectionViewItem < numberOfCollectionViewCells; collectionViewItem++)
+        {
+            
+            CGFloat red = arc4random() % 255;
+            CGFloat green = arc4random() % 255;
+            CGFloat blue = arc4random() % 255;
+            UIColor *color = [UIColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:1.0f];
+            
+            [colorArray addObject:color];
+        }
+        
+        [mutableArray addObject:colorArray];
+    }
+    
+    self.colorArray = [NSArray arrayWithArray:mutableArray];
+    self.contentOffsetDictionary = [NSMutableDictionary dictionary];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -56,6 +85,9 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self.loadingMovies startAnimating];
     isAutoScrolling = NO;
+    
+    self.movieTableView.rowHeight = 120;
+    self.movieTableView.backgroundColor = [UIColor clearColor];
     
     self.detailViewController = [(DetailViewController *)[DetailViewController alloc] init];
     
@@ -209,13 +241,26 @@
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.contentOffset.x == max && !isAutoScrolling) {
-        [scrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
+    if ([scrollView isKindOfClass:[UICollectionView class]]) {
+        
+        CGFloat horizontalOffset = scrollView.contentOffset.x;
+        
+        AFIndexedCollectionView *collectionView = (AFIndexedCollectionView *)scrollView;
+        NSInteger index = collectionView.indexPath.row;
+        self.contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
+        
+    } else if ([scrollView isKindOfClass:[UITableView class]]) {
+        return;
     }
-    else if (scrollView.contentOffset.x == 0 && !isAutoScrolling) {
-        [scrollView setContentOffset:CGPointMake((max-[[UIScreen mainScreen] bounds].size.width),0) animated:NO];
-    } else {
-        x = scrollView.contentOffset.x;
+    else {
+        if (scrollView.contentOffset.x == max && !isAutoScrolling) {
+            [scrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
+        }
+        else if (scrollView.contentOffset.x == 0 && !isAutoScrolling) {
+            [scrollView setContentOffset:CGPointMake((max-[[UIScreen mainScreen] bounds].size.width),0) animated:NO];
+        } else {
+            x = scrollView.contentOffset.x;
+        }
     }
 }
 
@@ -228,6 +273,83 @@
         }
     }
     return NO;
+}
+
+// CollectionView + TableView
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 3;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.colorArray.count;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"CellIdentifier";
+    
+    AFTableViewCell *cell = (AFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (!cell) {
+        cell = [[AFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    
+    header.textLabel.font = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:20];
+    header.textLabel.text = [header.textLabel.text capitalizedString];
+    header.textLabel.textColor = [UIColor whiteColor];
+    header.backgroundView.backgroundColor = [UIColor clearColor];
+    CGRect headerFrame = header.frame;
+    header.textLabel.frame = headerFrame;
+}
+
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *sectionName;
+    switch (section) {
+        case 0:
+            sectionName = NSLocalizedString(@"In Theatres", @"In Theatres");
+            break;
+        case 1:
+            sectionName = NSLocalizedString(@"New & Trending", @"New & Trending");
+            break;
+        case 2:
+            sectionName = NSLocalizedString(@"Recommended For You", @"Recommended For You");
+            break;
+        default:
+            sectionName = @"";
+            break;
+    }
+    return sectionName;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(AFTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    [cell setCollectionViewDataSourceDelegate:self indexPath:indexPath];
+    NSInteger index = cell.collectionView.indexPath.row;
+    
+    CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
+    [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
+}
+
+#pragma mark - UICollectionViewDataSource Methods
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView indexPath].row];
+    return collectionViewArray.count;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
+    
+    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView indexPath].row];
+    cell.backgroundColor = collectionViewArray[indexPath.item];
+    
+    return cell;
 }
 
 @end

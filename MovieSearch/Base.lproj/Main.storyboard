@@ -28,23 +28,36 @@
                                     <constraint firstAttribute="width" secondItem="fpM-KN-AhK" secondAttribute="height" multiplier="107:60" id="AbU-Jr-aLb"/>
                                 </constraints>
                             </scrollView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="3Kr-AT-HEo">
+                                <rect key="frame" x="0.0" y="275" width="375" height="344"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Osh-Bz-Ryx" id="i15-7Q-Lqn"/>
+                                    <outlet property="delegate" destination="Osh-Bz-Ryx" id="CL6-Sh-DGx"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" red="0.10154151171445847" green="0.11338534206151962" blue="0.13417184352874756" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="fpM-KN-AhK" firstAttribute="leading" secondItem="JG8-Np-ScS" secondAttribute="leading" id="D2t-QV-REo"/>
-                            <constraint firstItem="fpM-KN-AhK" firstAttribute="centerX" secondItem="JG8-Np-ScS" secondAttribute="centerX" id="gen-59-9rM"/>
-                            <constraint firstItem="fpM-KN-AhK" firstAttribute="top" secondItem="20W-sl-TMF" secondAttribute="bottom" id="rb4-DT-7E2"/>
+                            <constraint firstItem="fpM-KN-AhK" firstAttribute="leading" secondItem="JG8-Np-ScS" secondAttribute="leading" id="FJ9-dz-MUw"/>
+                            <constraint firstItem="3Kr-AT-HEo" firstAttribute="top" secondItem="fpM-KN-AhK" secondAttribute="bottom" id="ItN-pI-z7l"/>
+                            <constraint firstAttribute="trailing" secondItem="fpM-KN-AhK" secondAttribute="trailing" id="UhW-RE-yVH"/>
+                            <constraint firstItem="fpM-KN-AhK" firstAttribute="top" secondItem="20W-sl-TMF" secondAttribute="bottom" id="Uie-vs-2ZT"/>
+                            <constraint firstItem="fpM-KN-AhK" firstAttribute="leading" secondItem="3Kr-AT-HEo" secondAttribute="leading" id="kZl-HR-yjn"/>
+                            <constraint firstItem="fpM-KN-AhK" firstAttribute="trailing" secondItem="3Kr-AT-HEo" secondAttribute="trailing" id="w2G-g0-UUu"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="3Kr-AT-HEo" secondAttribute="bottom" constant="48" id="zYb-Es-up2"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Discover" id="Weg-R6-A8W"/>
                     <connections>
                         <outlet property="imageScrollView" destination="fpM-KN-AhK" id="Mtz-Jf-2vf"/>
+                        <outlet property="movieTableView" destination="3Kr-AT-HEo" id="1yZ-tv-pfC"/>
                         <segue destination="LId-c8-I7P" kind="showDetail" identifier="showDiscoverDetail" id="PGb-wc-TaV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2XG-z6-uzP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="750" y="-1676"/>
+            <point key="canvasLocation" x="749.60000000000002" y="-1676.311844077961"/>
         </scene>
         <!--Master-->
         <scene sceneID="pY4-Hu-kfo">
@@ -124,7 +137,7 @@
                                 <rect key="frame" x="0.0" y="66" width="375" height="116"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WCw-Qf-5nD" id="37f-cq-3Eg">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="116"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="115.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="auq-rg-UkV">
@@ -358,7 +371,7 @@
                                 <rect key="frame" x="0.0" y="22" width="375" height="116"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="P4w-9E-d6x" id="JSy-bn-nYT">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="116"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="115.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="R4W-VP-92y">

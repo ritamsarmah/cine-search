@@ -36,6 +36,7 @@
     self.scrollView.parallaxHeader.view = self.headerView;
     
     // Download poster image from URL
+    
     [self.posterLoadingIndicator startAnimating];
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
     
@@ -50,6 +51,8 @@
                             animations:^{
                                 self.posterImageView.image = image;
                             } completion:nil];
+        } else {
+            self.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
         }
     }];
     
