@@ -23,11 +23,10 @@
 		20ED58BD1DCAA778000D811A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20ED58BB1DCAA778000D811A /* LaunchScreen.storyboard */; };
 		20ED58C61DCAA8ED000D811A /* MovieSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 20ED58C51DCAA8ED000D811A /* MovieSearch.m */; };
 		20ED58C91DCAAB1A000D811A /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = 20ED58C81DCAAB1A000D811A /* Movie.m */; };
-		5D93AEEE56E88CC60AA0484D /* libPods-MovieSearch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DFFA0DD82DE328ED4047E5C /* libPods-MovieSearch.a */; };
+		8E7707A81EEB10EA9C78DBEB /* libPods-MovieSearch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA72A1C59EB8EEC93EE558E5 /* libPods-MovieSearch.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1DFFA0DD82DE328ED4047E5C /* libPods-MovieSearch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MovieSearch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		202942BB1E0869B500E0AC3E /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		202942BC1E086A7500E0AC3E /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		20475EE71E299E3F00A67582 /* MovieID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieID.h; sourceTree = "<group>"; };
@@ -58,8 +57,9 @@
 		20ED58C51DCAA8ED000D811A /* MovieSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieSearch.m; sourceTree = "<group>"; };
 		20ED58C71DCAAB1A000D811A /* Movie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
 		20ED58C81DCAAB1A000D811A /* Movie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
-		4BFD07D66119EE2B5F546AD1 /* Pods-MovieSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieSearch.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieSearch/Pods-MovieSearch.release.xcconfig"; sourceTree = "<group>"; };
-		DA482BB5E4877CAB8E5B9598 /* Pods-MovieSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieSearch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieSearch/Pods-MovieSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		AA8FD829299048F080A5BEA0 /* Pods-MovieSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieSearch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieSearch/Pods-MovieSearch.debug.xcconfig"; sourceTree = "<group>"; };
+		E3B2741160A68488DB407F79 /* Pods-MovieSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieSearch.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieSearch/Pods-MovieSearch.release.xcconfig"; sourceTree = "<group>"; };
+		EA72A1C59EB8EEC93EE558E5 /* libPods-MovieSearch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MovieSearch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D93AEEE56E88CC60AA0484D /* libPods-MovieSearch.a in Frameworks */,
+				8E7707A81EEB10EA9C78DBEB /* libPods-MovieSearch.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,8 +79,8 @@
 			children = (
 				20ED58A91DCAA778000D811A /* MovieSearch */,
 				20ED58A81DCAA778000D811A /* Products */,
-				EC498A8E4FD67FB643281AC0 /* Pods */,
-				43BDBB1ED26D1B2ADB18479F /* Frameworks */,
+				235A15B552D3E980EF1E59BF /* Pods */,
+				F503F81F8819D54C4EF15888 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -144,21 +144,21 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		43BDBB1ED26D1B2ADB18479F /* Frameworks */ = {
+		235A15B552D3E980EF1E59BF /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				1DFFA0DD82DE328ED4047E5C /* libPods-MovieSearch.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EC498A8E4FD67FB643281AC0 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				DA482BB5E4877CAB8E5B9598 /* Pods-MovieSearch.debug.xcconfig */,
-				4BFD07D66119EE2B5F546AD1 /* Pods-MovieSearch.release.xcconfig */,
+				AA8FD829299048F080A5BEA0 /* Pods-MovieSearch.debug.xcconfig */,
+				E3B2741160A68488DB407F79 /* Pods-MovieSearch.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		F503F81F8819D54C4EF15888 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA72A1C59EB8EEC93EE558E5 /* libPods-MovieSearch.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,12 +168,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 20ED58C11DCAA778000D811A /* Build configuration list for PBXNativeTarget "MovieSearch" */;
 			buildPhases = (
-				9FD55ECB999ED1579EBF8906 /* [CP] Check Pods Manifest.lock */,
+				67ACD116969F93343FC56A24 /* [CP] Check Pods Manifest.lock */,
 				20ED58A31DCAA778000D811A /* Sources */,
 				20ED58A41DCAA778000D811A /* Frameworks */,
 				20ED58A51DCAA778000D811A /* Resources */,
-				309AAE9BA4A77D42E02623B8 /* [CP] Embed Pods Frameworks */,
-				757C9FF32AF2BEA05F6F02B4 /* [CP] Copy Pods Resources */,
+				4B7AF588F2C35721A2765888 /* [CP] Embed Pods Frameworks */,
+				F806BA03F3F45940EFD1BEB5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -190,7 +190,7 @@
 		20ED589F1DCAA778000D811A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Ritam Sarmah";
 				TargetAttributes = {
 					20ED58A61DCAA778000D811A = {
@@ -232,7 +232,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		309AAE9BA4A77D42E02623B8 /* [CP] Embed Pods Frameworks */ = {
+		4B7AF588F2C35721A2765888 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -247,7 +247,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MovieSearch/Pods-MovieSearch-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		757C9FF32AF2BEA05F6F02B4 /* [CP] Copy Pods Resources */ = {
+		67ACD116969F93343FC56A24 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F806BA03F3F45940EFD1BEB5 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -260,21 +275,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MovieSearch/Pods-MovieSearch-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9FD55ECB999ED1579EBF8906 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -331,7 +331,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -339,7 +341,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -380,7 +386,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -388,7 +396,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -416,7 +428,7 @@
 		};
 		20ED58C21DCAA778000D811A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DA482BB5E4877CAB8E5B9598 /* Pods-MovieSearch.debug.xcconfig */;
+			baseConfigurationReference = AA8FD829299048F080A5BEA0 /* Pods-MovieSearch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 582KY6XV9S;
@@ -435,7 +447,7 @@
 		};
 		20ED58C31DCAA778000D811A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4BFD07D66119EE2B5F546AD1 /* Pods-MovieSearch.release.xcconfig */;
+			baseConfigurationReference = E3B2741160A68488DB407F79 /* Pods-MovieSearch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 582KY6XV9S;

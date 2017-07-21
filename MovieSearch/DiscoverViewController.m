@@ -30,9 +30,13 @@
     [super loadView];
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [self.view addSubview:activityIndicator];
+    [self.movieTableView setHidden:YES];
+    [self.imageScrollView setHidden:YES];
     self.loadingMovies = activityIndicator;
     
-    const NSInteger numberOfTableViewRows = 1;
+    
+    // Setup of tableview+collectionview
+    const NSInteger numberOfTableViewRows = 3;
     const NSInteger numberOfCollectionViewCells = 10;
     
     NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:numberOfTableViewRows];
@@ -86,7 +90,7 @@
     [self.loadingMovies startAnimating];
     isAutoScrolling = NO;
     
-    self.movieTableView.rowHeight = 120;
+    self.movieTableView.rowHeight = 140;
     self.movieTableView.backgroundColor = [UIColor clearColor];
     
     self.detailViewController = [(DetailViewController *)[DetailViewController alloc] init];
@@ -98,8 +102,6 @@
                 self.moviesNowPlaying = movies;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self setupImageScrollView];
-                    // TODO: Include reload method call for scroll view of "in theatres", etc...
-                    // [self.loadingMovies stopAnimating]; TODO: Reimplement
                 });
             }
         }
@@ -167,7 +169,7 @@
             self.imageScrollView.pagingEnabled = YES;
             for (UIImage *image in images) {
                 
-                // Popular scrollview with imageViews containing backdrops
+                // Populate scrollView with imageViews containing backdrops
                 UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(x, 0, [[UIScreen mainScreen] bounds].size.width, self.imageScrollView.frame.size.height)];
                 
                 imageView.image = image;
@@ -178,24 +180,24 @@
                 imageView.userInteractionEnabled = YES;
                 UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openMovie:)];
                 [imageView addGestureRecognizer:tapRecognizer];
-                
-                self.imageScrollView.hidden = YES;
                 [self.imageScrollView addSubview:imageView];
-                [self.loadingMovies stopAnimating];
-                [UIView transitionWithView:self.imageScrollView
-                                  duration:0.3
-                 
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    self.imageScrollView.hidden = NO;
-                                }
-                                completion:nil];
             }
             
             self.imageScrollView.contentSize=CGSizeMake(x, self.imageScrollView.frame.size.height);
             self.imageScrollView.contentOffset=CGPointMake([[UIScreen mainScreen] bounds].size.width, 0);
             
             x = ([[UIScreen mainScreen] bounds].size.width * 2);
+            
+            [self.loadingMovies stopAnimating];
+            [UIView transitionWithView:self.imageScrollView
+                              duration:0.3
+             
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                [self.imageScrollView setHidden:NO];
+                                [self.movieTableView setHidden:NO];
+                            }
+                            completion:nil];
             
             NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.7 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
             self.scrollTimer = timer;
@@ -246,7 +248,7 @@
         CGFloat horizontalOffset = scrollView.contentOffset.x;
         
         AFIndexedCollectionView *collectionView = (AFIndexedCollectionView *)scrollView;
-        NSInteger index = collectionView.indexPath.row;
+        NSInteger index = collectionView.section;
         self.contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
         
     } else if ([scrollView isKindOfClass:[UITableView class]]) {
@@ -282,7 +284,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.colorArray.count;
+    return 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -306,8 +308,8 @@
     header.backgroundView.backgroundColor = [UIColor clearColor];
     CGRect headerFrame = header.frame;
     header.textLabel.frame = headerFrame;
+    
 }
-
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *sectionName;
@@ -329,8 +331,9 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(AFTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    [cell setCollectionViewDataSourceDelegate:self indexPath:indexPath];
-    NSInteger index = cell.collectionView.indexPath.row;
+    [cell setCollectionViewDataSourceDelegate:self section:indexPath.section];
+    NSInteger index = cell.collectionView.section;
+    NSLog(@"Collection view index %lu", index);
     
     CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
     [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
@@ -339,14 +342,14 @@
 #pragma mark - UICollectionViewDataSource Methods
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView indexPath].row];
+    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
     return collectionViewArray.count;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
     
-    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView indexPath].row];
+    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
     cell.backgroundColor = collectionViewArray[indexPath.item];
     
     return cell;

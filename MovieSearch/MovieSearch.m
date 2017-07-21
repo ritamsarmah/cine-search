@@ -119,7 +119,7 @@
     return stringDate;
 }
 
-/* Retures movie data for ID */
+/* Returns movie data for ID */
 - (void)getMovieForID:(NSInteger)idNumber completion:(void (^)(Movie *))completion {
     NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%lu?api_key=%@&append_to_response=release_dates", idNumber, key];
     

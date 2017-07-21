@@ -11,7 +11,7 @@
 
 @interface AFIndexedCollectionView : UICollectionView
 
-@property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic) NSInteger section;
 
 @end
 
@@ -21,6 +21,6 @@ static NSString *CollectionViewCellIdentifier = @"CollectionViewCellIdentifier";
 
 @property (nonatomic, strong) AFIndexedCollectionView *collectionView;
 
-- (void)setCollectionViewDataSourceDelegate:(id<UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate indexPath:(NSIndexPath *)indexPath;
+- (void)setCollectionViewDataSourceDelegate:(id<UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate section:(NSInteger)section;
 
 @end

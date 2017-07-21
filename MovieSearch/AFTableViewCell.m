@@ -19,7 +19,7 @@
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.sectionInset = UIEdgeInsetsMake(10, 10, 9, 10);
-    layout.itemSize = CGSizeMake(66, 99);
+    layout.itemSize = CGSizeMake(80, 120); //(66, 99);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     self.collectionView = [[AFIndexedCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
@@ -36,10 +36,10 @@
     self.collectionView.frame = self.contentView.bounds;
 }
 
-- (void)setCollectionViewDataSourceDelegate:(id<UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate indexPath:(NSIndexPath *)indexPath {
+- (void)setCollectionViewDataSourceDelegate:(id<UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate section:(NSInteger)section {
     self.collectionView.dataSource = dataSourceDelegate;
     self.collectionView.delegate = dataSourceDelegate;
-    self.collectionView.indexPath = indexPath;
+    self.collectionView.section = section;
     [self.collectionView setContentOffset:self.collectionView.contentOffset animated:NO];
     
     [self.collectionView reloadData];
