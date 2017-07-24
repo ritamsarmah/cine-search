@@ -36,12 +36,12 @@
     self.scrollView.parallaxHeader.view = self.headerView;
     
     // Download poster image from URL
+    
     [self.posterLoadingIndicator startAnimating];
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
     
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
-    
-    [manager downloadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    [manager loadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         [self.posterLoadingIndicator stopAnimating];
         if (image) {
             [UIView transitionWithView:self.posterImageView
@@ -50,6 +50,8 @@
                             animations:^{
                                 self.posterImageView.image = image;
                             } completion:nil];
+        } else {
+            self.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
         }
     }];
     
@@ -62,7 +64,7 @@
     self.scrollView.parallaxHeader.minimumHeight = 64;
     
     NSURL *backdropURL = [[NSURL alloc] initWithString:self.movie.backdropURL];
-    [manager downloadImageWithURL:backdropURL options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+    [manager loadImageWithURL:backdropURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         [self.posterLoadingIndicator stopAnimating];
         if (image) {
             CIContext *context = [CIContext contextWithOptions:nil];

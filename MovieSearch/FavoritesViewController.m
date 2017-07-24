@@ -41,8 +41,7 @@ static NSString * const kTableName = @"table";
     self.navigationController.navigationBar.hidden = YES;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
@@ -124,8 +123,7 @@ static NSString * const kTableName = @"table";
         NSURL *url = [[NSURL alloc] initWithString:movie.posterURL];
         
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
-        
-        [manager downloadImageWithURL:url options:0 progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        [manager loadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             if (image) {
                 [UIView transitionWithView:cell.posterImageView
                                   duration:0.2

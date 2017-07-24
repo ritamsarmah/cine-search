@@ -10,13 +10,19 @@
 #import "MovieSingleton.h"
 #import "DetailViewController.h"
 #import "MovieID.h"
+#import "AFTableViewCell.h"
+
 #import <Realm/Realm.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface DiscoverViewController () {
     int x;
     int max;
     BOOL isAutoScrolling;
 }
+
+@property (nonatomic, strong) NSArray *moviesArray;
+@property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
 
 @end
 
@@ -26,6 +32,8 @@
     [super loadView];
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [self.view addSubview:activityIndicator];
+    [self.movieTableView setHidden:YES];
+    [self.imageScrollView setHidden:YES];
     self.loadingMovies = activityIndicator;
 }
 
@@ -57,34 +65,73 @@
     [self.loadingMovies startAnimating];
     isAutoScrolling = NO;
     
+    self.movieTableView.rowHeight = 140;
+    self.movieTableView.backgroundColor = [UIColor clearColor];
+    
     self.detailViewController = [(DetailViewController *)[DetailViewController alloc] init];
-    
-    [self.manager.database getNowPlaying:^(NSMutableArray *movies) {
-        if (self.moviesNowPlaying != movies) {
-            if (movies.count != 0) {
-                [self.imageCache removeAllObjects];
-                self.moviesNowPlaying = movies;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self setupImageScrollView];
-                    // TODO: Include reload method call for scroll view of "in theatres", etc...
-                    // [self.loadingMovies stopAnimating]; TODO: Reimplement
-                });
-            }
-        }
-    }];
-    
+    [self retrieveMovieData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void)retrieveMovieData {
+    dispatch_group_t movieGroup = dispatch_group_create();
+    
+    // Populate nowPlayingMovies array
+    dispatch_group_enter(movieGroup);
+    [self.manager.database getNowPlaying:^(NSMutableArray *movies) {
+        if (self.nowPlayingMovies != movies) {
+            if (movies.count != 0) {
+                [self.imageCache removeAllObjects];
+                self.nowPlayingMovies = movies;
+            }
+        }
+        dispatch_group_leave(movieGroup);
+    }];
+    
+    // Populate popularMovies array
+    dispatch_group_enter(movieGroup);
+    [self.manager.database getPopular:^(NSMutableArray *movies) {
+        if (self.popularMovies != movies) {
+            if (movies.count != 0) {
+                self.popularMovies = movies;
+            }
+        }
+        
+        dispatch_group_leave(movieGroup);
+    }];
+    
+    // Get random ID for recommendation
+    RLMResults *favorites = [MovieID allObjects];
+    if (favorites.count != 0) {
+        MovieID *randomID;
+        randomID = favorites[arc4random_uniform(favorites.count)];
+        
+        // Populate recommendedMovies array
+        dispatch_group_enter(movieGroup);
+        [self.manager.database getRecommendedForID:randomID.movieID completion:^(NSMutableArray *movies) {
+            if (self.recommendedMovies != movies) {
+                if (movies.count != 0) {
+                    self.recommendedMovies = movies;
+                }
+            }
+            dispatch_group_leave(movieGroup);
+        }];
+    }
+    
+    dispatch_group_notify(movieGroup, dispatch_get_main_queue(),^{
+        [self setupImageScrollView];
+        [self setupMoviesTableView];
+    });
 }
 
 -(void)setupImageScrollView {
     NSMutableArray *images = [NSMutableArray arrayWithCapacity:6];
     
     dispatch_async(dispatch_get_global_queue(0,0), ^{
-        for (Movie *movie in self.moviesNowPlaying) {
+        for (Movie *movie in self.nowPlayingMovies) {
             NSURL *url = [NSURL URLWithString:movie.backdropURL];
             NSData *data = [[NSData alloc] initWithContentsOfURL: url];
             if (data != nil) {
@@ -135,7 +182,7 @@
             self.imageScrollView.pagingEnabled = YES;
             for (UIImage *image in images) {
                 
-                // Popular scrollview with imageViews containing backdrops
+                // Populate scrollView with imageViews containing backdrops
                 UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(x, 0, [[UIScreen mainScreen] bounds].size.width, self.imageScrollView.frame.size.height)];
                 
                 imageView.image = image;
@@ -146,24 +193,24 @@
                 imageView.userInteractionEnabled = YES;
                 UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openMovie:)];
                 [imageView addGestureRecognizer:tapRecognizer];
-                
-                self.imageScrollView.hidden = YES;
                 [self.imageScrollView addSubview:imageView];
-                [self.loadingMovies stopAnimating];
-                [UIView transitionWithView:self.imageScrollView
-                                  duration:0.3
-                 
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    self.imageScrollView.hidden = NO;
-                                }
-                                completion:nil];
             }
             
             self.imageScrollView.contentSize=CGSizeMake(x, self.imageScrollView.frame.size.height);
             self.imageScrollView.contentOffset=CGPointMake([[UIScreen mainScreen] bounds].size.width, 0);
             
             x = ([[UIScreen mainScreen] bounds].size.width * 2);
+            
+            [self.loadingMovies stopAnimating];
+            [UIView transitionWithView:self.imageScrollView
+                              duration:0.3
+             
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                [self.imageScrollView setHidden:NO];
+                                [self.movieTableView setHidden:NO];
+                            }
+                            completion:nil];
             
             NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.7 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
             self.scrollTimer = timer;
@@ -188,15 +235,61 @@
     x += [[UIScreen mainScreen] bounds].size.width;
 }
 
+// Setup of movie table view data
+- (void)setupMoviesTableView {
+    const NSInteger numberOfSections = 3;
+    const NSInteger numberOfCollectionViewCells = 10;
+
+    NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:numberOfSections];
+
+    for (NSInteger section = 0; section < numberOfSections; section++) {
+        NSMutableArray *movieArray = [NSMutableArray arrayWithCapacity:numberOfCollectionViewCells];
+        
+        switch (section) {
+            case 0:
+                movieArray = self.nowPlayingMovies;
+                break;
+            case 1:
+                movieArray = self.popularMovies;
+                break;
+            case 2:
+                movieArray = self.recommendedMovies;
+                break;
+            default:
+                break;
+        }
+        
+        if (movieArray != nil) {
+            [mutableArray addObject:movieArray];
+        }
+    }
+
+    self.moviesArray = [NSArray arrayWithArray:mutableArray];
+    self.contentOffsetDictionary = [NSMutableDictionary dictionary];
+    [self.movieTableView reloadData];
+}
+
 -(void)openMovie:(UITapGestureRecognizer *)sender {
-    [self performSegueWithIdentifier:@"showDiscoverDetail" sender:sender];
+    [self performSegueWithIdentifier:@"showBannerDetail" sender:sender];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showDiscoverDetail"]) {
+    if ([[segue identifier] isEqualToString:@"showBannerDetail"]) {
         UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
         UIImageView *imageView = (UIImageView *)recognizer.view;
         Movie *movie = self.bannerMovies[imageView.tag-1];
+        DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+        [controller setMovie:movie];
+        
+        if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
+            controller.isFavorite = YES;
+        } else {
+            controller.isFavorite = NO;
+        }
+    } else if ([[segue identifier] isEqualToString:@"showMovieDetail"]) {
+        AFCollectionViewCell *cell = (AFCollectionViewCell *)sender;
+        NSLog(@"%@",cell.movie.title);
+        Movie *movie = cell.movie;
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         [controller setMovie:movie];
         
@@ -209,13 +302,26 @@
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.contentOffset.x == max && !isAutoScrolling) {
-        [scrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
+    if ([scrollView isKindOfClass:[UICollectionView class]]) {
+        
+        CGFloat horizontalOffset = scrollView.contentOffset.x;
+        
+        AFIndexedCollectionView *collectionView = (AFIndexedCollectionView *)scrollView;
+        NSInteger index = collectionView.section;
+        self.contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
+        
+    } else if ([scrollView isKindOfClass:[UITableView class]]) {
+        return;
     }
-    else if (scrollView.contentOffset.x == 0 && !isAutoScrolling) {
-        [scrollView setContentOffset:CGPointMake((max-[[UIScreen mainScreen] bounds].size.width),0) animated:NO];
-    } else {
-        x = scrollView.contentOffset.x;
+    else {
+        if (scrollView.contentOffset.x == max && !isAutoScrolling) {
+            [scrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
+        }
+        else if (scrollView.contentOffset.x == 0 && !isAutoScrolling) {
+            [scrollView setContentOffset:CGPointMake((max-[[UIScreen mainScreen] bounds].size.width),0) animated:NO];
+        } else {
+            x = scrollView.contentOffset.x;
+        }
     }
 }
 
@@ -228,6 +334,119 @@
         }
     }
     return NO;
+}
+
+#pragma mark - Table View
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return [self.moviesArray count];
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"CellIdentifier";
+    
+    AFTableViewCell *cell = (AFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (!cell) {
+        cell = [[AFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    
+    header.textLabel.font = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:20];
+    header.textLabel.text = [header.textLabel.text capitalizedString];
+    header.textLabel.textColor = [UIColor whiteColor];
+    header.backgroundView.backgroundColor = [UIColor clearColor];
+    CGRect headerFrame = header.frame;
+    header.textLabel.frame = headerFrame;
+    
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSString *sectionName;
+    switch (section) {
+        case 0:
+            sectionName = NSLocalizedString(@"In Theatres", @"In Theatres");
+            break;
+        case 1:
+            sectionName = NSLocalizedString(@"Trending Movies", @"Trending Movies");
+            break;
+        case 2:
+            sectionName = NSLocalizedString(@"Recommended For You", @"Recommended For You");
+            break;
+        default:
+            sectionName = @"";
+            break;
+    }
+    return sectionName;
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayCell:(AFTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    [cell setCollectionViewDataSourceDelegate:self section:indexPath.section];
+    NSInteger index = cell.collectionView.section;
+    
+    CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
+    [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
+    [cell.collectionView registerClass:[AFCollectionViewCell class] forCellWithReuseIdentifier:@"CollectionViewCellIdentifier"];
+}
+
+#pragma mark - Collection View
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+//    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
+    return 10;
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    AFCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
+    
+    //    cell.movieID = self.moviesNowPlaying[indexPath.item];
+    //    NSLog(@"%lu", cell.movieID.movieID);
+    //
+    //    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
+    //    cell.backgroundColor = collectionViewArray[indexPath.item];
+    
+    // Create imageView for background
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BlankMoviePoster"]];
+    imageView.frame = cell.bounds;
+    imageView.clipsToBounds = YES;
+    imageView.contentScaleFactor = UIViewContentModeScaleAspectFit;
+   
+    NSArray *collectionViewArray = self.moviesArray[[(AFIndexedCollectionView *)collectionView section]];
+    Movie *movie = collectionViewArray[indexPath.item];
+    NSURL *posterURL = [NSURL URLWithString:movie.posterURL];
+    
+    // Download poster image
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    [manager loadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        if (image) {
+            [UIView transitionWithView:cell.backgroundView
+                              duration:0.4
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                imageView.image = image;
+                            } completion:nil];
+        }
+    }];
+    
+    cell.backgroundView = imageView;
+    cell.movie = movie;
+
+    return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    AFCollectionViewCell *cell = (AFCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [self performSegueWithIdentifier:@"showMovieDetail" sender:cell];
+    NSLog(@"%@", cell.movie.title);
 }
 
 @end

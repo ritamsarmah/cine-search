@@ -11,23 +11,26 @@
 @class DetailViewController;
 @class MovieSingleton;
 
-@interface DiscoverViewController : UIViewController <UIScrollViewDelegate>
+@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *imageScrollView;
 @property (weak, nonatomic) UIActivityIndicatorView *loadingMovies;
 @property (weak, nonatomic) UILabel *bannerLabel;
+@property (weak, nonatomic) IBOutlet UITableView *movieTableView;
 
 @property NSTimer *scrollTimer;
 @property MovieSingleton *manager;
-@property NSMutableArray *moviesNowPlaying;
+@property NSMutableArray *nowPlayingMovies;
+@property NSMutableArray *popularMovies;
+@property NSMutableArray *recommendedMovies;
 @property NSMutableArray *bannerMovies; // Movies for banner images
 @property NSMutableDictionary *imageCache;
 
--(void)setupImageScrollView;
--(void)nextImage;
--(void)openMovie:(UITapGestureRecognizer *)sender;
-
+- (void)setupImageScrollView;
+- (void)nextImage;
+- (void)openMovie:(UITapGestureRecognizer *)sender;
+- (BOOL)isMovieInFavorites:(NSInteger)movieID;
 
 @end
