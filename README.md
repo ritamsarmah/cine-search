@@ -31,5 +31,4 @@ Discover and search for the latest movies using Movie Search for iPhone. Uses [T
 - [SDWebImage](https://github.com/rs/SDWebImage)
 
 ## Known Issues & Bugs
-- Discover tab is incomplete
 - Crashes when there is no internet connection
