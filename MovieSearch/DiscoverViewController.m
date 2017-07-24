@@ -10,8 +10,10 @@
 #import "MovieSingleton.h"
 #import "DetailViewController.h"
 #import "MovieID.h"
-#import <Realm/Realm.h>
 #import "AFTableViewCell.h"
+
+#import <Realm/Realm.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface DiscoverViewController () {
     int x;
@@ -33,33 +35,6 @@
     [self.movieTableView setHidden:YES];
     [self.imageScrollView setHidden:YES];
     self.loadingMovies = activityIndicator;
-    
-    
-    // Setup of tableview+collectionview
-    const NSInteger numberOfTableViewRows = 3;
-    const NSInteger numberOfCollectionViewCells = 10;
-    
-    NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:numberOfTableViewRows];
-    
-    for (NSInteger tableViewRow = 0; tableViewRow < numberOfTableViewRows; tableViewRow++) {
-        NSMutableArray *colorArray = [NSMutableArray arrayWithCapacity:numberOfCollectionViewCells];
-        
-        for (NSInteger collectionViewItem = 0; collectionViewItem < numberOfCollectionViewCells; collectionViewItem++)
-        {
-            
-            CGFloat red = arc4random() % 255;
-            CGFloat green = arc4random() % 255;
-            CGFloat blue = arc4random() % 255;
-            UIColor *color = [UIColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:1.0f];
-            
-            [colorArray addObject:color];
-        }
-        
-        [mutableArray addObject:colorArray];
-    }
-    
-    self.colorArray = [NSArray arrayWithArray:mutableArray];
-    self.contentOffsetDictionary = [NSMutableDictionary dictionary];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -94,24 +69,27 @@
     self.movieTableView.backgroundColor = [UIColor clearColor];
     
     self.detailViewController = [(DetailViewController *)[DetailViewController alloc] init];
-    
+    [self retrieveMovieData];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+- (void)retrieveMovieData {
+    // Populate moviesNowPlaying array
     [self.manager.database getNowPlaying:^(NSMutableArray *movies) {
         if (self.moviesNowPlaying != movies) {
             if (movies.count != 0) {
                 [self.imageCache removeAllObjects];
                 self.moviesNowPlaying = movies;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self setupImageScrollView];
-                });
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setupImageScrollView];
+                [self setupMoviesTableView];
+            });
         }
     }];
-    
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(void)setupImageScrollView {
@@ -188,6 +166,7 @@
             
             x = ([[UIScreen mainScreen] bounds].size.width * 2);
             
+            // TODO: move this somewhere after movieTableView is setup as well
             [self.loadingMovies stopAnimating];
             [UIView transitionWithView:self.imageScrollView
                               duration:0.3
@@ -222,15 +201,55 @@
     x += [[UIScreen mainScreen] bounds].size.width;
 }
 
+// Setup of movie table view data
+- (void)setupMoviesTableView {
+    const NSInteger numberOfSections = 3;
+    const NSInteger numberOfCollectionViewCells = 10;
+    
+    NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:numberOfSections];
+    
+    for (NSInteger section = 0; section < numberOfSections; section++) {
+        NSMutableArray *colorArray = [NSMutableArray arrayWithCapacity:numberOfCollectionViewCells];
+        
+        for (NSInteger collectionViewItem = 0; collectionViewItem < numberOfCollectionViewCells; collectionViewItem++) {
+            
+            CGFloat red = arc4random() % 255;
+            CGFloat green = arc4random() % 255;
+            CGFloat blue = arc4random() % 255;
+            UIColor *color = [UIColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:1.0f];
+            
+            [colorArray addObject:color];
+        }
+        
+        [mutableArray addObject:colorArray];
+    }
+    
+    self.colorArray = [NSArray arrayWithArray:mutableArray];
+    self.contentOffsetDictionary = [NSMutableDictionary dictionary];
+    [self.movieTableView reloadData];
+}
+
 -(void)openMovie:(UITapGestureRecognizer *)sender {
-    [self performSegueWithIdentifier:@"showDiscoverDetail" sender:sender];
+    [self performSegueWithIdentifier:@"showBannerDetail" sender:sender];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showDiscoverDetail"]) {
+    if ([[segue identifier] isEqualToString:@"showBannerDetail"]) {
         UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
         UIImageView *imageView = (UIImageView *)recognizer.view;
         Movie *movie = self.bannerMovies[imageView.tag-1];
+        DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+        [controller setMovie:movie];
+        
+        if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
+            controller.isFavorite = YES;
+        } else {
+            controller.isFavorite = NO;
+        }
+    } else if ([[segue identifier] isEqualToString:@"showMovieDetail"]) {
+        AFCollectionViewCell *cell = (AFCollectionViewCell *)sender;
+        NSLog(@"%@",cell.movie.title);
+        Movie *movie = cell.movie;
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         [controller setMovie:movie];
         
@@ -277,7 +296,7 @@
     return NO;
 }
 
-// CollectionView + TableView
+#pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
@@ -333,13 +352,13 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(AFTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     [cell setCollectionViewDataSourceDelegate:self section:indexPath.section];
     NSInteger index = cell.collectionView.section;
-    NSLog(@"Collection view index %lu", index);
     
     CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
     [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
+    [cell.collectionView registerClass:[AFCollectionViewCell class] forCellWithReuseIdentifier:@"CollectionViewCellIdentifier"];
 }
 
-#pragma mark - UICollectionViewDataSource Methods
+#pragma mark - Collection View
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
@@ -347,12 +366,46 @@
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
+    AFCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
     
-    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
-    cell.backgroundColor = collectionViewArray[indexPath.item];
+    //    cell.movieID = self.moviesNowPlaying[indexPath.item];
+    //    NSLog(@"%lu", cell.movieID.movieID);
+    //
+    //    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
+    //    cell.backgroundColor = collectionViewArray[indexPath.item];
     
+    // Create imageView for background
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BlankMoviePoster"]];
+    imageView.frame = cell.bounds;
+    imageView.clipsToBounds = YES;
+    imageView.contentScaleFactor = UIViewContentModeScaleAspectFit;
+   
+    Movie *movie = self.moviesNowPlaying[indexPath.item];
+    NSURL *posterURL = [NSURL URLWithString:movie.posterURL];
+    
+    // Download poster image
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    [manager loadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        if (image) {
+            [UIView transitionWithView:cell.backgroundView
+                              duration:0.4
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                imageView.image = image;
+                            } completion:nil];
+        }
+    }];
+    
+    cell.backgroundView = imageView;
+    cell.movie = movie;
+
     return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    AFCollectionViewCell *cell = (AFCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    [self performSegueWithIdentifier:@"showMovieDetail" sender:cell];
+    NSLog(@"%@", cell.movie.title);
 }
 
 @end

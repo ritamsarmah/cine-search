@@ -61,7 +61,8 @@
                     <connections>
                         <outlet property="imageScrollView" destination="fpM-KN-AhK" id="Mtz-Jf-2vf"/>
                         <outlet property="movieTableView" destination="3Kr-AT-HEo" id="1yZ-tv-pfC"/>
-                        <segue destination="LId-c8-I7P" kind="showDetail" identifier="showDiscoverDetail" id="PGb-wc-TaV"/>
+                        <segue destination="LId-c8-I7P" kind="showDetail" identifier="showBannerDetail" id="PGb-wc-TaV"/>
+                        <segue destination="LId-c8-I7P" kind="showDetail" identifier="showMovieDetail" id="1gB-r4-ctE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2XG-z6-uzP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -366,7 +367,7 @@
         <!--SearchMaster-->
         <scene sceneID="u7r-xa-wcl">
             <objects>
-                <tableViewController title="SearchMaster" clearsSelectionOnViewWillAppear="NO" id="1aw-Ol-giI" customClass="FavoritesViewController" sceneMemberID="viewController">
+                <tableViewController title="SearchMaster" id="1aw-Ol-giI" customClass="FavoritesViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="white" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" rowHeight="116" sectionHeaderHeight="22" sectionFooterHeight="22" id="DED-uv-W0V">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -569,7 +570,7 @@
                                 </constraints>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a66-TQ-i2B">
-                                <rect key="frame" x="8" y="23" width="40" height="40"/>
+                                <rect key="frame" x="8" y="67" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="QMj-F4-Kup"/>
                                     <constraint firstAttribute="height" constant="40" id="Rjb-1e-kqw"/>
@@ -720,9 +721,9 @@
         <image name="Star" width="26" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="1gB-r4-ctE"/>
+        <segue reference="USQ-ZQ-G6K"/>
         <segue reference="URd-go-6mu"/>
-        <segue reference="vdv-tw-0Lh"/>
-        <segue reference="PGb-wc-TaV"/>
         <segue reference="6S0-TO-JiA"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Movie.h"
 
+@interface AFCollectionViewCell : UICollectionViewCell
+
+@property (nonatomic) Movie *movie;
+
+@end
 
 @interface AFIndexedCollectionView : UICollectionView
 

@@ -8,6 +8,10 @@
 
 #import "AFTableViewCell.h"
 
+@implementation AFCollectionViewCell
+
+@end
+
 @implementation AFIndexedCollectionView
 
 @end
