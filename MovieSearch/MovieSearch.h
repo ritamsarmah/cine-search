@@ -18,5 +18,7 @@
 - (void)getMovieForID:(NSInteger)idNumber completion:(void (^)(Movie *))completion;
 - (void)getTrailerForID:(NSNumber *)idNumber completion:(void (^)(NSString *))completion;
 - (void)getNowPlaying:(void (^)(NSMutableArray *))completion;
+- (void)getPopular:(void (^)(NSMutableArray *))completion;
+- (void)getRecommendedForID:(NSInteger)idNumber completion:(void (^)(NSMutableArray *))completion;
 
 @end

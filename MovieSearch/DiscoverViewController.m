@@ -21,7 +21,7 @@
     BOOL isAutoScrolling;
 }
 
-@property (nonatomic, strong) NSArray *colorArray;
+@property (nonatomic, strong) NSArray *moviesArray;
 @property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
 
 @end
@@ -77,26 +77,61 @@
 }
 
 - (void)retrieveMovieData {
-    // Populate moviesNowPlaying array
+    dispatch_group_t movieGroup = dispatch_group_create();
+    
+    // Populate nowPlayingMovies array
+    dispatch_group_enter(movieGroup);
     [self.manager.database getNowPlaying:^(NSMutableArray *movies) {
-        if (self.moviesNowPlaying != movies) {
+        if (self.nowPlayingMovies != movies) {
             if (movies.count != 0) {
                 [self.imageCache removeAllObjects];
-                self.moviesNowPlaying = movies;
+                self.nowPlayingMovies = movies;
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self setupImageScrollView];
-                [self setupMoviesTableView];
-            });
         }
+        dispatch_group_leave(movieGroup);
     }];
+    
+    // Populate popularMovies array
+    dispatch_group_enter(movieGroup);
+    [self.manager.database getPopular:^(NSMutableArray *movies) {
+        if (self.popularMovies != movies) {
+            if (movies.count != 0) {
+                self.popularMovies = movies;
+            }
+        }
+        
+        dispatch_group_leave(movieGroup);
+    }];
+    
+    // Get random ID for recommendation
+    RLMResults *favorites = [MovieID allObjects];
+    if (favorites.count != 0) {
+        MovieID *randomID;
+        randomID = favorites[arc4random_uniform(favorites.count)];
+        
+        // Populate recommendedMovies array
+        dispatch_group_enter(movieGroup);
+        [self.manager.database getRecommendedForID:randomID.movieID completion:^(NSMutableArray *movies) {
+            if (self.recommendedMovies != movies) {
+                if (movies.count != 0) {
+                    self.recommendedMovies = movies;
+                }
+            }
+            dispatch_group_leave(movieGroup);
+        }];
+    }
+    
+    dispatch_group_notify(movieGroup, dispatch_get_main_queue(),^{
+        [self setupImageScrollView];
+        [self setupMoviesTableView];
+    });
 }
 
 -(void)setupImageScrollView {
     NSMutableArray *images = [NSMutableArray arrayWithCapacity:6];
     
     dispatch_async(dispatch_get_global_queue(0,0), ^{
-        for (Movie *movie in self.moviesNowPlaying) {
+        for (Movie *movie in self.nowPlayingMovies) {
             NSURL *url = [NSURL URLWithString:movie.backdropURL];
             NSData *data = [[NSData alloc] initWithContentsOfURL: url];
             if (data != nil) {
@@ -166,7 +201,6 @@
             
             x = ([[UIScreen mainScreen] bounds].size.width * 2);
             
-            // TODO: move this somewhere after movieTableView is setup as well
             [self.loadingMovies stopAnimating];
             [UIView transitionWithView:self.imageScrollView
                               duration:0.3
@@ -205,26 +239,32 @@
 - (void)setupMoviesTableView {
     const NSInteger numberOfSections = 3;
     const NSInteger numberOfCollectionViewCells = 10;
-    
+
     NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:numberOfSections];
-    
+
     for (NSInteger section = 0; section < numberOfSections; section++) {
-        NSMutableArray *colorArray = [NSMutableArray arrayWithCapacity:numberOfCollectionViewCells];
+        NSMutableArray *movieArray = [NSMutableArray arrayWithCapacity:numberOfCollectionViewCells];
         
-        for (NSInteger collectionViewItem = 0; collectionViewItem < numberOfCollectionViewCells; collectionViewItem++) {
-            
-            CGFloat red = arc4random() % 255;
-            CGFloat green = arc4random() % 255;
-            CGFloat blue = arc4random() % 255;
-            UIColor *color = [UIColor colorWithRed:red/255.0 green:green/255.0 blue:blue/255.0 alpha:1.0f];
-            
-            [colorArray addObject:color];
+        switch (section) {
+            case 0:
+                movieArray = self.nowPlayingMovies;
+                break;
+            case 1:
+                movieArray = self.popularMovies;
+                break;
+            case 2:
+                movieArray = self.recommendedMovies;
+                break;
+            default:
+                break;
         }
         
-        [mutableArray addObject:colorArray];
+        if (movieArray != nil) {
+            [mutableArray addObject:movieArray];
+        }
     }
-    
-    self.colorArray = [NSArray arrayWithArray:mutableArray];
+
+    self.moviesArray = [NSArray arrayWithArray:mutableArray];
     self.contentOffsetDictionary = [NSMutableDictionary dictionary];
     [self.movieTableView reloadData];
 }
@@ -299,7 +339,7 @@
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return [self.moviesArray count];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -337,7 +377,7 @@
             sectionName = NSLocalizedString(@"In Theatres", @"In Theatres");
             break;
         case 1:
-            sectionName = NSLocalizedString(@"New & Trending", @"New & Trending");
+            sectionName = NSLocalizedString(@"Trending Movies", @"Trending Movies");
             break;
         case 2:
             sectionName = NSLocalizedString(@"Recommended For You", @"Recommended For You");
@@ -361,8 +401,8 @@
 #pragma mark - Collection View
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
-    return collectionViewArray.count;
+//    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
+    return 10;
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -380,7 +420,8 @@
     imageView.clipsToBounds = YES;
     imageView.contentScaleFactor = UIViewContentModeScaleAspectFit;
    
-    Movie *movie = self.moviesNowPlaying[indexPath.item];
+    NSArray *collectionViewArray = self.moviesArray[[(AFIndexedCollectionView *)collectionView section]];
+    Movie *movie = collectionViewArray[indexPath.item];
     NSURL *posterURL = [NSURL URLWithString:movie.posterURL];
     
     // Download poster image
