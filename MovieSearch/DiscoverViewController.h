@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *imageScrollView;
 @property (weak, nonatomic) UIActivityIndicatorView *loadingMovies;
 @property (weak, nonatomic) UILabel *bannerLabel;
+@property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITableView *movieTableView;
 
 @property NSTimer *scrollTimer;

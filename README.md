@@ -29,6 +29,3 @@ Discover and search for the latest movies using Movie Search for iPhone. Uses [T
 - [Realm](https://github.com/realm/realm-cocoa)
 - [MKParallaxHeader](https://github.com/maxep/MXParallaxHeader)
 - [SDWebImage](https://github.com/rs/SDWebImage)
-
-## Known Issues & Bugs
-- Crashes when there is no internet connection

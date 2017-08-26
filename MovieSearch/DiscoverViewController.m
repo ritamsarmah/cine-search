@@ -11,6 +11,7 @@
 #import "DetailViewController.h"
 #import "MovieID.h"
 #import "AFTableViewCell.h"
+#import "Reachability.h"
 
 #import <Realm/Realm.h>
 #import <SDWebImage/UIImageView+WebCache.h>
@@ -23,6 +24,7 @@
 
 @property (nonatomic, strong) NSArray *moviesArray;
 @property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
+@property (nonatomic) Reachability *internetReachability;
 
 @end
 
@@ -62,20 +64,72 @@
     self.bannerMovies = [NSMutableArray arrayWithCapacity:4];
     self.imageScrollView.delegate = self;
     self.automaticallyAdjustsScrollViewInsets = NO;
-    [self.loadingMovies startAnimating];
     isAutoScrolling = NO;
     
     self.movieTableView.rowHeight = 140;
     self.movieTableView.backgroundColor = [UIColor clearColor];
     
     self.detailViewController = [(DetailViewController *)[DetailViewController alloc] init];
-    [self retrieveMovieData];
+    
+    // Set up of connection status label
+    self.connectionLabel.hidden = YES;
+    
+    /*
+        Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the method
+        reachabilityChanged will be called.
+     */
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+
+    
+    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    [self.internetReachability startNotifier];
+    [self updateInterfaceWithReachability:self.internetReachability];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
+/*
+ * Called by Reachability whenever status changes.
+ */
+#pragma mark - Reachability
+- (void) reachabilityChanged:(NSNotification *)note {
+    Reachability* curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+    [self updateInterfaceWithReachability:curReach];
+}
+
+
+- (void)updateInterfaceWithReachability:(Reachability *)reachability {
+    if (reachability == self.internetReachability) {
+        [self configureInterfaceWithReachability:reachability];
+    }
+    
+}
+
+- (void)configureInterfaceWithReachability:(Reachability *)reachability {
+    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    
+    switch (netStatus) {
+        case NotReachable: {
+            self.connectionLabel.hidden = NO;
+            self.imageScrollView.hidden = YES;
+            self.movieTableView.hidden = YES;
+            [self.loadingMovies stopAnimating];
+            break;
+        }
+        case ReachableViaWWAN:
+        case ReachableViaWiFi: {
+            self.connectionLabel.hidden = YES;
+            [self.loadingMovies startAnimating];
+            [self retrieveMovieData];
+            break;
+        }
+    }
+}
+
+#pragma mark - UI/Movie methods
 - (void)retrieveMovieData {
     dispatch_group_t movieGroup = dispatch_group_create();
     
@@ -127,7 +181,7 @@
     });
 }
 
--(void)setupImageScrollView {
+- (void)setupImageScrollView {
     NSMutableArray *images = [NSMutableArray arrayWithCapacity:6];
     
     dispatch_async(dispatch_get_global_queue(0,0), ^{
@@ -218,7 +272,7 @@
     });
 }
 
--(void)nextImage {
+- (void)nextImage {
     isAutoScrolling = YES;
     if (x == max) {
         [self.imageScrollView setContentOffset:CGPointMake(0, 0) animated:NO];
@@ -269,7 +323,7 @@
     [self.movieTableView reloadData];
 }
 
--(void)openMovie:(UITapGestureRecognizer *)sender {
+- (void)openMovie:(UITapGestureRecognizer *)sender {
     [self performSegueWithIdentifier:@"showBannerDetail" sender:sender];
 }
 
@@ -377,7 +431,7 @@
             sectionName = NSLocalizedString(@"In Theatres", @"In Theatres");
             break;
         case 1:
-            sectionName = NSLocalizedString(@"Trending Movies", @"Trending Movies");
+            sectionName = NSLocalizedString(@"Trending Now", @"Trending Now");
             break;
         case 2:
             sectionName = NSLocalizedString(@"Recommended For You", @"Recommended For You");

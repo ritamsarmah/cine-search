@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Reachability.h"
 
 @class DetailViewController;
 @class MovieSingleton;
@@ -21,6 +22,9 @@
 
 @property NSMutableArray *movies;
 @property MovieSingleton *manager;
+
+@property (nonatomic) BOOL connectedToInternet;
+@property (nonatomic) Reachability *internetReachability;
 
 -(void) instantSearch;
 -(void) resetSearchTimer;

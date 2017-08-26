@@ -13,6 +13,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Realm/Realm.h>
 
+
 @implementation MasterViewController
 
 - (void)loadView {
@@ -47,12 +48,76 @@
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.searchBar.delegate = self;
     self.searchBar.keyboardAppearance = UIKeyboardAppearanceDark;
+    
+    /*
+     Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the method
+     reachabilityChanged will be called.
+     */
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    
+    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    [self.internetReachability startNotifier];
+    [self updateInterfaceWithReachability:self.internetReachability];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
     [super viewWillAppear:animated];
     [self.tableView reloadData];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
+
+#pragma mark - Reachability
+- (void) reachabilityChanged:(NSNotification *)note {
+    self.connectedToInternet = NO;
+    Reachability* curReach = [note object];
+    NSParameterAssert([curReach isKindOfClass:[Reachability class]]);
+    [self updateInterfaceWithReachability:curReach];
+}
+
+- (void)updateInterfaceWithReachability:(Reachability *)reachability {
+    if (reachability == self.internetReachability) {
+        [self checkReachabilityStatus:reachability];
+    }
+}
+
+- (void)checkReachabilityStatus:(Reachability *)reachability {
+    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    
+    switch (netStatus) {
+        case NotReachable: {
+            self.connectedToInternet = NO;
+        }
+        case ReachableViaWWAN:
+        case ReachableViaWiFi: {
+            self.connectedToInternet = YES;
+        }
+    }
+}
+
+- (void)displayConnectionAlert {
+    [self.loadingMovies stopAnimating];
+    self.loadingView.hidden = YES;
+    UIAlertController *alert = [UIAlertController
+                                alertControllerWithTitle:@"Unable to retrieve movies"
+                                message:@"Please check your internet connection and try again."
+                                preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* yesButton = [UIAlertAction
+                                actionWithTitle:@"OK"
+                                style:UIAlertActionStyleDefault
+                                
+                                handler:^(UIAlertAction * action) {
+                                }];
+    
+    [alert addAction:yesButton];
+    
+    [self presentViewController:alert animated:true completion:nil];
+    [self.tableView setUserInteractionEnabled:YES];
 }
 
 #pragma mark - Segues
@@ -77,49 +142,55 @@
 #pragma mark - Search Bar
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [self.searchTimer invalidate];
-    [self.loadingMovies startAnimating];
-    self.loadingView.hidden = NO;
-    [searchBar endEditing:YES];
-    [self.tableView setUserInteractionEnabled:NO];
-    [self.manager.database search:searchBar.text completion:^(NSMutableArray *movies) {
-        if (self.movies != movies) {
-            if (movies.count != 0) {
-                self.movies = movies;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSRange range = NSMakeRange(0, 1);
-                    NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
-                    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
-                    [self.loadingMovies stopAnimating];
-                    [self.tableView setUserInteractionEnabled:YES];
-                    self.loadingView.hidden = true;
-                });
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.loadingMovies stopAnimating];
-                    self.loadingView.hidden = YES;
-                    UIAlertController *alert = [UIAlertController
-                                                alertControllerWithTitle:@"Movie not found"
-                                                message:@"No movies matched your search"
-                                                preferredStyle:UIAlertControllerStyleAlert];
-                    
-                    UIAlertAction* yesButton = [UIAlertAction
-                                                actionWithTitle:@"OK"
-                                                style:UIAlertActionStyleDefault
-                                                
-                                                handler:^(UIAlertAction * action) {
-                                                }];
-                    
-                    [alert addAction:yesButton];
-                    
-                    [self presentViewController:alert animated:true completion:nil];
-                    [self.tableView setUserInteractionEnabled:YES];
-                });
-            }
-        }
-        
-    }];
     
+    if (self.connectedToInternet) {
+        [self.searchTimer invalidate];
+        [self.loadingMovies startAnimating];
+        self.loadingView.hidden = NO;
+        [searchBar endEditing:YES];
+        [self.tableView setUserInteractionEnabled:NO];
+        [self.manager.database search:searchBar.text completion:^(NSMutableArray *movies) {
+            if (movies == nil) {
+                [self displayConnectionAlert];
+            }
+            else if (self.movies != movies) {
+                if (movies.count != 0) {
+                    self.movies = movies;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSRange range = NSMakeRange(0, 1);
+                        NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
+                        [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [self.loadingMovies stopAnimating];
+                        [self.tableView setUserInteractionEnabled:YES];
+                        self.loadingView.hidden = YES;
+                    });
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.loadingMovies stopAnimating];
+                        self.loadingView.hidden = YES;
+                        UIAlertController *alert = [UIAlertController
+                                                    alertControllerWithTitle:@"Movie not found"
+                                                    message:@"No movies matched your search"
+                                                    preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        UIAlertAction* yesButton = [UIAlertAction
+                                                    actionWithTitle:@"OK"
+                                                    style:UIAlertActionStyleDefault
+                                                    
+                                                    handler:^(UIAlertAction * action) {
+                                                    }];
+                        
+                        [alert addAction:yesButton];
+                        
+                        [self presentViewController:alert animated:YES completion:nil];
+                        [self.tableView setUserInteractionEnabled:YES];
+                    });
+                }
+            }
+        }];
+    } else {
+        [self displayConnectionAlert];
+    }
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
@@ -153,18 +224,20 @@
 }
 
 - (void)instantSearch {
-    [self.manager.database search:self.searchBar.text completion:^(NSMutableArray *movies) {
-        if (self.movies != movies) {
-            if (movies.count != 0) {
-                self.movies = movies;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSRange range = NSMakeRange(0, 1);
-                    NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
-                    [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
-                });
+    if (self.connectedToInternet) {
+        [self.manager.database search:self.searchBar.text completion:^(NSMutableArray *movies) {
+            if (self.movies != movies) {
+                if (movies.count != 0) {
+                    self.movies = movies;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSRange range = NSMakeRange(0, 1);
+                        NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
+                        [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
+                    });
+                }
             }
-        }
-    }];
+        }];
+    }
 }
 
 #pragma mark - Table View

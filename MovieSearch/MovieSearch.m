@@ -70,40 +70,44 @@
         
         if (NSClassFromString(@"NSJSONSerialization")) {
             NSError *error = nil;
-            id results = [NSJSONSerialization
-                          JSONObjectWithData:data
-                          options:0
-                          error:&error];
-            
-            if (error) { NSLog(@"Error retrieving movie data"); }
-            
-            if ([results isKindOfClass:[NSDictionary class]]) {
-                NSDictionary *movieResults = [results objectForKey:@"results"];
-                for (id movie in movieResults) {
-                    NSString *title = [movie objectForKey:@"title"];
-                    NSString *overview = [movie objectForKey:@"overview"];
-                    NSString *releaseDate = [self formatDate:[movie objectForKey:@"release_date"]];
-                    NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
-                    NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
-                    NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                    NSArray *genreNumbers = [NSArray arrayWithArray:[movie objectForKey:@"genre_ids"]];
-                    NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
-                    // TODO: Add certification to movie
-                    for (NSNumber *genreID in genreNumbers) {
-                        if (self.genres[genreID] != nil) {
-                            [movieGenres addObject:self.genres[genreID]];
+            if (data != nil) {
+                id results = [NSJSONSerialization
+                              JSONObjectWithData:data
+                              options:0
+                              error:&error];
+                
+                if (error) { NSLog(@"Error retrieving movie data"); }
+                
+                if ([results isKindOfClass:[NSDictionary class]]) {
+                    NSDictionary *movieResults = [results objectForKey:@"results"];
+                    for (id movie in movieResults) {
+                        NSString *title = [movie objectForKey:@"title"];
+                        NSString *overview = [movie objectForKey:@"overview"];
+                        NSString *releaseDate = [self formatDate:[movie objectForKey:@"release_date"]];
+                        NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
+                        NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
+                        NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
+                        NSArray *genreNumbers = [NSArray arrayWithArray:[movie objectForKey:@"genre_ids"]];
+                        NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
+                        // TODO: Add certification to movie
+                        for (NSNumber *genreID in genreNumbers) {
+                            if (self.genres[genreID] != nil) {
+                                [movieGenres addObject:self.genres[genreID]];
+                            }
                         }
+                        
+                        NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
+                        
+                        Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:movieGenres posterURL:poster backdropURL:backdrop idNumber:idNumber];
+                        [movies addObject:newMovie];
                     }
-                    
-                    NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
-                    
-                    Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:movieGenres posterURL:poster backdropURL:backdrop idNumber:idNumber];
-                    [movies addObject:newMovie];
+                    completion(movies);
                 }
-                completion(movies);
-            }
-            else {
-                NSLog(@"Not valid dictionary");
+                else {
+                    NSLog(@"Not valid dictionary");
+                }
+            } else {
+                completion(nil);
             }
         }
     }] resume];

@@ -11,6 +11,7 @@
 		20475EE91E299E3F00A67582 /* MovieID.m in Sources */ = {isa = PBXBuildFile; fileRef = 20475EE81E299E3F00A67582 /* MovieID.m */; };
 		20502AE81E3478E1005D0036 /* AFTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 20502AE71E3478E1005D0036 /* AFTableViewCell.m */; };
 		206F80DF1DD3DD01007E4727 /* MovieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 206F80DE1DD3DD01007E4727 /* MovieTableViewCell.m */; };
+		20C7D6C71F4A29F900FF9535 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 20C7D6C61F4A29F900FF9535 /* Reachability.m */; };
 		20E92FBD1E0B809F009957F2 /* FavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E92FBC1E0B809F009957F2 /* FavoritesViewController.m */; };
 		20E92FEC1E0C7A73009957F2 /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E92FEB1E0C7A73009957F2 /* DiscoverViewController.m */; };
 		20E92FEF1E0C7B20009957F2 /* MovieSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E92FEE1E0C7B20009957F2 /* MovieSingleton.m */; };
@@ -35,6 +36,8 @@
 		20502AE71E3478E1005D0036 /* AFTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFTableViewCell.m; sourceTree = "<group>"; };
 		206F80DD1DD3DD01007E4727 /* MovieTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieTableViewCell.h; sourceTree = "<group>"; };
 		206F80DE1DD3DD01007E4727 /* MovieTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieTableViewCell.m; sourceTree = "<group>"; };
+		20C7D6C51F4A29F900FF9535 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		20C7D6C61F4A29F900FF9535 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		20E92FBB1E0B809F009957F2 /* FavoritesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoritesViewController.h; sourceTree = "<group>"; };
 		20E92FBC1E0B809F009957F2 /* FavoritesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoritesViewController.m; sourceTree = "<group>"; };
 		20E92FEA1E0C7A73009957F2 /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
@@ -107,6 +110,8 @@
 				20E92FBC1E0B809F009957F2 /* FavoritesViewController.m */,
 				206F80DD1DD3DD01007E4727 /* MovieTableViewCell.h */,
 				206F80DE1DD3DD01007E4727 /* MovieTableViewCell.m */,
+				20C7D6C51F4A29F900FF9535 /* Reachability.h */,
+				20C7D6C61F4A29F900FF9535 /* Reachability.m */,
 				20ED58B61DCAA778000D811A /* Main.storyboard */,
 				20ED58CA1DCAACB9000D811A /* Model */,
 				20ED58AA1DCAA778000D811A /* Supporting Files */,
@@ -294,6 +299,7 @@
 				20E92FBD1E0B809F009957F2 /* FavoritesViewController.m in Sources */,
 				20E92FEC1E0C7A73009957F2 /* DiscoverViewController.m in Sources */,
 				20ED58AC1DCAA778000D811A /* main.m in Sources */,
+				20C7D6C71F4A29F900FF9535 /* Reachability.m in Sources */,
 				20475EE91E299E3F00A67582 /* MovieID.m in Sources */,
 				20ED58C61DCAA8ED000D811A /* MovieSearch.m in Sources */,
 				20ED58B51DCAA778000D811A /* DetailViewController.m in Sources */,
