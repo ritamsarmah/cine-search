@@ -1,11 +1,11 @@
 PODS:
   - MXParallaxHeader (0.6.1)
-  - Realm (2.8.3):
-    - Realm/Headers (= 2.8.3)
-  - Realm/Headers (2.8.3)
-  - SDWebImage (4.0.0):
-    - SDWebImage/Core (= 4.0.0)
-  - SDWebImage/Core (4.0.0)
+  - Realm (2.10.1):
+    - Realm/Headers (= 2.10.1)
+  - Realm/Headers (2.10.1)
+  - SDWebImage (4.1.0):
+    - SDWebImage/Core (= 4.1.0)
+  - SDWebImage/Core (4.1.0)
 
 DEPENDENCIES:
   - MXParallaxHeader
@@ -14,9 +14,9 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   MXParallaxHeader: 858c403532ed933b381556a81ce333d7065ad182
-  Realm: 3601ef091c8c499a31101d8563b991e75546cdce
-  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  Realm: fc7a317a5c2c9ba91f5f235ede4e2ea76e9eba0c
+  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
 
-PODFILE CHECKSUM: 66db37efba0c2b4ee075c972a1ff59550abafa14
+PODFILE CHECKSUM: 6487229e37ecc27a70b70d855d89f1747c51169b
 
 COCOAPODS: 1.2.1
