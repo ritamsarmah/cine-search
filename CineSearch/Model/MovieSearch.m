@@ -323,7 +323,7 @@
 
 -(void)getRecommendedForID:(NSInteger)idNumber completion:(void (^)(NSMutableArray *))completion {
     NSMutableArray *movies = [NSMutableArray array];
-    NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/%ld/recommendations?api_key=%@", idNumber, key];
+    NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/%ld/similar?api_key=%@", idNumber, key];
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:stringURL]];

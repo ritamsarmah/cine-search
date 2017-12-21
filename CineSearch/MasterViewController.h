@@ -12,7 +12,7 @@
 @class DetailViewController;
 @class MovieSingleton;
 
-@interface MasterViewController : UITableViewController<UISearchBarDelegate>
+@interface MasterViewController : UITableViewController<UISearchBarDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;

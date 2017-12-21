@@ -173,10 +173,9 @@
     // Get random ID for recommendation
     RLMResults *favorites = [MovieID allObjects];
     if (favorites.count != 0) {
-        int randomIndex = arc4random_uniform(((int)favorites.count - 1));
-        NSLog(@"%d", (int)favorites.count-1);
-        MovieID *randomID = favorites[randomIndex];
-        NSLog(@"%d", randomIndex);
+        int randIndex = arc4random_uniform((int)favorites.count);
+        MovieID *randomID = favorites[randIndex];
+        NSLog(@"%d", randIndex);
         
         // Populate recommendedMovies array
         dispatch_group_enter(movieGroup);
