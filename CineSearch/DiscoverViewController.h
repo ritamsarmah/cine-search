@@ -11,7 +11,7 @@
 @class DetailViewController;
 @class MovieSingleton;
 
-@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
+@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
@@ -28,6 +28,8 @@
 @property NSMutableArray *recommendedMovies;
 @property NSMutableArray *bannerMovies; // Movies for banner images
 @property NSMutableDictionary *imageCache;
+
+@property BOOL enteredSegue;
 
 - (void)setupImageScrollView;
 - (void)nextImage;

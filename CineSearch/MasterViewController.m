@@ -283,12 +283,7 @@
     
     [manager loadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         if (image) {
-            [UIView transitionWithView:cell.posterImageView
-                              duration:0.2
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{
-                                cell.posterImageView.image = image;
-                            } completion:nil];
+            cell.posterImageView.image = image;
         }
     }];
     

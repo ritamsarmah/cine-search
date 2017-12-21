@@ -31,14 +31,28 @@ static NSString * const kTableName = @"table";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.title = @"Favorites";
-    self.navigationController.navigationBar.hidden = NO;
     
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+    
+    if (self.enteredSegue && self.navigationController.isNavigationBarHidden) {
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+        self.enteredSegue = NO;
+    } else {
+         [self.navigationController setNavigationBarHidden:NO animated:NO];
+    }
+    
+    if (@available(iOS 11.0, *)) {
+        self.navigationController.navigationBar.prefersLargeTitles = YES;
+        self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.title = @"";
-    self.navigationController.navigationBar.hidden = YES;
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void)viewDidLoad {
@@ -47,6 +61,7 @@ static NSString * const kTableName = @"table";
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     self.manager = [[MovieSingleton alloc] init];
     self.moviesForID = [[NSMutableDictionary alloc] init];
+    self.enteredSegue = NO;
     
     for (MovieID *movieID in self.array) {
         if (!self.moviesForID[@(movieID.movieID)]) {
@@ -125,12 +140,7 @@ static NSString * const kTableName = @"table";
         SDWebImageManager *manager = [SDWebImageManager sharedManager];
         [manager loadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             if (image) {
-                [UIView transitionWithView:cell.posterImageView
-                                  duration:0.2
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    cell.posterImageView.image = image;
-                                } completion:nil];
+                cell.posterImageView.image = image;
             }
         }];
     }
@@ -140,15 +150,16 @@ static NSString * const kTableName = @"table";
 
 #pragma mark - Segues
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    self.enteredSegue = YES;
     if ([[segue identifier] isEqualToString:@"showFavoriteMovie"]) {
         MovieTableViewCell *cell = (MovieTableViewCell *)sender;
-
-        self.navigationController.navigationBar.hidden = YES;
-        self.title = @"";
-        
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         [controller setMovie:self.moviesForID[@(cell.movieID.movieID)]];
     }
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    return YES;
 }
 
 @end

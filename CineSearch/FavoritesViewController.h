@@ -11,10 +11,11 @@
 
 @class DetailViewController;
 
-@interface FavoritesViewController : UITableViewController
+@interface FavoritesViewController : UITableViewController <UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property NSMutableDictionary *moviesForID;
 @property MovieSingleton *manager;
+@property BOOL enteredSegue;
 
 @end

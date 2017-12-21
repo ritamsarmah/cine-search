@@ -44,12 +44,7 @@
     [manager loadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         [self.posterLoadingIndicator stopAnimating];
         if (image) {
-            [UIView transitionWithView:self.posterImageView
-                              duration:0.4
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{
-                                self.posterImageView.image = image;
-                            } completion:nil];
+            self.posterImageView.image = image;
         } else {
             self.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
         }
@@ -102,7 +97,8 @@
     self.ratingView.layer.masksToBounds = YES;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.navigationController.navigationBar.hidden = YES;
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    self.navigationController.navigationBar.hidden = YES;
     
     [self configureView];
     

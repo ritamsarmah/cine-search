@@ -47,14 +47,27 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.title = @"Discover";
-    self.navigationController.navigationBar.hidden = NO;
+    if (self.enteredSegue && self.navigationController.isNavigationBarHidden) {
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+        self.enteredSegue = NO;
+    } else {
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
+    }
     
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    }
+    
+    if (@available(iOS 11.0, *)) {
+        self.navigationController.navigationBar.prefersLargeTitles = YES;
+        self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.title = @"";
-    self.navigationController.navigationBar.hidden = YES;
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void)viewDidLoad {
@@ -160,8 +173,10 @@
     // Get random ID for recommendation
     RLMResults *favorites = [MovieID allObjects];
     if (favorites.count != 0) {
-        MovieID *randomID;
-        randomID = favorites[arc4random_uniform(favorites.count)];
+        int randomIndex = arc4random_uniform(((int)favorites.count - 1));
+        NSLog(@"%d", (int)favorites.count-1);
+        MovieID *randomID = favorites[randomIndex];
+        NSLog(@"%d", randomIndex);
         
         // Populate recommendedMovies array
         dispatch_group_enter(movieGroup);
@@ -328,6 +343,7 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    self.enteredSegue = YES;
     if ([[segue identifier] isEqualToString:@"showBannerDetail"]) {
         UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
         UIImageView *imageView = (UIImageView *)recognizer.view;
@@ -462,12 +478,6 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     AFCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
     
-    //    cell.movieID = self.moviesNowPlaying[indexPath.item];
-    //    NSLog(@"%lu", cell.movieID.movieID);
-    //
-    //    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
-    //    cell.backgroundColor = collectionViewArray[indexPath.item];
-    
     // Create imageView for background
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BlankMoviePoster"]];
     imageView.frame = cell.bounds;
@@ -482,12 +492,7 @@
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager loadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         if (image) {
-            [UIView transitionWithView:cell.backgroundView
-                              duration:0.4
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{
-                                imageView.image = image;
-                            } completion:nil];
+            imageView.image = image;
         }
     }];
     
@@ -501,6 +506,12 @@
     AFCollectionViewCell *cell = (AFCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     [self performSegueWithIdentifier:@"showMovieDetail" sender:cell];
     NSLog(@"%@", cell.movie.title);
+}
+
+#pragma mark - Gesture Recognizer
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    return YES;
 }
 
 @end
