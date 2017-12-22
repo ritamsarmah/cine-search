@@ -80,11 +80,6 @@
             [self setNeedsStatusBarAppearanceUpdate];
         }
     }];
-    
-    // Get cast for movie
-    [self.manager.database getCastForID:self.movie.idNumber.integerValue completion:^(NSArray *castArray) {
-        // TODO stuff
-    }];
 }
 
 - (void)viewDidLoad {

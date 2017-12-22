@@ -336,7 +336,6 @@
 - (NSString *)formatRuntime:(int)minutes {
     int hours = minutes / 60;
     int remainder = minutes % 60;
-    
     return [NSString stringWithFormat:@"%dh %dh", hours, remainder];
 }
 
