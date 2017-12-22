@@ -23,6 +23,8 @@
 @property NSMutableArray *movies;
 @property MovieSingleton *manager;
 
+@property BOOL enteredSegue;
+
 @property (nonatomic) BOOL connectedToInternet;
 @property (nonatomic) Reachability *internetReachability;
 

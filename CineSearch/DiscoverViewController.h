@@ -27,7 +27,6 @@
 @property NSMutableArray *popularMovies;
 @property NSMutableArray *recommendedMovies;
 @property NSMutableArray *bannerMovies; // Movies for banner images
-@property NSMutableDictionary *imageCache;
 
 @property BOOL enteredSegue;
 

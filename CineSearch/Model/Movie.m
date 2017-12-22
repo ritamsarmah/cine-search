@@ -12,13 +12,14 @@
 
 // TODO: Add certification
 
-- (instancetype)initWithTitle:(NSString *)title overview:(NSString *)overview releaseDate:(NSString *)releaseDate rating:(NSNumber *)rating genres:(NSArray *)genres posterURL:(NSString *)posterURL backdropURL:(NSString *)backdropURL idNumber:(NSNumber *)idNumber{
+- (instancetype)initWithTitle:(NSString *)title overview:(NSString *)overview releaseDate:(NSString *)releaseDate runtime:(NSString *)runtime rating:(NSNumber *)rating genres:(NSArray *)genres posterURL:(NSString *)posterURL backdropURL:(NSString *)backdropURL idNumber:(NSNumber *)idNumber{
     self = [super init];
     
     if (self) {
         _title = title;
         _overview = overview;
         _releaseDate = releaseDate;
+        _runtime = runtime;
         _rating = rating;
         _genres = genres;
         _posterURL = posterURL;

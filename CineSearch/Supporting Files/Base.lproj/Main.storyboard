@@ -28,25 +28,26 @@
                         <viewControllerLayoutGuide type="bottom" id="NoB-KM-baT"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="JG8-Np-ScS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fpM-KN-AhK">
-                                <rect key="frame" x="0.0" y="64" width="375" height="210.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="fpM-KN-AhK" secondAttribute="height" multiplier="107:60" id="AbU-Jr-aLb"/>
-                                </constraints>
-                            </scrollView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="3Kr-AT-HEo">
-                                <rect key="frame" x="0.0" y="275" width="375" height="343"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="502"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <scrollView key="tableHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="fpM-KN-AhK">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="210.5"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" secondItem="fpM-KN-AhK" secondAttribute="height" multiplier="107:60" id="AbU-Jr-aLb"/>
+                                    </constraints>
+                                </scrollView>
                                 <connections>
                                     <outlet property="dataSource" destination="Osh-Bz-Ryx" id="i15-7Q-Lqn"/>
                                     <outlet property="delegate" destination="Osh-Bz-Ryx" id="CL6-Sh-DGx"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unable to retrieve movie data. Please check your internet connection and try again." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Du-E3-Kbc">
-                                <rect key="frame" x="16" y="243" width="343" height="98.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unable to retrieve movie data" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Du-E3-Kbc">
+                                <rect key="frame" x="16" y="217.5" width="343" height="33"/>
                                 <fontDescription key="fontDescription" name="AvenirNextCondensed-Medium" family="Avenir Next Condensed" pointSize="24"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -55,16 +56,13 @@
                         <color key="backgroundColor" red="0.10154151171445847" green="0.11338534206151962" blue="0.13417184352874756" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="3Du-E3-Kbc" firstAttribute="trailing" secondItem="JG8-Np-ScS" secondAttribute="trailingMargin" id="4Mb-M3-DJQ"/>
-                            <constraint firstItem="fpM-KN-AhK" firstAttribute="leading" secondItem="JG8-Np-ScS" secondAttribute="leading" id="FJ9-dz-MUw"/>
-                            <constraint firstItem="3Kr-AT-HEo" firstAttribute="top" secondItem="fpM-KN-AhK" secondAttribute="bottom" id="ItN-pI-z7l"/>
+                            <constraint firstItem="3Kr-AT-HEo" firstAttribute="leading" secondItem="JG8-Np-ScS" secondAttribute="leading" id="7zb-ak-hGx"/>
+                            <constraint firstAttribute="trailing" secondItem="3Kr-AT-HEo" secondAttribute="trailing" id="Lcw-70-fG7"/>
+                            <constraint firstItem="3Kr-AT-HEo" firstAttribute="top" secondItem="20W-sl-TMF" secondAttribute="bottom" id="NVE-Yy-hFx"/>
                             <constraint firstItem="3Du-E3-Kbc" firstAttribute="leading" secondItem="JG8-Np-ScS" secondAttribute="leadingMargin" id="QVw-lF-cUh"/>
-                            <constraint firstAttribute="trailing" secondItem="fpM-KN-AhK" secondAttribute="trailing" id="UhW-RE-yVH"/>
-                            <constraint firstItem="fpM-KN-AhK" firstAttribute="top" secondItem="20W-sl-TMF" secondAttribute="bottom" id="Uie-vs-2ZT"/>
                             <constraint firstItem="3Du-E3-Kbc" firstAttribute="centerX" secondItem="JG8-Np-ScS" secondAttribute="centerX" id="YTd-Js-uPW"/>
                             <constraint firstItem="3Du-E3-Kbc" firstAttribute="centerY" secondItem="JG8-Np-ScS" secondAttribute="centerY" constant="-42" id="aqB-in-lmx"/>
-                            <constraint firstItem="fpM-KN-AhK" firstAttribute="leading" secondItem="3Kr-AT-HEo" secondAttribute="leading" id="kZl-HR-yjn"/>
-                            <constraint firstItem="fpM-KN-AhK" firstAttribute="trailing" secondItem="3Kr-AT-HEo" secondAttribute="trailing" id="w2G-g0-UUu"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="3Kr-AT-HEo" secondAttribute="bottom" id="zYb-Es-up2"/>
+                            <constraint firstItem="NoB-KM-baT" firstAttribute="top" secondItem="3Kr-AT-HEo" secondAttribute="bottom" id="xEU-Fb-60b"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Discover" id="Weg-R6-A8W"/>
@@ -87,9 +85,12 @@
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="Pmd-2v-anx">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.10154151171445847" green="0.11338534206151962" blue="0.13417184352874756" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.15294117647058825" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>
@@ -109,7 +110,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.089775554835796356" green="0.10161743313074112" blue="0.1224028691649437" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.090196078431372548" green="0.10196078431372549" blue="0.12156862745098039" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="aqR-ZV-wXv" kind="relationship" relationship="viewControllers" id="U9E-Yn-mB4"/>
@@ -148,11 +149,11 @@
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <color key="sectionIndexBackgroundColor" red="0.1015415117" green="0.11338534209999999" blue="0.1341718435" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="sectionIndexTrackingBackgroundColor" red="0.1015415117" green="0.11338534209999999" blue="0.1341718435" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" barStyle="black" placeholder="Search for movies" id="Qly-RB-L28">
+                        <searchBar key="tableHeaderView" contentMode="redraw" misplaced="YES" barStyle="black" searchBarStyle="minimal" text="" placeholder="Search for movies" id="LYm-6g-KmO">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="barTintColor" red="0.04287766665" green="0.050863020119999998" blue="0.059196643530000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES"/>
+                            <color key="barTintColor" red="0.10546340793371201" green="0.1173078790307045" blue="0.1380946934223175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
                         </searchBar>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MovieCell" rowHeight="116" id="WCw-Qf-5nD" customClass="MovieTableViewCell">
@@ -262,7 +263,7 @@
                     <navigationItem key="navigationItem" title="Search" id="Zdf-7t-Un8"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
-                        <outlet property="searchBar" destination="Qly-RB-L28" id="MEF-4q-viR"/>
+                        <outlet property="searchBar" destination="LYm-6g-KmO" id="wQ6-Bu-g9P"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
@@ -305,11 +306,14 @@
                 <navigationController title="Master" automaticallyAdjustsScrollViewInsets="NO" id="H84-8d-cJv" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Discover" image="Discover" id="yo3-Rh-x9U"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="o1r-DR-F0D">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" largeTitles="YES" id="o1r-DR-F0D">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.10154151171445847" green="0.11338534206151962" blue="0.13417184352874756" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.15294117647058825" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
@@ -328,7 +332,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LId-c8-I7P" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="r20-d9-pIY">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -338,18 +342,21 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SyQ-vS-DqM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-46" y="-1316"/>
+            <point key="canvasLocation" x="-47" y="-1304"/>
         </scene>
         <!--Master-->
         <scene sceneID="7gg-Pq-1DQ">
             <objects>
                 <navigationController title="Master" id="1Hn-MN-Udt" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="lcf-4p-rwN">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" largeTitles="YES" id="lcf-4p-rwN">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.16441559791564941" green="0.17228719592094421" blue="0.18890562653541565" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.15294117647058825" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>
@@ -380,7 +387,7 @@
             <objects>
                 <tableViewController title="SearchMaster" id="1aw-Ol-giI" customClass="FavoritesViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="white" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" rowHeight="116" sectionHeaderHeight="22" sectionFooterHeight="22" id="DED-uv-W0V">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.1015415117" green="0.11338534209999999" blue="0.1341718435" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="separatorColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>

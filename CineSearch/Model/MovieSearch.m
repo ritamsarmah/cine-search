@@ -52,14 +52,8 @@
                                                    withString:@"+"];
     
     NSMutableArray *movies = [NSMutableArray array];
-    NSString *url = [NSString stringWithFormat:@"https://api.themoviedb.org/3/search/movie?query=%@&api_key=%@", newQuery, key];
-    // TODO: &append_to_response=release_dates for certifications
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:url]];
-    [request setHTTPMethod:@"GET"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/search/movie?query=%@&api_key=%@", newQuery, key];
+    NSMutableURLRequest *request = [self getRequestWithStringURL:stringURL];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -81,25 +75,7 @@
                 if ([results isKindOfClass:[NSDictionary class]]) {
                     NSDictionary *movieResults = [results objectForKey:@"results"];
                     for (id movie in movieResults) {
-                        NSString *title = [movie objectForKey:@"title"];
-                        NSString *overview = [movie objectForKey:@"overview"];
-                        NSString *releaseDate = [self formatDate:[movie objectForKey:@"release_date"]];
-                        NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
-                        NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
-                        NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                        NSArray *genreNumbers = [NSArray arrayWithArray:[movie objectForKey:@"genre_ids"]];
-                        NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
-                        // TODO: Add certification to movie
-                        for (NSNumber *genreID in genreNumbers) {
-                            if (self.genres[genreID] != nil) {
-                                [movieGenres addObject:self.genres[genreID]];
-                            }
-                        }
-                        
-                        NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
-                        
-                        Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:movieGenres posterURL:poster backdropURL:backdrop idNumber:idNumber];
-                        [movies addObject:newMovie];
+                        [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
                     }
                     completion(movies);
                 }
@@ -113,25 +89,10 @@
     }] resume];
 }
 
-- (NSString *)formatDate:(NSString *)stringDate {
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd"];
-    NSDate *date = [dateFormat dateFromString:stringDate];
-    
-    [dateFormat setDateFormat: @"MMMM d, YYYY"];
-    stringDate = [dateFormat stringFromDate:date];
-    return stringDate;
-}
-
 /* Returns movie data for ID */
 - (void)getMovieForID:(NSInteger)idNumber completion:(void (^)(Movie *))completion {
     NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%lu?api_key=%@&append_to_response=release_dates", idNumber, key];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:stringURL]];
-    [request setHTTPMethod:@"GET"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSMutableURLRequest *request = [self getRequestWithStringURL:stringURL];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -146,25 +107,7 @@
             if (error) { NSLog(@"Error retrieving movie"); }
             
             if ([movie isKindOfClass:[NSDictionary class]]) {
-                NSString *title = [movie objectForKey:@"title"];
-                NSString *overview = [movie objectForKey:@"overview"];
-                NSString *releaseDate = [self formatDate:[movie objectForKey:@"release_date"]];
-                NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
-                NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
-                NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                NSArray *genreResults = [NSArray arrayWithArray:[movie objectForKey:@"genres"]];
-                NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
-                // TODO: Add certification to movie
-                for (id genre in genreResults) {
-                    if (self.genres[[genre objectForKey:@"id"]] != nil) {
-                        [movieGenres addObject:self.genres[[genre objectForKey:@"id"]]];
-                    }
-                }
-                
-                NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
-                
-                Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:movieGenres posterURL:poster backdropURL:backdrop idNumber:idNumber];
-                completion(newMovie);
+                completion([self createMovieFromDict:movie isOnlyMovie:YES]);
             }
             
             else {
@@ -177,12 +120,7 @@
 /* Returns trailer video for ID */
 - (void)getTrailerForID:(NSNumber *)idNumber completion:(void (^)(NSString *))completion {
     NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%@/videos?api_key=%@", idNumber, key];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:stringURL]];
-    [request setHTTPMethod:@"GET"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSMutableURLRequest *request = [self getRequestWithStringURL:stringURL];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -199,7 +137,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *videoResults = [results objectForKey:@"results"];
                 for (id video in videoResults) {
-                    if ([[video objectForKey:@"name"]  containsString:@"Trailer"]) {
+                    if ([[video objectForKey:@"type"] isEqualToString:@"Trailer"]) {
                         completion([video objectForKey:@"key"]);
                         return;
                     }
@@ -213,16 +151,44 @@
     }] resume];
 }
 
+- (void)getCastForID:(NSInteger)idNumber completion:(void (^)(NSArray *))completion {
+    NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%lu/credits?api_key=%@", idNumber, key];
+    NSMutableURLRequest *request = [self getRequestWithStringURL:stringURL];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+        if (NSClassFromString(@"NSJSONSerialization")) {
+            NSError *error = nil;
+            id credits = [NSJSONSerialization
+                          JSONObjectWithData:data
+                          options:0
+                          error:&error];
+            
+            if (error) { NSLog(@"Error retrieving credits"); }
+            
+            if ([credits isKindOfClass:[NSDictionary class]]) {
+                NSMutableArray *castArray = [[NSMutableArray alloc] init];
+                for (id member in [credits objectForKey:@"cast"]) {
+                    NSString *name = [member objectForKey:@"name"];
+                    NSString *character = [member objectForKey:@"character"];
+                    NSString *profile = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [member objectForKey:@"profile_path"]];
+                    [castArray addObject:@[name, character, profile]];
+                }
+                completion([castArray copy]);
+            }
+            else {
+                NSLog(@"Not valid dictionary");
+            }
+        }
+    }] resume];
+}
+
 /* Returns array of movies in theaters for US */
 - (void)getNowPlaying:(void (^)(NSMutableArray *))completion {
     NSMutableArray *movies = [NSMutableArray array];
     NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/now_playing?api_key=%@&region=US", key];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:stringURL]];
-    [request setHTTPMethod:@"GET"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSMutableURLRequest *request = [self getRequestWithStringURL:stringURL];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -239,24 +205,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    NSString *title = [movie objectForKey:@"title"];
-                    NSString *overview = [movie objectForKey:@"overview"];
-                    NSString *releaseDate = [self formatDate:[movie objectForKey:@"release_date"]];
-                    NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
-                    NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
-                    NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                    NSArray *genreNumbers = [NSArray arrayWithArray:[movie objectForKey:@"genre_ids"]];
-                    NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
-                    for (NSNumber *genreID in genreNumbers) {
-                        if (self.genres[genreID] != nil) {
-                            [movieGenres addObject:self.genres[genreID]];
-                        }
-                    }
-                    
-                    NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
-                    
-                    Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:movieGenres posterURL:poster backdropURL:backdrop idNumber:idNumber];
-                    [movies addObject:newMovie];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
                 }
                 completion(movies);
             }
@@ -271,12 +220,7 @@
 - (void)getPopular:(void (^)(NSMutableArray *))completion {
     NSMutableArray *movies = [NSMutableArray array];
     NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/popular?api_key=%@&region=US", key];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:stringURL]];
-    [request setHTTPMethod:@"GET"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSMutableURLRequest *request = [self getRequestWithStringURL:stringURL];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -293,24 +237,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    NSString *title = [movie objectForKey:@"title"];
-                    NSString *overview = [movie objectForKey:@"overview"];
-                    NSString *releaseDate = [self formatDate:[movie objectForKey:@"release_date"]];
-                    NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
-                    NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
-                    NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                    NSArray *genreNumbers = [NSArray arrayWithArray:[movie objectForKey:@"genre_ids"]];
-                    NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
-                    for (NSNumber *genreID in genreNumbers) {
-                        if (self.genres[genreID] != nil) {
-                            [movieGenres addObject:self.genres[genreID]];
-                        }
-                    }
-                    
-                    NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
-                    
-                    Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:movieGenres posterURL:poster backdropURL:backdrop idNumber:idNumber];
-                    [movies addObject:newMovie];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
                 }
                 completion(movies);
             }
@@ -324,12 +251,7 @@
 -(void)getRecommendedForID:(NSInteger)idNumber completion:(void (^)(NSMutableArray *))completion {
     NSMutableArray *movies = [NSMutableArray array];
     NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/%ld/similar?api_key=%@", idNumber, key];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:stringURL]];
-    [request setHTTPMethod:@"GET"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    NSMutableURLRequest *request = [self getRequestWithStringURL:stringURL];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -346,24 +268,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    NSString *title = [movie objectForKey:@"title"];
-                    NSString *overview = [movie objectForKey:@"overview"];
-                    NSString *releaseDate = [self formatDate:[movie objectForKey:@"release_date"]];
-                    NSNumber *rating = [NSNumber numberWithDouble:[[movie objectForKey:@"vote_average"] doubleValue]];
-                    NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"poster_path"]];
-                    NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movie objectForKey:@"backdrop_path"]];
-                    NSArray *genreNumbers = [NSArray arrayWithArray:[movie objectForKey:@"genre_ids"]];
-                    NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
-                    for (NSNumber *genreID in genreNumbers) {
-                        if (self.genres[genreID] != nil) {
-                            [movieGenres addObject:self.genres[genreID]];
-                        }
-                    }
-                    
-                    NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]];
-                    
-                    Movie *newMovie = [[Movie alloc] initWithTitle:title overview:overview releaseDate:releaseDate rating:rating genres:movieGenres posterURL:poster backdropURL:backdrop idNumber:idNumber];
-                    [movies addObject:newMovie];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
                 }
                 completion(movies);
             }
@@ -372,6 +277,77 @@
             }
         }
     }] resume];
+}
+
+# pragma mark - Helper Functions
+
+- (NSMutableURLRequest *)getRequestWithStringURL:(NSString *)stringURL {
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:stringURL]];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    return request;
+}
+
+- (Movie *)createMovieFromDict:(NSDictionary *)movieDict isOnlyMovie:(BOOL)isOnlyMovie {
+    NSString *title = [movieDict objectForKey:@"title"];
+    NSString *overview = [movieDict objectForKey:@"overview"];
+    NSString *releaseDate = [self formatDate:[movieDict objectForKey:@"release_date"]];
+    int runtimeMinutes = [[movieDict objectForKey:@"runtime"] intValue];
+    NSLog(@"%d", runtimeMinutes);
+    NSString *runtime = [self formatRuntime:runtimeMinutes];
+    NSLog(@"%@", runtime);
+    NSNumber *rating = [NSNumber numberWithDouble:[[movieDict objectForKey:@"vote_average"] doubleValue]];
+    NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movieDict objectForKey:@"poster_path"]];
+    NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movieDict objectForKey:@"backdrop_path"]];
+    NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movieDict objectForKey:@"id"] integerValue]];
+    NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
+    
+    if (isOnlyMovie) {
+        NSArray *genreResults = [NSArray arrayWithArray:[movieDict objectForKey:@"genres"]];
+        for (id genre in genreResults) {
+            if (self.genres[[genre objectForKey:@"id"]] != nil) {
+                [movieGenres addObject:self.genres[[genre objectForKey:@"id"]]];
+            }
+        }
+    } else {
+        NSArray *genreNumbers = [NSArray arrayWithArray:[movieDict objectForKey:@"genre_ids"]];
+        for (NSNumber *genreID in genreNumbers) {
+            if (self.genres[genreID] != nil) {
+                [movieGenres addObject:self.genres[genreID]];
+            }
+        }
+    }
+    
+    Movie *newMovie = [[Movie alloc] initWithTitle:title
+                                          overview:overview
+                                       releaseDate:releaseDate
+                                           runtime:runtime
+                                            rating:rating
+                                            genres:movieGenres
+                                         posterURL:poster
+                                       backdropURL:backdrop
+                                          idNumber:idNumber];
+    return newMovie;
+}
+
+- (NSString *)formatRuntime:(int)minutes {
+    int hours = minutes / 60;
+    int remainder = minutes % 60;
+    
+    return [NSString stringWithFormat:@"%dh %dh", hours, remainder];
+}
+
+- (NSString *)formatDate:(NSString *)stringDate {
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd"];
+    NSDate *date = [dateFormat dateFromString:stringDate];
+    
+    [dateFormat setDateFormat: @"MMMM d, YYYY"];
+    stringDate = [dateFormat stringFromDate:date];
+    return stringDate;
 }
 
 @end

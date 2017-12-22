@@ -80,6 +80,11 @@
             [self setNeedsStatusBarAppearanceUpdate];
         }
     }];
+    
+    // Get cast for movie
+    [self.manager.database getCastForID:self.movie.idNumber.integerValue completion:^(NSArray *castArray) {
+        // TODO stuff
+    }];
 }
 
 - (void)viewDidLoad {
@@ -97,8 +102,11 @@
     self.ratingView.layer.masksToBounds = YES;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
-//    self.navigationController.navigationBar.hidden = YES;
+    self.navigationController.navigationBar.hidden = YES;
+
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    }
     
     [self configureView];
     

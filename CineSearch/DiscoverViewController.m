@@ -41,7 +41,7 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.loadingMovies.center = self.view.center;
+    self.loadingMovies.center = CGPointMake(self.view.bounds.size.width / 2,  self.view.bounds.size.height / 3);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -61,7 +61,6 @@
     
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = YES;
-        self.navigationController.navigationBar.largeTitleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     }
 }
 
@@ -151,7 +150,6 @@
     [self.manager.database getNowPlaying:^(NSMutableArray *movies) {
         if (self.nowPlayingMovies != movies) {
             if (movies.count != 0) {
-                [self.imageCache removeAllObjects];
                 self.nowPlayingMovies = movies;
             }
         }

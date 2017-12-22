@@ -44,10 +44,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.manager = [MovieSingleton sharedManager];
-//    self.navigationController.navigationBar.hidden = YES;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     self.searchBar.delegate = self;
-    self.searchBar.keyboardAppearance = UIKeyboardAppearanceDark;
     
     /*
      Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the method
@@ -128,6 +127,7 @@
 #pragma mark - Segues
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    self.enteredSegue = YES;
     if ([[segue identifier] isEqualToString:@"showMovie"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         Movie *movie = self.movies[indexPath.row];
@@ -208,7 +208,7 @@
 }
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    [self.searchBar endEditing:YES];
+    [searchBar endEditing:YES];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
