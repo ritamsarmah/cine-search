@@ -296,15 +296,14 @@
     NSString *overview = [movieDict objectForKey:@"overview"];
     NSString *releaseDate = [self formatDate:[movieDict objectForKey:@"release_date"]];
     int runtimeMinutes = [[movieDict objectForKey:@"runtime"] intValue];
-    NSLog(@"%d", runtimeMinutes);
     NSString *runtime = [self formatRuntime:runtimeMinutes];
-    NSLog(@"%@", runtime);
     NSNumber *rating = [NSNumber numberWithDouble:[[movieDict objectForKey:@"vote_average"] doubleValue]];
     NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movieDict objectForKey:@"poster_path"]];
     NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movieDict objectForKey:@"backdrop_path"]];
     NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movieDict objectForKey:@"id"] integerValue]];
     NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
     
+    // Get genres
     if (isOnlyMovie) {
         NSArray *genreResults = [NSArray arrayWithArray:[movieDict objectForKey:@"genres"]];
         for (id genre in genreResults) {
@@ -321,10 +320,28 @@
         }
     }
     
+    // Get certification
+    NSDictionary *releaseDateResults = [[movieDict objectForKey:@"release_dates"] objectForKey:@"results"];
+    NSString *certification = @"";
+    for (NSDictionary* result in releaseDateResults) {
+        NSString *location = [result objectForKey:@"iso_3166_1"];
+        if ([location isEqualToString:@"US"]) {
+            NSDictionary *releaseDates = [result objectForKey:@"release_dates"];
+            for (NSDictionary* release in releaseDates) {
+                NSString *releaseCert = [release objectForKey:@"certification"];
+                if ([certification isEqualToString:@""] && ![releaseCert isEqualToString:@""]) {
+                    certification = releaseCert;
+                }
+            }
+            break;
+        }
+    }
+    
     Movie *newMovie = [[Movie alloc] initWithTitle:title
                                           overview:overview
                                        releaseDate:releaseDate
                                            runtime:runtime
+                                     certification:certification
                                             rating:rating
                                             genres:movieGenres
                                          posterURL:poster

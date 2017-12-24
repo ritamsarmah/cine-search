@@ -49,7 +49,6 @@
     self.title = @"Discover";
     if (self.enteredSegue && self.navigationController.isNavigationBarHidden) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
-        self.enteredSegue = NO;
     } else {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
     }
@@ -62,6 +61,11 @@
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = YES;
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.enteredSegue = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -87,11 +91,11 @@
     self.connectionLabel.hidden = YES;
     
     /*
-        Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the method
-        reachabilityChanged will be called.
+     Observe the kNetworkReachabilityChangedNotification. When that notification is posted, the method
+     reachabilityChanged will be called.
      */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-
+    
     
     self.internetReachability = [Reachability reachabilityForInternetConnection];
     [self.internetReachability startNotifier];
@@ -164,7 +168,6 @@
                 self.popularMovies = movies;
             }
         }
-        
         dispatch_group_leave(movieGroup);
     }];
     
@@ -305,9 +308,9 @@
 - (void)setupMoviesTableView {
     const NSInteger numberOfSections = 3;
     const NSInteger numberOfCollectionViewCells = 10;
-
+    
     NSMutableArray *mutableArray = [NSMutableArray arrayWithCapacity:numberOfSections];
-
+    
     for (NSInteger section = 0; section < numberOfSections; section++) {
         NSMutableArray *movieArray = [NSMutableArray arrayWithCapacity:numberOfCollectionViewCells];
         
@@ -329,7 +332,7 @@
             [mutableArray addObject:movieArray];
         }
     }
-
+    
     self.moviesArray = [NSArray arrayWithArray:mutableArray];
     self.contentOffsetDictionary = [NSMutableDictionary dictionary];
     [self.movieTableView reloadData];
@@ -347,24 +350,14 @@
         Movie *movie = self.bannerMovies[imageView.tag-1];
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         [controller setMovie:movie];
-        
-        if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
-            controller.isFavorite = YES;
-        } else {
-            controller.isFavorite = NO;
-        }
+        controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
     } else if ([[segue identifier] isEqualToString:@"showMovieDetail"]) {
         AFCollectionViewCell *cell = (AFCollectionViewCell *)sender;
         NSLog(@"%@",cell.movie.title);
         Movie *movie = cell.movie;
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         [controller setMovie:movie];
-        
-        if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
-            controller.isFavorite = YES;
-        } else {
-            controller.isFavorite = NO;
-        }
+        controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
     }
 }
 
@@ -468,7 +461,7 @@
 #pragma mark - Collection View
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-//    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
+    //    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
     return 10;
 }
 
@@ -480,7 +473,7 @@
     imageView.frame = cell.bounds;
     imageView.clipsToBounds = YES;
     imageView.contentScaleFactor = UIViewContentModeScaleAspectFit;
-   
+    
     NSArray *collectionViewArray = self.moviesArray[[(AFIndexedCollectionView *)collectionView section]];
     Movie *movie = collectionViewArray[indexPath.item];
     NSURL *posterURL = [NSURL URLWithString:movie.posterURL];
@@ -495,7 +488,7 @@
     
     cell.backgroundView = imageView;
     cell.movie = movie;
-
+    
     return cell;
 }
 

@@ -660,7 +660,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.1050081262" green="0.1162193337" blue="0.13881230350000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.10588235294117647" green="0.11764705882352941" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="feO-a9-lpm" firstAttribute="top" secondItem="6cM-bC-1KQ" secondAttribute="bottom" constant="20" id="7Rx-IA-dip"/>
                             <constraint firstItem="a66-TQ-i2B" firstAttribute="top" secondItem="etQ-yj-j2h" secondAttribute="bottom" constant="3" id="Eup-ki-yks"/>
@@ -733,9 +733,9 @@
     </scenes>
     <resources>
         <image name="BackButton" width="139" height="134"/>
-        <image name="Discover" width="27" height="23"/>
+        <image name="Discover" width="30" height="30"/>
         <image name="HeartFilled" width="25" height="22"/>
-        <image name="Star" width="26" height="25"/>
+        <image name="Star" width="102" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="USQ-ZQ-G6K"/>

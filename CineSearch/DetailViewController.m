@@ -23,6 +23,17 @@
 @implementation DetailViewController
 
 - (void)configureView {
+    // Configure buttons
+    self.trailerButton.layer.cornerRadius = 5;
+    self.trailerButton.layer.masksToBounds = YES;
+    self.favoriteButton.layer.cornerRadius = 5;
+    self.favoriteButton.layer.masksToBounds = YES;
+    self.ratingView.layer.cornerRadius = 5;
+    self.ratingView.layer.masksToBounds = YES;
+    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.navigationController.navigationBar.hidden = YES;
+    
     // Update the user interface for the detail item.
     self.movieTitleLabel.text = self.movie.title;
     self.releaseLabel.text = [NSString stringWithFormat:@"Release date: %@", self.movie.releaseDate ?: @"TBA"];
@@ -36,7 +47,6 @@
     self.scrollView.parallaxHeader.view = self.headerView;
     
     // Download poster image from URL
-    
     [self.posterLoadingIndicator startAnimating];
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
     
@@ -89,22 +99,6 @@
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     self.scrollView.delegate = self;
     
-    self.trailerButton.layer.cornerRadius = 5;
-    self.trailerButton.layer.masksToBounds = YES;
-    self.favoriteButton.layer.cornerRadius = 5;
-    self.favoriteButton.layer.masksToBounds = YES;
-    self.ratingView.layer.cornerRadius = 5;
-    self.ratingView.layer.masksToBounds = YES;
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.navigationController.navigationBar.hidden = YES;
-
-    if (@available(iOS 11.0, *)) {
-        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
-    }
-    
-    [self configureView];
-    
     __weak typeof(self) weakSelf = self;
     self.notification = [self.array addNotificationBlock:^(RLMResults *data, RLMCollectionChange *changes, NSError *error) {
         if (error) {
@@ -128,6 +122,14 @@
             [weakSelf.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
         }
     }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    if (@available(iOS 11.0, *)) {
+        self.navigationController.navigationBar.prefersLargeTitles = NO;
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    }
+    [self configureView];
 }
 
 #pragma mark - UIScrollViewDelegate

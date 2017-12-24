@@ -10,9 +10,7 @@
 
 @implementation Movie
 
-// TODO: Add certification
-
-- (instancetype)initWithTitle:(NSString *)title overview:(NSString *)overview releaseDate:(NSString *)releaseDate runtime:(NSString *)runtime rating:(NSNumber *)rating genres:(NSArray *)genres posterURL:(NSString *)posterURL backdropURL:(NSString *)backdropURL idNumber:(NSNumber *)idNumber{
+- (instancetype)initWithTitle:(NSString *)title overview:(NSString *)overview releaseDate:(NSString *)releaseDate runtime:(NSString *)runtime certification:(NSString*)certification rating:(NSNumber *)rating genres:(NSArray *)genres posterURL:(NSString *)posterURL backdropURL:(NSString *)backdropURL idNumber:(NSNumber *)idNumber{
     self = [super init];
     
     if (self) {
@@ -20,6 +18,7 @@
         _overview = overview;
         _releaseDate = releaseDate;
         _runtime = runtime;
+        _certification = certification;
         _rating = rating;
         _genres = genres;
         _posterURL = posterURL;
