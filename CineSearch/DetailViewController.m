@@ -36,7 +36,7 @@
     
     // Update the user interface for the detail item.
     self.movieTitleLabel.text = self.movie.title;
-    self.releaseLabel.text = [NSString stringWithFormat:@"Release date: %@", self.movie.releaseDate ?: @"TBA"];
+    self.detailLabel.text = [NSString stringWithFormat:@"%@ ‧ %@ ‧ %@", self.movie.certification ?: @"NR", self.movie.runtime, self.movie.releaseDate ?: @"TBA"];
     self.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [self.movie.rating doubleValue]];
     self.overviewLabel.text = self.movie.overview;
     

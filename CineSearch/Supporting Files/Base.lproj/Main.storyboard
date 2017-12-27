@@ -13,7 +13,6 @@
     <customFonts key="customFonts">
         <array key="AvenirNextCondensed.ttc">
             <string>AvenirNextCondensed-DemiBold</string>
-            <string>AvenirNextCondensed-Italic</string>
             <string>AvenirNextCondensed-Medium</string>
             <string>AvenirNextCondensed-Regular</string>
         </array>
@@ -539,7 +538,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="6a9-dH-WUd">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="595"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="aBR-Fq-F9l">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="aBR-Fq-F9l">
                                         <rect key="frame" x="16" y="68.5" width="342" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genres" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hlx-TV-DCv">
@@ -548,9 +547,9 @@
                                                 <color key="textColor" red="0.1487722397" green="0.54916626209999997" blue="0.89794868230000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Release Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="akq-0k-HhL">
-                                                <rect key="frame" x="0.0" y="25" width="80.5" height="25"/>
-                                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Italic" family="Avenir Next Condensed" pointSize="18"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rating ‧ Release Date  ‧ Runtime" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="akq-0k-HhL">
+                                                <rect key="frame" x="0.0" y="25" width="205" height="25"/>
+                                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="18"/>
                                                 <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -681,6 +680,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="backdropImageView" destination="7ia-P2-Ueg" id="W0f-4W-ykM"/>
+                        <outlet property="detailLabel" destination="akq-0k-HhL" id="z82-Ld-Duv"/>
                         <outlet property="favoriteButton" destination="U0v-EE-8bh" id="eDZ-pv-syJ"/>
                         <outlet property="genreLabel" destination="Hlx-TV-DCv" id="lRl-gU-HqI"/>
                         <outlet property="headerView" destination="HEt-Kt-5gp" id="f0K-dH-SOU"/>
@@ -690,7 +690,6 @@
                         <outlet property="posterLoadingIndicator" destination="ZMw-NZ-fj9" id="8aL-HN-B6v"/>
                         <outlet property="ratingLabel" destination="agS-Zt-n3N" id="q37-N0-7W8"/>
                         <outlet property="ratingView" destination="5E6-X9-wdh" id="w4a-cd-ZNl"/>
-                        <outlet property="releaseLabel" destination="akq-0k-HhL" id="7ff-SR-FHJ"/>
                         <outlet property="scrollView" destination="6a9-dH-WUd" id="5gy-9e-rbJ"/>
                         <outlet property="trailerButton" destination="6cM-bC-1KQ" id="8C9-UV-UAW"/>
                     </connections>

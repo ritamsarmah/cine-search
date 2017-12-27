@@ -147,28 +147,32 @@
 
 #pragma mark - UI/Movie methods
 - (void)retrieveMovieData {
-    dispatch_group_t movieGroup = dispatch_group_create();
+    dispatch_group_t movieCollectionGroup = dispatch_group_create();
+    
+    __block NSMutableArray *nowPlayingIDs;
+    __block NSMutableArray *popularIDs;
+    __block NSMutableArray *recommendedIDs;
+    
+    self.nowPlayingMovies = [NSMutableArray array];
+    self.popularMovies = [NSMutableArray array];
+    self.recommendedMovies = [NSMutableArray array];
     
     // Populate nowPlayingMovies array
-    dispatch_group_enter(movieGroup);
+    dispatch_group_enter(movieCollectionGroup);
     [self.manager.database getNowPlaying:^(NSMutableArray *movies) {
-        if (self.nowPlayingMovies != movies) {
-            if (movies.count != 0) {
-                self.nowPlayingMovies = movies;
-            }
+        if (movies.count != 0) {
+            nowPlayingIDs = movies;
         }
-        dispatch_group_leave(movieGroup);
+        dispatch_group_leave(movieCollectionGroup);
     }];
     
     // Populate popularMovies array
-    dispatch_group_enter(movieGroup);
+    dispatch_group_enter(movieCollectionGroup);
     [self.manager.database getPopular:^(NSMutableArray *movies) {
-        if (self.popularMovies != movies) {
-            if (movies.count != 0) {
-                self.popularMovies = movies;
-            }
+        if (movies.count != 0) {
+            popularIDs = movies;
         }
-        dispatch_group_leave(movieGroup);
+        dispatch_group_leave(movieCollectionGroup);
     }];
     
     // Get random ID for recommendation
@@ -176,23 +180,49 @@
     if (favorites.count != 0) {
         int randIndex = arc4random_uniform((int)favorites.count);
         MovieID *randomID = favorites[randIndex];
-        NSLog(@"%d", randIndex);
         
         // Populate recommendedMovies array
-        dispatch_group_enter(movieGroup);
+        dispatch_group_enter(movieCollectionGroup);
         [self.manager.database getRecommendedForID:randomID.movieID completion:^(NSMutableArray *movies) {
-            if (self.recommendedMovies != movies) {
-                if (movies.count != 0) {
-                    self.recommendedMovies = movies;
-                }
+            if (movies.count != 0) {
+                recommendedIDs = movies;
             }
-            dispatch_group_leave(movieGroup);
+            dispatch_group_leave(movieCollectionGroup);
         }];
     }
     
-    dispatch_group_notify(movieGroup, dispatch_get_main_queue(),^{
-        [self setupImageScrollView];
-        [self setupMoviesTableView];
+    // Retrieve full movie data for IDs
+    dispatch_group_notify(movieCollectionGroup, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        dispatch_group_t movieGroup = dispatch_group_create();
+ 
+        for (NSNumber* movieId in nowPlayingIDs){
+            dispatch_group_enter(movieGroup);
+            [self.manager.database getMovieForID:movieId.integerValue completion:^(Movie *newMovie) {
+                [self.nowPlayingMovies addObject:newMovie];
+                dispatch_group_leave(movieGroup);
+            }];
+        }
+        
+        for (NSNumber* movieId in popularIDs){
+            dispatch_group_enter(movieGroup);
+            [self.manager.database getMovieForID:movieId.integerValue completion:^(Movie *newMovie) {
+                [self.popularMovies addObject:newMovie];
+                dispatch_group_leave(movieGroup);
+            }];
+        }
+        
+        for (NSNumber* movieId in recommendedIDs){
+            dispatch_group_enter(movieGroup);
+            [self.manager.database getMovieForID:movieId.integerValue completion:^(Movie *newMovie) {
+                [self.recommendedMovies addObject:newMovie];
+                dispatch_group_leave(movieGroup);
+            }];
+        }
+        
+        dispatch_group_notify(movieGroup, dispatch_get_main_queue(),^{
+            [self setupImageScrollView];
+            [self setupMoviesTableView];
+        });
     });
 }
 
@@ -461,7 +491,6 @@
 #pragma mark - Collection View
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    //    NSArray *collectionViewArray = self.colorArray[[(AFIndexedCollectionView *)collectionView section]];
     return 10;
 }
 
@@ -495,7 +524,6 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     AFCollectionViewCell *cell = (AFCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     [self performSegueWithIdentifier:@"showMovieDetail" sender:cell];
-    NSLog(@"%@", cell.movie.title);
 }
 
 #pragma mark - Gesture Recognizer

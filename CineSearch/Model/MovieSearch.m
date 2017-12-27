@@ -184,7 +184,7 @@
     }] resume];
 }
 
-/* Returns array of movies in theaters for US */
+/* Returns array of movie IDs in theaters for US */
 - (void)getNowPlaying:(void (^)(NSMutableArray *))completion {
     NSMutableArray *movies = [NSMutableArray array];
     NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/now_playing?api_key=%@&region=US", key];
@@ -205,7 +205,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
+                    [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
                 }
                 completion(movies);
             }
@@ -216,7 +216,7 @@
     }] resume];
 }
 
-/* Returns array of movies in theaters for US */
+/* Returns array of movie IDs in theaters for US */
 - (void)getPopular:(void (^)(NSMutableArray *))completion {
     NSMutableArray *movies = [NSMutableArray array];
     NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/popular?api_key=%@&region=US", key];
@@ -237,7 +237,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
+                    [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
                 }
                 completion(movies);
             }
@@ -248,6 +248,7 @@
     }] resume];
 }
 
+/* Returns array of movie IDs similar to input movie ID */
 -(void)getRecommendedForID:(NSInteger)idNumber completion:(void (^)(NSMutableArray *))completion {
     NSMutableArray *movies = [NSMutableArray array];
     NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/%ld/similar?api_key=%@", idNumber, key];
@@ -268,7 +269,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
+                    [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
                 }
                 completion(movies);
             }
@@ -287,7 +288,6 @@
     [request setHTTPMethod:@"GET"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
     return request;
 }
 
@@ -337,6 +337,8 @@
         }
     }
     
+    NSLog(@"%@: %@ %@", title, runtime, certification);
+    
     Movie *newMovie = [[Movie alloc] initWithTitle:title
                                           overview:overview
                                        releaseDate:releaseDate
@@ -353,7 +355,7 @@
 - (NSString *)formatRuntime:(int)minutes {
     int hours = minutes / 60;
     int remainder = minutes % 60;
-    return [NSString stringWithFormat:@"%dh %dh", hours, remainder];
+    return [NSString stringWithFormat:@"%dh %dm", hours, remainder];
 }
 
 - (NSString *)formatDate:(NSString *)stringDate {
