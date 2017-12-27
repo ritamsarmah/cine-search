@@ -75,9 +75,26 @@
                 if ([results isKindOfClass:[NSDictionary class]]) {
                     NSDictionary *movieResults = [results objectForKey:@"results"];
                     for (id movie in movieResults) {
-                        [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
+                        [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
                     }
-                    completion(movies);
+                    
+                    if (movies.count > 0) {
+                        __block int count = 0;
+                        NSLog(@"Entering getmovies");
+                        for (int i = 0; i < movies.count; i++) {
+                            NSNumber *movieId = movies[i];
+                            [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
+                                [movies setObject:movie atIndexedSubscript:i];
+                                count++;
+                                if (count == movies.count) {
+                                    NSLog(@"completed");
+                                    completion(movies);
+                                }
+                            }];
+                        }
+                    } else {
+                        completion([NSMutableArray array]);
+                    }
                 }
                 else {
                     NSLog(@"Not valid dictionary");
@@ -207,7 +224,18 @@
                 for (id movie in movieResults) {
                     [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
                 }
-                completion(movies);
+                
+                __block int count = 0;
+                for (int i = 0; i < movies.count; i++) {
+                    NSNumber *movieId = movies[i];
+                    [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
+                        [movies setObject:movie atIndexedSubscript:i];
+                        count++;
+                        if (count == movies.count) {
+                            completion(movies);
+                        }
+                    }];
+                }
             }
             else {
                 NSLog(@"Not valid dictionary");
@@ -239,7 +267,18 @@
                 for (id movie in movieResults) {
                     [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
                 }
-                completion(movies);
+                
+                __block int count = 0;
+                for (int i = 0; i < movies.count; i++) {
+                    NSNumber *movieId = movies[i];
+                    [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
+                        [movies setObject:movie atIndexedSubscript:i];
+                        count++;
+                        if (count == movies.count) {
+                            completion(movies);
+                        }
+                    }];
+                }
             }
             else {
                 NSLog(@"Not valid dictionary");
@@ -271,7 +310,18 @@
                 for (id movie in movieResults) {
                     [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
                 }
-                completion(movies);
+                
+                __block int count = 0;
+                for (int i = 0; i < movies.count; i++) {
+                    NSNumber *movieId = movies[i];
+                    [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
+                        [movies setObject:movie atIndexedSubscript:i];
+                        count++;
+                        if (count == movies.count) {
+                            completion(movies);
+                        }
+                    }];
+                }
             }
             else {
                 NSLog(@"Not valid dictionary");
@@ -295,8 +345,8 @@
     NSString *title = [movieDict objectForKey:@"title"];
     NSString *overview = [movieDict objectForKey:@"overview"];
     NSString *releaseDate = [self formatDate:[movieDict objectForKey:@"release_date"]];
-    int runtimeMinutes = [[movieDict objectForKey:@"runtime"] intValue];
-    NSString *runtime = [self formatRuntime:runtimeMinutes];
+    NSNumber *runtimeMinutes = [NSNumber numberWithInteger:[[movieDict objectForKey:@"runtime"] integerValue]];
+    NSString *runtime = [self formatRuntime:runtimeMinutes.intValue];
     NSNumber *rating = [NSNumber numberWithDouble:[[movieDict objectForKey:@"vote_average"] doubleValue]];
     NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movieDict objectForKey:@"poster_path"]];
     NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movieDict objectForKey:@"backdrop_path"]];
@@ -336,8 +386,9 @@
             break;
         }
     }
-    
-    NSLog(@"%@: %@ %@", title, runtime, certification);
+    if ([certification isEqualToString:@""]) {
+        certification = @"NR";
+    }
     
     Movie *newMovie = [[Movie alloc] initWithTitle:title
                                           overview:overview
@@ -353,6 +404,9 @@
 }
 
 - (NSString *)formatRuntime:(int)minutes {
+    if (minutes == 0) {
+        return @"N/A";
+    }
     int hours = minutes / 60;
     int remainder = minutes % 60;
     return [NSString stringWithFormat:@"%dh %dm", hours, remainder];

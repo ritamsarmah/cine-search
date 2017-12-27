@@ -32,7 +32,7 @@
 
 - (void)loadView {
     [super loadView];
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     [self.view addSubview:activityIndicator];
     [self.movieTableView setHidden:YES];
     [self.imageScrollView setHidden:YES];
@@ -41,7 +41,7 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.loadingMovies.center = CGPointMake(self.view.bounds.size.width / 2,  self.view.bounds.size.height / 3);
+    self.loadingMovies.center = CGPointMake(self.view.bounds.size.width / 2,  self.view.bounds.size.height / 2.5);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -148,20 +148,12 @@
 #pragma mark - UI/Movie methods
 - (void)retrieveMovieData {
     dispatch_group_t movieCollectionGroup = dispatch_group_create();
-    
-    __block NSMutableArray *nowPlayingIDs;
-    __block NSMutableArray *popularIDs;
-    __block NSMutableArray *recommendedIDs;
-    
-    self.nowPlayingMovies = [NSMutableArray array];
-    self.popularMovies = [NSMutableArray array];
-    self.recommendedMovies = [NSMutableArray array];
-    
+
     // Populate nowPlayingMovies array
     dispatch_group_enter(movieCollectionGroup);
     [self.manager.database getNowPlaying:^(NSMutableArray *movies) {
         if (movies.count != 0) {
-            nowPlayingIDs = movies;
+            self.nowPlayingMovies = movies;
         }
         dispatch_group_leave(movieCollectionGroup);
     }];
@@ -170,7 +162,7 @@
     dispatch_group_enter(movieCollectionGroup);
     [self.manager.database getPopular:^(NSMutableArray *movies) {
         if (movies.count != 0) {
-            popularIDs = movies;
+            self.popularMovies = movies;
         }
         dispatch_group_leave(movieCollectionGroup);
     }];
@@ -185,44 +177,16 @@
         dispatch_group_enter(movieCollectionGroup);
         [self.manager.database getRecommendedForID:randomID.movieID completion:^(NSMutableArray *movies) {
             if (movies.count != 0) {
-                recommendedIDs = movies;
+                self.recommendedMovies = movies;
             }
             dispatch_group_leave(movieCollectionGroup);
         }];
     }
     
-    // Retrieve full movie data for IDs
-    dispatch_group_notify(movieCollectionGroup, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        dispatch_group_t movieGroup = dispatch_group_create();
- 
-        for (NSNumber* movieId in nowPlayingIDs){
-            dispatch_group_enter(movieGroup);
-            [self.manager.database getMovieForID:movieId.integerValue completion:^(Movie *newMovie) {
-                [self.nowPlayingMovies addObject:newMovie];
-                dispatch_group_leave(movieGroup);
-            }];
-        }
-        
-        for (NSNumber* movieId in popularIDs){
-            dispatch_group_enter(movieGroup);
-            [self.manager.database getMovieForID:movieId.integerValue completion:^(Movie *newMovie) {
-                [self.popularMovies addObject:newMovie];
-                dispatch_group_leave(movieGroup);
-            }];
-        }
-        
-        for (NSNumber* movieId in recommendedIDs){
-            dispatch_group_enter(movieGroup);
-            [self.manager.database getMovieForID:movieId.integerValue completion:^(Movie *newMovie) {
-                [self.recommendedMovies addObject:newMovie];
-                dispatch_group_leave(movieGroup);
-            }];
-        }
-        
-        dispatch_group_notify(movieGroup, dispatch_get_main_queue(),^{
-            [self setupImageScrollView];
-            [self setupMoviesTableView];
-        });
+    dispatch_group_notify(movieCollectionGroup, dispatch_get_main_queue(),^{
+        NSLog(@"Data retrieval complete. Setting up UI.");
+        [self setupImageScrollView];
+        [self setupMoviesTableView];
     });
 }
 

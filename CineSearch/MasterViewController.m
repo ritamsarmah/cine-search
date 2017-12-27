@@ -156,7 +156,9 @@
         [self.tableView setUserInteractionEnabled:NO];
         [self.manager.database search:searchBar.text completion:^(NSMutableArray *movies) {
             if (movies == nil) {
-                [self displayConnectionAlert];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self displayConnectionAlert];
+                });
             }
             else if (self.movies != movies) {
                 if (movies.count != 0) {
@@ -201,7 +203,6 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     [searchBar setShowsCancelButton:YES animated:YES];
 }
-
 
 -(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
     [searchBar setShowsCancelButton:NO animated:YES];
