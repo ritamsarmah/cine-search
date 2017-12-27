@@ -74,20 +74,20 @@
                 
                 if ([results isKindOfClass:[NSDictionary class]]) {
                     NSDictionary *movieResults = [results objectForKey:@"results"];
+                    if (movieResults == NULL) { completion([NSMutableArray array]); }
+                    
                     for (id movie in movieResults) {
                         [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
                     }
                     
                     if (movies.count > 0) {
                         __block int count = 0;
-                        NSLog(@"Entering getmovies");
                         for (int i = 0; i < movies.count; i++) {
                             NSNumber *movieId = movies[i];
                             [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
                                 [movies setObject:movie atIndexedSubscript:i];
                                 count++;
                                 if (count == movies.count) {
-                                    NSLog(@"completed");
                                     completion(movies);
                                 }
                             }];
@@ -345,13 +345,18 @@
     NSString *title = [movieDict objectForKey:@"title"];
     NSString *overview = [movieDict objectForKey:@"overview"];
     NSString *releaseDate = [self formatDate:[movieDict objectForKey:@"release_date"]];
-    NSNumber *runtimeMinutes = [NSNumber numberWithInteger:[[movieDict objectForKey:@"runtime"] integerValue]];
-    NSString *runtime = [self formatRuntime:runtimeMinutes.intValue];
     NSNumber *rating = [NSNumber numberWithDouble:[[movieDict objectForKey:@"vote_average"] doubleValue]];
     NSString *poster = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movieDict objectForKey:@"poster_path"]];
     NSString *backdrop = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [movieDict objectForKey:@"backdrop_path"]];
     NSNumber *idNumber = [NSNumber numberWithInt: (int)[[movieDict objectForKey:@"id"] integerValue]];
     NSMutableArray *movieGenres = [[NSMutableArray alloc] init];
+    
+    NSString *runtime = @"N/A";
+    
+    if ([movieDict objectForKey:@"runtime"] != [NSNull null]) {
+        NSNumber *runtimeMinutes = [NSNumber numberWithInteger:[[movieDict objectForKey:@"runtime"] integerValue]];
+        runtime = [self formatRuntime:runtimeMinutes.intValue];
+    }
     
     // Get genres
     if (isOnlyMovie) {
