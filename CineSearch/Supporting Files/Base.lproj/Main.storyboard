@@ -589,42 +589,42 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Bjz-5D-4dq">
-                                        <rect key="frame" x="16" y="174" width="342" height="173"/>
+                                        <rect key="frame" x="16" y="174" width="342" height="175"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="173" id="eJa-Yz-LJ7"/>
+                                            <constraint firstAttribute="height" constant="175" id="eJa-Yz-LJ7"/>
                                         </constraints>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qwU-0U-Nm3">
-                                            <size key="itemSize" width="86" height="172"/>
+                                            <size key="itemSize" width="82" height="173"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CastCell" id="ZA4-KT-Rim" customClass="CastCollectionViewCell">
-                                                <rect key="frame" x="0.0" y="0.5" width="86" height="172"/>
+                                                <rect key="frame" x="0.0" y="1" width="82" height="173"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="86" height="172"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="82" height="173"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="o1A-af-U5E">
-                                                            <rect key="frame" x="0.0" y="0.0" width="86" height="129"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="82" height="123"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" secondItem="o1A-af-U5E" secondAttribute="height" multiplier="2:3" id="TGZ-Mz-Jfg"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="E3L-a2-eed">
-                                                            <rect key="frame" x="0.0" y="137" width="86" height="35"/>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="E3L-a2-eed">
+                                                            <rect key="frame" x="0.0" y="131" width="82" height="42"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gMc-Hg-0Gd">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="86" height="14.5"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="82" height="18.5"/>
                                                                     <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="17"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Role" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="01t-35-gzf">
-                                                                    <rect key="frame" x="0.0" y="14.5" width="86" height="20.5"/>
+                                                                    <rect key="frame" x="0.0" y="21.5" width="82" height="20.5"/>
                                                                     <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="15"/>
                                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                                     <nil key="highlightedColor"/>
@@ -637,10 +637,10 @@
                                                     <constraint firstItem="o1A-af-U5E" firstAttribute="leading" secondItem="ZA4-KT-Rim" secondAttribute="leading" id="3ON-cf-mmS"/>
                                                     <constraint firstItem="o1A-af-U5E" firstAttribute="top" secondItem="ZA4-KT-Rim" secondAttribute="top" id="4Oz-qq-tHe"/>
                                                     <constraint firstAttribute="trailing" secondItem="o1A-af-U5E" secondAttribute="trailing" id="MH7-ve-Mjf"/>
-                                                    <constraint firstAttribute="trailing" secondItem="E3L-a2-eed" secondAttribute="trailing" id="WiV-IT-Ge1"/>
-                                                    <constraint firstItem="E3L-a2-eed" firstAttribute="top" secondItem="o1A-af-U5E" secondAttribute="bottom" constant="8" id="kff-fh-g48"/>
-                                                    <constraint firstAttribute="bottom" secondItem="E3L-a2-eed" secondAttribute="bottom" id="q5b-nd-4e1"/>
-                                                    <constraint firstItem="E3L-a2-eed" firstAttribute="leading" secondItem="ZA4-KT-Rim" secondAttribute="leading" id="rDo-v0-ItT"/>
+                                                    <constraint firstAttribute="trailing" secondItem="E3L-a2-eed" secondAttribute="trailing" id="bfK-7y-OiD"/>
+                                                    <constraint firstItem="E3L-a2-eed" firstAttribute="top" secondItem="o1A-af-U5E" secondAttribute="bottom" constant="8" id="hlT-Ju-mVV"/>
+                                                    <constraint firstItem="E3L-a2-eed" firstAttribute="leading" secondItem="ZA4-KT-Rim" secondAttribute="leading" id="qco-5j-mGq"/>
+                                                    <constraint firstAttribute="bottom" secondItem="E3L-a2-eed" secondAttribute="bottom" id="rY7-3g-nYl"/>
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="nameLabel" destination="gMc-Hg-0Gd" id="99q-us-SKy"/>

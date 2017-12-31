@@ -80,7 +80,16 @@
     
     self.scrollView.parallaxHeader.height = self.view.frame.size.height/3;
     self.scrollView.parallaxHeader.mode = MXParallaxHeaderModeFill;
-    self.scrollView.parallaxHeader.minimumHeight = 64;
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        switch ((int)[[UIScreen mainScreen] nativeBounds].size.height) {
+            case 2436: // iPhone X Height
+                 self.scrollView.parallaxHeader.minimumHeight = 88;
+                break;
+            default:
+                self.scrollView.parallaxHeader.minimumHeight = 64;
+        }
+    }
     
     NSURL *backdropURL = [[NSURL alloc] initWithString:self.movie.backdropURL];
     [manager loadImageWithURL:backdropURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
@@ -109,31 +118,37 @@
     self.castCollectionView.backgroundColor = [UIColor clearColor];
     
     [self.manager.database getCastForID:self.movie.idNumber.integerValue completion:^(NSArray *cast) {
-        int ActorCount = (int)MIN(5, cast.count);
+        int actorCount = (int)MIN(5, cast.count);
         self.castImageDict = [[NSMutableDictionary alloc] init];
-        self.castArray = [cast subarrayWithRange:NSMakeRange(0, ActorCount)];
+        self.castArray = [cast subarrayWithRange:NSMakeRange(0, actorCount)];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.castCollectionView reloadData];
         });
         
-        dispatch_group_t actorGroup = dispatch_group_create();
-        
-        for (int i = 0; i < ActorCount; i++) {
-            Actor *actor = self.castArray[i];
-            NSURL *url = [[NSURL alloc] initWithString:actor.profileURL];
-            dispatch_group_enter(actorGroup);
-            [manager loadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                if (image) {
-                    NSString *key = [NSString stringWithFormat: @"%d", i];
-                    [self.castImageDict setValue:image forKey:key];
-                }
-                dispatch_group_leave(actorGroup);
-            }];
+        if (actorCount == 0) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.castCollectionView.hidden = YES;
+            });
+        } else {
+            dispatch_group_t actorGroup = dispatch_group_create();
+            
+            for (int i = 0; i < actorCount; i++) {
+                Actor *actor = self.castArray[i];
+                NSURL *url = [[NSURL alloc] initWithString:actor.profileURL];
+                dispatch_group_enter(actorGroup);
+                [manager loadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                    if (image) {
+                        NSString *key = [NSString stringWithFormat: @"%d", i];
+                        [self.castImageDict setValue:image forKey:key];
+                    }
+                    dispatch_group_leave(actorGroup);
+                }];
+            }
+            
+            dispatch_group_notify(actorGroup, dispatch_get_main_queue(),^{
+                [self.castCollectionView reloadData];
+            });
         }
-        
-        dispatch_group_notify(actorGroup, dispatch_get_main_queue(),^{
-            [self.castCollectionView reloadData];
-        });
     }];
 }
 
