@@ -122,7 +122,6 @@
             Actor *actor = self.castArray[i];
             NSURL *url = [[NSURL alloc] initWithString:actor.profileURL];
             dispatch_group_enter(actorGroup);
-            NSLog(@"%@", url);
             [manager loadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
                 if (image) {
                     NSString *key = [NSString stringWithFormat: @"%d", i];
