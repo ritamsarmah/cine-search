@@ -84,7 +84,7 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         switch ((int)[[UIScreen mainScreen] nativeBounds].size.height) {
             case 2436: // iPhone X Height
-                 self.scrollView.parallaxHeader.minimumHeight = 88;
+                self.scrollView.parallaxHeader.minimumHeight = 88;
                 break;
             default:
                 self.scrollView.parallaxHeader.minimumHeight = 64;
@@ -118,7 +118,7 @@
     self.castCollectionView.backgroundColor = [UIColor clearColor];
     
     [self.manager.database getCastForID:self.movie.idNumber.integerValue completion:^(NSArray *cast) {
-        int actorCount = (int)MIN(5, cast.count);
+        int actorCount = (int)MIN(6, cast.count);
         self.castImageDict = [[NSMutableDictionary alloc] init];
         self.castArray = [cast subarrayWithRange:NSMakeRange(0, actorCount)];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -127,9 +127,16 @@
         
         if (actorCount == 0) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.castCollectionView.hidden = YES;
+                [self.castCollectionView removeConstraint:self.castCollectionViewHeight];
+                [self.castCollectionView layoutIfNeeded];
             });
         } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.castCollectionView.hidden = NO;
+                [UIView animateWithDuration:0.2 animations:^() {
+                    self.castCollectionView.alpha = 1.0;
+                }];
+            });
             dispatch_group_t actorGroup = dispatch_group_create();
             
             for (int i = 0; i < actorCount; i++) {
@@ -160,6 +167,8 @@
     self.scrollView.delegate = self;
     self.castCollectionView.delegate = self;
     self.castCollectionView.dataSource = self;
+    self.castCollectionView.hidden = YES;
+    self.castCollectionView.alpha = 0;
     
     [self configureView];
     
@@ -324,7 +333,7 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return MAX(4, self.castArray.count);
+    return MAX(6, self.castArray.count);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -343,7 +352,7 @@
         Actor *actor = self.castArray[indexPath.row];
         cell.nameLabel.text = actor.name;
         cell.roleLabel.text = actor.role;
-    
+        
         NSString *key = [NSString stringWithFormat:@"%lu", indexPath.row];
         if (self.castImageDict[key] != nil) {
             [UIView transitionWithView:cell.profileImageView

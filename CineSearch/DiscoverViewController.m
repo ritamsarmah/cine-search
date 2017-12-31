@@ -266,7 +266,6 @@
             [self.loadingMovies stopAnimating];
             [UIView transitionWithView:self.imageScrollView
                               duration:0.3
-             
                                options:UIViewAnimationOptionTransitionCrossDissolve
                             animations:^{
                                 [self.imageScrollView setHidden:NO];

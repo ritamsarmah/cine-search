@@ -34,6 +34,7 @@
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIImageView *posterImageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *castCollectionView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *castCollectionViewHeight;
 
 - (IBAction)back:(UIButton *)sender;
 - (IBAction)favoritePressed:(UIButton *)sender;

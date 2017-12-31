@@ -654,9 +654,9 @@
                                 <constraints>
                                     <constraint firstItem="Bjz-5D-4dq" firstAttribute="leading" secondItem="6a9-dH-WUd" secondAttribute="leading" constant="16" id="1K8-kl-qfP"/>
                                     <constraint firstAttribute="trailing" secondItem="Bjz-5D-4dq" secondAttribute="trailing" constant="16" id="1kb-P2-Efj"/>
+                                    <constraint firstItem="Bjz-5D-4dq" firstAttribute="top" secondItem="2sG-my-td0" secondAttribute="bottom" constant="24" id="57k-Ql-Mge"/>
                                     <constraint firstAttribute="trailing" secondItem="2sG-my-td0" secondAttribute="trailing" constant="16" id="EfN-KV-z37"/>
                                     <constraint firstItem="Lhs-6n-4To" firstAttribute="leading" secondItem="6a9-dH-WUd" secondAttribute="leading" constant="16" id="FA7-Hj-lcf"/>
-                                    <constraint firstItem="Bjz-5D-4dq" firstAttribute="top" secondItem="2sG-my-td0" secondAttribute="bottom" constant="24" id="KV6-1t-rsH"/>
                                     <constraint firstAttribute="trailing" secondItem="aBR-Fq-F9l" secondAttribute="trailing" constant="16" id="Zet-TS-xko"/>
                                     <constraint firstItem="aBR-Fq-F9l" firstAttribute="top" secondItem="Lhs-6n-4To" secondAttribute="bottom" constant="2.5" id="dXx-g5-ETt"/>
                                     <constraint firstAttribute="bottom" secondItem="Bjz-5D-4dq" secondAttribute="bottom" id="e9I-Dp-4sR"/>
@@ -764,6 +764,7 @@
                     <connections>
                         <outlet property="backdropImageView" destination="7ia-P2-Ueg" id="W0f-4W-ykM"/>
                         <outlet property="castCollectionView" destination="Bjz-5D-4dq" id="O7l-e9-PTF"/>
+                        <outlet property="castCollectionViewHeight" destination="eJa-Yz-LJ7" id="SaE-We-yTI"/>
                         <outlet property="detailLabel" destination="akq-0k-HhL" id="z82-Ld-Duv"/>
                         <outlet property="favoriteButton" destination="U0v-EE-8bh" id="eDZ-pv-syJ"/>
                         <outlet property="genreLabel" destination="Hlx-TV-DCv" id="lRl-gU-HqI"/>
