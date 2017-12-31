@@ -190,9 +190,10 @@
                 NSMutableArray *castArray = [[NSMutableArray alloc] init];
                 for (id member in [credits objectForKey:@"cast"]) {
                     NSString *name = [member objectForKey:@"name"];
-                    NSString *character = [member objectForKey:@"character"];
+                    NSString *role = [member objectForKey:@"character"];
                     NSString *profile = [NSString stringWithFormat:@"http://image.tmdb.org/t/p/w500/%@", [member objectForKey:@"profile_path"]];
-                    [castArray addObject:@[name, character, profile]];
+                    Actor *actor = [[Actor alloc] initWithName:name role:role profileURL:profile];
+                    [castArray addObject:actor];
                 }
                 completion([castArray copy]);
             }

@@ -9,6 +9,7 @@
 #import "DetailViewController.h"
 #import "MovieSingleton.h"
 #import "MovieID.h"
+#import "CastCollectionViewCell.h"
 #import <Realm/Realm.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <MXParallaxHeader/MXParallaxHeader.h>
@@ -58,6 +59,16 @@
         [self.posterLoadingIndicator stopAnimating];
         if (image) {
             self.posterImageView.image = image;
+            if (cacheType == SDImageCacheTypeNone) {
+                [UIView transitionWithView:self.posterImageView
+                                  duration:0.2
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    self.posterImageView.image = image;
+                                } completion:nil];
+            } else {
+                self.posterImageView.image = image;
+            }
         } else {
             self.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];
         }
@@ -93,6 +104,38 @@
             [self setNeedsStatusBarAppearanceUpdate];
         }
     }];
+    
+    // Set up cast collection view
+    self.castCollectionView.backgroundColor = [UIColor clearColor];
+    
+    [self.manager.database getCastForID:self.movie.idNumber.integerValue completion:^(NSArray *cast) {
+        int ActorCount = (int)MIN(5, cast.count);
+        self.castImageDict = [[NSMutableDictionary alloc] init];
+        self.castArray = [cast subarrayWithRange:NSMakeRange(0, ActorCount)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.castCollectionView reloadData];
+        });
+        
+        dispatch_group_t actorGroup = dispatch_group_create();
+        
+        for (int i = 0; i < ActorCount; i++) {
+            Actor *actor = self.castArray[i];
+            NSURL *url = [[NSURL alloc] initWithString:actor.profileURL];
+            dispatch_group_enter(actorGroup);
+            NSLog(@"%@", url);
+            [manager loadImageWithURL:url options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                if (image) {
+                    NSString *key = [NSString stringWithFormat: @"%d", i];
+                    [self.castImageDict setValue:image forKey:key];
+                }
+                dispatch_group_leave(actorGroup);
+            }];
+        }
+        
+        dispatch_group_notify(actorGroup, dispatch_get_main_queue(),^{
+            [self.castCollectionView reloadData];
+        });
+    }];
 }
 
 - (void)viewDidLoad {
@@ -101,6 +144,8 @@
     self.manager = [MovieSingleton sharedManager];
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     self.scrollView.delegate = self;
+    self.castCollectionView.delegate = self;
+    self.castCollectionView.dataSource = self;
     
     [self configureView];
     
@@ -139,7 +184,9 @@
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    self.posterImageView.alpha = scrollView.parallaxHeader.progress;
+    if (self.scrollView == scrollView) {
+        self.posterImageView.alpha = scrollView.parallaxHeader.progress;
+    }
 }
 
 #pragma mark - Managing the detail item
@@ -254,6 +301,47 @@
             [self presentViewController:alert animated:true completion:nil];
         }
     }];
+}
+
+#pragma mark - UICollectionView
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return MAX(4, self.castArray.count);
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"CastCell";
+    
+    CastCollectionViewCell *cell = (CastCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+    cell.profileImageView.image = [UIImage imageNamed:@"BlankActor"];
+    cell.nameLabel.text = @"";
+    cell.roleLabel.text = @"";
+    cell.profileImageView.contentMode = UIViewContentModeScaleAspectFill;
+    cell.profileImageView.layer.cornerRadius = 6;
+    cell.profileImageView.layer.masksToBounds = YES;
+    
+    if (self.castArray.count != 0) {
+        Actor *actor = self.castArray[indexPath.row];
+        cell.nameLabel.text = actor.name;
+        cell.roleLabel.text = actor.role;
+    
+        NSString *key = [NSString stringWithFormat:@"%lu", indexPath.row];
+        if (self.castImageDict[key] != nil) {
+            [UIView transitionWithView:cell.profileImageView
+                              duration:0.2
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                cell.profileImageView.image = self.castImageDict[key];
+                            } completion:nil];
+        }
+    }
+    
+    return cell;
 }
 
 @end

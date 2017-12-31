@@ -11,9 +11,11 @@
 @class MovieSingleton;
 @class Movie;
 
-@interface DetailViewController : UIViewController <UIScrollViewDelegate>
+@interface DetailViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (strong, nonatomic) Movie *movie;
+@property (nonatomic) NSArray *castArray;
+@property (nonatomic) NSMutableDictionary *castImageDict;
 @property (weak, nonatomic) NSURL *trailerURL;
 @property (nonatomic) BOOL isFavorite;
 @property MovieSingleton *manager;
@@ -31,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *backdropImageView;
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (weak, nonatomic) IBOutlet UIImageView *posterImageView;
+@property (weak, nonatomic) IBOutlet UICollectionView *castCollectionView;
 
 - (IBAction)back:(UIButton *)sender;
 - (IBAction)favoritePressed:(UIButton *)sender;

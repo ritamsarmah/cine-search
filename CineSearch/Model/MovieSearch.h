@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Movie.h"
+#import "Actor.h"
 
 @interface MovieSearch : NSObject
 

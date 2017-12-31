@@ -474,7 +474,16 @@
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager loadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
         if (image) {
-            imageView.image = image;
+            if (cacheType == SDImageCacheTypeNone) {
+                [UIView transitionWithView:imageView
+                                  duration:0.2
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    imageView.image = image;
+                                } completion:nil];
+            } else {
+                imageView.image = image;
+            }
         }
     }];
     

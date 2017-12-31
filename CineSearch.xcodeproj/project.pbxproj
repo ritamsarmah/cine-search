@@ -24,6 +24,8 @@
 		20C7821B1FA021AA00AEA19A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC421FA014AD00D0C8B1 /* AppDelegate.m */; };
 		20C7821C1FA021AA00AEA19A /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC491FA014AD00D0C8B1 /* Constants.m */; };
 		20C7821D1FA021AA00AEA19A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC511FA014AD00D0C8B1 /* main.m */; };
+		20F5D26D1FF960DB0087C1C6 /* CastCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */; };
+		20F5D2701FF967CE0087C1C6 /* Actor.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F5D26F1FF967CE0087C1C6 /* Actor.m */; };
 		D05D3DC93CEC3DA8B3BC2401 /* libPods-CineSearch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E876B424F1AE50B8549E42 /* libPods-CineSearch.a */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +63,10 @@
 		2089BC5E1FA014AD00D0C8B1 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		2089BC5F1FA014AD00D0C8B1 /* Reachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		20ED58A71DCAA778000D811A /* CineSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CineSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		20F5D26B1FF960DB0087C1C6 /* CastCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CastCollectionViewCell.h; sourceTree = "<group>"; };
+		20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CastCollectionViewCell.m; sourceTree = "<group>"; };
+		20F5D26E1FF967CE0087C1C6 /* Actor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Actor.h; sourceTree = "<group>"; };
+		20F5D26F1FF967CE0087C1C6 /* Actor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Actor.m; sourceTree = "<group>"; };
 		364911537F04EC940C009021 /* Pods-CineSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineSearch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		C6E5F62CA664BFE04781295D /* Pods-CineSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineSearch.release.xcconfig"; path = "Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,6 +97,8 @@
 			children = (
 				2089BC3F1FA014AD00D0C8B1 /* AFTableViewCell.h */,
 				2089BC401FA014AD00D0C8B1 /* AFTableViewCell.m */,
+				20F5D26B1FF960DB0087C1C6 /* CastCollectionViewCell.h */,
+				20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */,
 				2089BC4A1FA014AD00D0C8B1 /* DetailViewController.h */,
 				2089BC4B1FA014AD00D0C8B1 /* DetailViewController.m */,
 				2089BC4C1FA014AD00D0C8B1 /* DiscoverViewController.h */,
@@ -112,6 +120,8 @@
 		2089BC601FA014C100D0C8B1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				20F5D26E1FF967CE0087C1C6 /* Actor.h */,
+				20F5D26F1FF967CE0087C1C6 /* Actor.m */,
 				2089BC541FA014AD00D0C8B1 /* Movie.h */,
 				2089BC551FA014AD00D0C8B1 /* Movie.m */,
 				2089BC561FA014AD00D0C8B1 /* MovieID.h */,
@@ -292,6 +302,7 @@
 			files = (
 				20C782101FA021AA00AEA19A /* AFTableViewCell.m in Sources */,
 				20C782111FA021AA00AEA19A /* DetailViewController.m in Sources */,
+				20F5D26D1FF960DB0087C1C6 /* CastCollectionViewCell.m in Sources */,
 				20C782121FA021AA00AEA19A /* DiscoverViewController.m in Sources */,
 				20C782131FA021AA00AEA19A /* FavoritesViewController.m in Sources */,
 				20C782141FA021AA00AEA19A /* MasterViewController.m in Sources */,
@@ -300,6 +311,7 @@
 				20C782171FA021AA00AEA19A /* Movie.m in Sources */,
 				20C782181FA021AA00AEA19A /* MovieID.m in Sources */,
 				20C782191FA021AA00AEA19A /* MovieSearch.m in Sources */,
+				20F5D2701FF967CE0087C1C6 /* Actor.m in Sources */,
 				20C7821A1FA021AA00AEA19A /* MovieSingleton.m in Sources */,
 				20C7821B1FA021AA00AEA19A /* AppDelegate.m in Sources */,
 				20C7821C1FA021AA00AEA19A /* Constants.m in Sources */,
