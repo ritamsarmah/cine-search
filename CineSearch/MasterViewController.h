@@ -12,13 +12,15 @@
 @class DetailViewController;
 @class MovieSingleton;
 
-@interface MasterViewController : UITableViewController<UISearchBarDelegate, UIGestureRecognizerDelegate>
+@interface MasterViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) UIView *loadingView;
 @property (weak, nonatomic) UIActivityIndicatorView *loadingMovies;
 @property (weak, nonatomic) NSTimer* searchTimer;
+
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property NSMutableArray *movies;
 @property MovieSingleton *manager;

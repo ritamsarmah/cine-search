@@ -39,6 +39,9 @@
     self.detailLabel.text = [NSString stringWithFormat:@"%@ ‧ %@ ‧ %@", self.movie.certification, self.movie.runtime, self.movie.releaseDate ?: @"TBA"];
     self.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [self.movie.rating doubleValue]];
     self.overviewLabel.text = self.movie.overview;
+    if ([self.overviewLabel.text isEqualToString:@""]) {
+        self.overviewLabel.text = @"No summary available.";
+    }
     
     // Format and display genres label text
     self.genreLabel.text = [self.movie.genres componentsJoinedByString:@" | "];
@@ -99,6 +102,8 @@
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     self.scrollView.delegate = self;
     
+    [self configureView];
+    
     __weak typeof(self) weakSelf = self;
     self.notification = [self.array addNotificationBlock:^(RLMResults *data, RLMCollectionChange *changes, NSError *error) {
         if (error) {
@@ -129,7 +134,6 @@
         self.navigationController.navigationBar.prefersLargeTitles = NO;
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     }
-    [self configureView];
 }
 
 #pragma mark - UIScrollViewDelegate

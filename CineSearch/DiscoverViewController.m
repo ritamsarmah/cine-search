@@ -184,7 +184,6 @@
     }
     
     dispatch_group_notify(movieCollectionGroup, dispatch_get_main_queue(),^{
-        NSLog(@"Data retrieval complete. Setting up UI.");
         [self setupImageScrollView];
         [self setupMoviesTableView];
     });

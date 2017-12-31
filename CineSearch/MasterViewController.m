@@ -13,7 +13,6 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Realm/Realm.h>
 
-
 @implementation MasterViewController
 
 - (void)loadView {
@@ -46,6 +45,9 @@
     self.manager = [MovieSingleton sharedManager];
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
     self.searchBar.delegate = self;
     
     /*
@@ -61,7 +63,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.clearsSelectionOnViewWillAppear = self.splitViewController.isCollapsed;
     
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
@@ -251,7 +252,6 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.movies.count;
