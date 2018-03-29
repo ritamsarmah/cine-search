@@ -77,23 +77,11 @@
                     if (movieResults == NULL) { completion([NSMutableArray array]); }
                     
                     for (id movie in movieResults) {
-                        [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
+                        [movies addObject:[self createMovieFromDict:movie isOnlyMovie:false]];
                     }
                     
                     if (movies.count > 0) {
-                        dispatch_group_t movieGroup = dispatch_group_create();
-                        for (int i = 0; i < movies.count; i++) {
-                            NSNumber *movieId = movies[i];
-                            dispatch_group_enter(movieGroup);
-                            [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
-                                [movies setObject:movie atIndexedSubscript:i];
-                                dispatch_group_leave(movieGroup);
-                            }];
-                        }
-                        
-                        dispatch_group_notify(movieGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
-                            completion(movies);
-                        });
+                        completion(movies);
                     } else {
                         completion([NSMutableArray array]);
                     }
@@ -225,22 +213,10 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:false]];
                 }
                 
-                dispatch_group_t movieGroup = dispatch_group_create();
-                for (int i = 0; i < movies.count; i++) {
-                    NSNumber *movieId = movies[i];
-                    dispatch_group_enter(movieGroup);
-                    [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
-                        [movies setObject:movie atIndexedSubscript:i];
-                        dispatch_group_leave(movieGroup);
-                    }];
-                }
-                
-                dispatch_group_notify(movieGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
-                    completion(movies);
-                });
+                completion(movies);
             }
             else {
                 NSLog(@"Not valid dictionary");
@@ -270,22 +246,9 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:false]];
                 }
-                
-                dispatch_group_t movieGroup = dispatch_group_create();
-                for (int i = 0; i < movies.count; i++) {
-                    NSNumber *movieId = movies[i];
-                    dispatch_group_enter(movieGroup);
-                    [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
-                        [movies setObject:movie atIndexedSubscript:i];
-                        dispatch_group_leave(movieGroup);
-                    }];
-                }
-                
-                dispatch_group_notify(movieGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
-                    completion(movies);
-                });
+                completion(movies);
             }
             else {
                 NSLog(@"Not valid dictionary");
@@ -315,22 +278,9 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[NSNumber numberWithInt: (int)[[movie objectForKey:@"id"] integerValue]]];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:false]];
                 }
-                
-                dispatch_group_t movieGroup = dispatch_group_create();
-                for (int i = 0; i < movies.count; i++) {
-                    NSNumber *movieId = movies[i];
-                    dispatch_group_enter(movieGroup);
-                    [self getMovieForID:movieId.integerValue completion:^(Movie *movie) {
-                        [movies setObject:movie atIndexedSubscript:i];
-                        dispatch_group_leave(movieGroup);
-                    }];
-                }
-                
-                dispatch_group_notify(movieGroup, dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
-                    completion(movies);
-                });
+                completion(movies);
             }
             else {
                 NSLog(@"Not valid dictionary");

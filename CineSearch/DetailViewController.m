@@ -121,9 +121,6 @@
         int actorCount = (int)MIN(6, cast.count);
         self.castImageDict = [[NSMutableDictionary alloc] init];
         self.castArray = [cast subarrayWithRange:NSMakeRange(0, actorCount)];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.castCollectionView reloadData];
-        });
         
         if (actorCount == 0) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -132,8 +129,9 @@
             });
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.castCollectionView reloadData];
                 self.castCollectionView.hidden = NO;
-                [UIView animateWithDuration:0.2 animations:^() {
+                [UIView animateWithDuration:0.4 animations:^() {
                     self.castCollectionView.alpha = 1.0;
                 }];
             });
@@ -147,6 +145,9 @@
                     if (image) {
                         NSString *key = [NSString stringWithFormat: @"%d", i];
                         [self.castImageDict setValue:image forKey:key];
+                    }
+                    if (cacheType == SDImageCacheTypeNone) {
+                        self.castImagesFromWeb = YES;
                     }
                     dispatch_group_leave(actorGroup);
                 }];
@@ -169,6 +170,7 @@
     self.castCollectionView.dataSource = self;
     self.castCollectionView.hidden = YES;
     self.castCollectionView.alpha = 0;
+    self.castImagesFromWeb = NO;
     
     [self configureView];
     
@@ -333,7 +335,7 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return MAX(6, self.castArray.count);
+    return self.castArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -355,12 +357,16 @@
         
         NSString *key = [NSString stringWithFormat:@"%lu", indexPath.row];
         if (self.castImageDict[key] != nil) {
-            [UIView transitionWithView:cell.profileImageView
-                              duration:0.2
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{
-                                cell.profileImageView.image = self.castImageDict[key];
-                            } completion:nil];
+            if (self.castImagesFromWeb) {
+                [UIView transitionWithView:cell.profileImageView
+                                  duration:0.2
+                                   options:UIViewAnimationOptionTransitionCrossDissolve
+                                animations:^{
+                                    cell.profileImageView.image = self.castImageDict[key];
+                                } completion:nil];
+            } else {
+                cell.profileImageView.image = self.castImageDict[key];
+            }
         }
     }
     

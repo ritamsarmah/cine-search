@@ -18,6 +18,7 @@
 @property (nonatomic) NSMutableDictionary *castImageDict;
 @property (weak, nonatomic) NSURL *trailerURL;
 @property (nonatomic) BOOL isFavorite;
+@property (nonatomic) BOOL castImagesFromWeb;
 @property MovieSingleton *manager;
 
 @property (weak, nonatomic) IBOutlet UILabel *movieTitleLabel;

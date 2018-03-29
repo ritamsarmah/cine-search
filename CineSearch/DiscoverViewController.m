@@ -85,8 +85,6 @@
     self.movieTableView.rowHeight = 140;
     self.movieTableView.backgroundColor = [UIColor clearColor];
     
-    self.detailViewController = [(DetailViewController *)[DetailViewController alloc] init];
-    
     // Set up of connection status label
     self.connectionLabel.hidden = YES;
     
@@ -339,17 +337,20 @@
     if ([[segue identifier] isEqualToString:@"showBannerDetail"]) {
         UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
         UIImageView *imageView = (UIImageView *)recognizer.view;
-        Movie *movie = self.bannerMovies[imageView.tag-1];
-        DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-        [controller setMovie:movie];
-        controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
+        Movie *selectedMovie = self.bannerMovies[imageView.tag-1];
+        [self.manager.database getMovieForID:selectedMovie.idNumber.integerValue completion:^(Movie *movie) {
+            DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+            [controller setMovie:movie];
+            controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
+        }];
     } else if ([[segue identifier] isEqualToString:@"showMovieDetail"]) {
         AFCollectionViewCell *cell = (AFCollectionViewCell *)sender;
         NSLog(@"%@",cell.movie.title);
-        Movie *movie = cell.movie;
-        DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-        [controller setMovie:movie];
-        controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
+        [self.manager.database getMovieForID:cell.movie.idNumber.integerValue completion:^(Movie *movie) {
+            DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+            [controller setMovie:movie];
+            controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
+        }];
     }
 }
 
