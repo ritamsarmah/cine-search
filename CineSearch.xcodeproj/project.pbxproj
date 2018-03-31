@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		208C9D892070198900E415F1 /* BoxActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 208C9D882070198900E415F1 /* BoxActivityIndicatorView.m */; };
 		20C781F01FA020D100AEA19A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2089BC431FA014AD00D0C8B1 /* Assets.xcassets */; };
 		20C781F11FA020D100AEA19A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2089BC441FA014AD00D0C8B1 /* LaunchScreen.storyboard */; };
 		20C781F21FA020D100AEA19A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2089BC461FA014AD00D0C8B1 /* Main.storyboard */; };
@@ -62,6 +63,8 @@
 		2089BC5D1FA014AD00D0C8B1 /* MovieTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MovieTableViewCell.m; sourceTree = "<group>"; };
 		2089BC5E1FA014AD00D0C8B1 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		2089BC5F1FA014AD00D0C8B1 /* Reachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		208C9D872070198900E415F1 /* BoxActivityIndicatorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BoxActivityIndicatorView.h; sourceTree = "<group>"; };
+		208C9D882070198900E415F1 /* BoxActivityIndicatorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BoxActivityIndicatorView.m; sourceTree = "<group>"; };
 		20ED58A71DCAA778000D811A /* CineSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CineSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20F5D26B1FF960DB0087C1C6 /* CastCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CastCollectionViewCell.h; sourceTree = "<group>"; };
 		20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CastCollectionViewCell.m; sourceTree = "<group>"; };
@@ -95,10 +98,6 @@
 		2089BC3E1FA014AD00D0C8B1 /* CineSearch */ = {
 			isa = PBXGroup;
 			children = (
-				2089BC3F1FA014AD00D0C8B1 /* AFTableViewCell.h */,
-				2089BC401FA014AD00D0C8B1 /* AFTableViewCell.m */,
-				20F5D26B1FF960DB0087C1C6 /* CastCollectionViewCell.h */,
-				20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */,
 				2089BC4A1FA014AD00D0C8B1 /* DetailViewController.h */,
 				2089BC4B1FA014AD00D0C8B1 /* DetailViewController.m */,
 				2089BC4C1FA014AD00D0C8B1 /* DiscoverViewController.h */,
@@ -107,11 +106,8 @@
 				2089BC4F1FA014AD00D0C8B1 /* FavoritesViewController.m */,
 				2089BC521FA014AD00D0C8B1 /* MasterViewController.h */,
 				2089BC531FA014AD00D0C8B1 /* MasterViewController.m */,
-				2089BC5C1FA014AD00D0C8B1 /* MovieTableViewCell.h */,
-				2089BC5D1FA014AD00D0C8B1 /* MovieTableViewCell.m */,
-				2089BC5E1FA014AD00D0C8B1 /* Reachability.h */,
-				2089BC5F1FA014AD00D0C8B1 /* Reachability.m */,
 				2089BC601FA014C100D0C8B1 /* Model */,
+				208C9D8A2070198C00E415F1 /* Views */,
 				2089BC611FA014D700D0C8B1 /* Supporting Files */,
 			);
 			path = CineSearch;
@@ -137,6 +133,8 @@
 		2089BC611FA014D700D0C8B1 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2089BC5E1FA014AD00D0C8B1 /* Reachability.h */,
+				2089BC5F1FA014AD00D0C8B1 /* Reachability.m */,
 				2089BC411FA014AD00D0C8B1 /* AppDelegate.h */,
 				2089BC421FA014AD00D0C8B1 /* AppDelegate.m */,
 				2089BC431FA014AD00D0C8B1 /* Assets.xcassets */,
@@ -148,6 +146,21 @@
 				2089BC511FA014AD00D0C8B1 /* main.m */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		208C9D8A2070198C00E415F1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2089BC3F1FA014AD00D0C8B1 /* AFTableViewCell.h */,
+				2089BC401FA014AD00D0C8B1 /* AFTableViewCell.m */,
+				20F5D26B1FF960DB0087C1C6 /* CastCollectionViewCell.h */,
+				20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */,
+				2089BC5C1FA014AD00D0C8B1 /* MovieTableViewCell.h */,
+				2089BC5D1FA014AD00D0C8B1 /* MovieTableViewCell.m */,
+				208C9D872070198900E415F1 /* BoxActivityIndicatorView.h */,
+				208C9D882070198900E415F1 /* BoxActivityIndicatorView.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		20ED589E1DCAA778000D811A = {
@@ -284,13 +297,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CineSearch-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -307,6 +323,7 @@
 				20C782131FA021AA00AEA19A /* FavoritesViewController.m in Sources */,
 				20C782141FA021AA00AEA19A /* MasterViewController.m in Sources */,
 				20C782151FA021AA00AEA19A /* MovieTableViewCell.m in Sources */,
+				208C9D892070198900E415F1 /* BoxActivityIndicatorView.m in Sources */,
 				20C782161FA021AA00AEA19A /* Reachability.m in Sources */,
 				20C782171FA021AA00AEA19A /* Movie.m in Sources */,
 				20C782181FA021AA00AEA19A /* MovieID.m in Sources */,

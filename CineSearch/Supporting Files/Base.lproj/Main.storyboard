@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="jCx-B2-GX4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="jCx-B2-GX4">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="AvenirNextCondensed.ttc">
-            <string>AvenirNextCondensed-DemiBold</string>
-            <string>AvenirNextCondensed-Medium</string>
-            <string>AvenirNextCondensed-Regular</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--DiscoverMaster-->
         <scene sceneID="TvH-nl-aec">
@@ -250,7 +243,6 @@
                                             <outlet property="ratingView" destination="ODn-iV-gaA" id="Lp4-od-eDu"/>
                                             <outlet property="releaseLabel" destination="vkd-hd-NwJ" id="hdY-6i-62B"/>
                                             <outlet property="titleLabel" destination="DwM-mV-Fj9" id="AaQ-oq-2UU"/>
-                                            <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showMovie" id="6S0-TO-JiA"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -281,6 +273,7 @@
                     <connections>
                         <outlet property="searchBar" destination="1Y5-tF-oFH" id="clQ-8i-spP"/>
                         <outlet property="tableView" destination="r7i-6Z-zg0" id="umj-Oq-boy"/>
+                        <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showMovie" id="5gY-gu-Rvd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="he8-ns-rPC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -349,7 +342,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LId-c8-I7P" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="r20-d9-pIY">
-                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -506,9 +499,7 @@
                                     <outlet property="ratingView" destination="r1d-F2-Kdj" id="tgs-oB-ocX"/>
                                     <outlet property="releaseLabel" destination="Zt7-8A-wpJ" id="ZEs-Vu-5Zw"/>
                                     <outlet property="titleLabel" destination="fle-45-d3c" id="Zvc-46-y3C"/>
-                                    <segue destination="Rt2-jh-XjN" kind="showDetail" identifier="showFavoriteMovie" id="URd-go-6mu">
-                                        <nil key="action"/>
-                                    </segue>
+                                    <segue destination="Rt2-jh-XjN" kind="showDetail" identifier="showFavoriteMovie" id="URd-go-6mu"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -554,13 +545,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="6a9-dH-WUd">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="595"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="546"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="aBR-Fq-F9l">
                                         <rect key="frame" x="16" y="68.5" width="342" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genres" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hlx-TV-DCv">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="25"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="44.5" height="25"/>
                                                 <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="18"/>
                                                 <color key="textColor" red="0.1487722397" green="0.54916626209999997" blue="0.89794868230000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -669,7 +660,7 @@
                                 </constraints>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5E6-X9-wdh">
-                                <rect key="frame" x="294" y="611" width="65" height="36"/>
+                                <rect key="frame" x="294" y="562" width="65" height="36"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.0" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="agS-Zt-n3N">
                                         <rect key="frame" x="28" y="9" width="32" height="20"/>
@@ -701,7 +692,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6cM-bC-1KQ">
-                                <rect key="frame" x="16" y="611" width="106" height="36"/>
+                                <rect key="frame" x="16" y="562" width="106" height="36"/>
                                 <color key="backgroundColor" red="0.23529411759999999" green="0.26274509800000001" blue="0.30980392159999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="3us-8s-6Bz"/>
@@ -716,7 +707,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0v-EE-8bh">
-                                <rect key="frame" x="130" y="611" width="48" height="36"/>
+                                <rect key="frame" x="130" y="562" width="48" height="36"/>
                                 <color key="backgroundColor" red="0.23429971929999999" green="0.26189869640000002" blue="0.31177157160000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="COw-3R-P8w"/>
@@ -825,6 +816,6 @@
         <segue reference="vdv-tw-0Lh"/>
         <segue reference="URd-go-6mu"/>
         <segue reference="1gB-r4-ctE"/>
-        <segue reference="6S0-TO-JiA"/>
+        <segue reference="5gY-gu-Rvd"/>
     </inferredMetricsTieBreakers>
 </document>

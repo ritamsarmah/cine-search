@@ -32,16 +32,19 @@
 
 - (void)loadView {
     [super loadView];
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    
+    BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
+    activityIndicator.disablesInteraction = NO;
     [self.view addSubview:activityIndicator];
+    self.activityIndicator = activityIndicator;
+    
     [self.movieTableView setHidden:YES];
     [self.imageScrollView setHidden:YES];
-    self.loadingMovies = activityIndicator;
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.loadingMovies.center = CGPointMake(self.view.bounds.size.width / 2,  self.view.bounds.size.height / 2.5);
+    self.activityIndicator.center = CGPointMake(self.view.bounds.size.width / 2,  self.view.bounds.size.height / 2.5);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -130,13 +133,13 @@
             self.connectionLabel.hidden = NO;
             self.imageScrollView.hidden = YES;
             self.movieTableView.hidden = YES;
-            [self.loadingMovies stopAnimating];
+            [self.activityIndicator stopAnimating];
             break;
         }
         case ReachableViaWWAN:
         case ReachableViaWiFi: {
             self.connectionLabel.hidden = YES;
-            [self.loadingMovies startAnimating];
+            [self.activityIndicator startAnimating];
             [self retrieveMovieData];
             break;
         }
@@ -261,7 +264,7 @@
             
             x = ([[UIScreen mainScreen] bounds].size.width * 2);
             
-            [self.loadingMovies stopAnimating];
+            [self.activityIndicator stopAnimating];
             [UIView transitionWithView:self.imageScrollView
                               duration:0.3
                                options:UIViewAnimationOptionTransitionCrossDissolve
@@ -329,29 +332,29 @@
 }
 
 - (void)openMovie:(UITapGestureRecognizer *)sender {
-    [self performSegueWithIdentifier:@"showBannerDetail" sender:sender];
+    UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
+    UIImageView *imageView = (UIImageView *)recognizer.view;
+    Movie *selectedMovie = self.bannerMovies[imageView.tag-1];
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                      target:self.activityIndicator
+                                                    selector:@selector(startAnimating)
+                                                    userInfo:nil
+                                                     repeats:NO];
+    [self.manager.database getMovieForID:selectedMovie.idNumber.integerValue completion:^(Movie *movie) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [timer invalidate];
+            [self.activityIndicator stopAnimating];
+            [self performSegueWithIdentifier:@"showBannerDetail" sender:movie];
+        });
+    }];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     self.enteredSegue = YES;
-    if ([[segue identifier] isEqualToString:@"showBannerDetail"]) {
-        UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
-        UIImageView *imageView = (UIImageView *)recognizer.view;
-        Movie *selectedMovie = self.bannerMovies[imageView.tag-1];
-        [self.manager.database getMovieForID:selectedMovie.idNumber.integerValue completion:^(Movie *movie) {
-            DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-            [controller setMovie:movie];
-            controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
-        }];
-    } else if ([[segue identifier] isEqualToString:@"showMovieDetail"]) {
-        AFCollectionViewCell *cell = (AFCollectionViewCell *)sender;
-        NSLog(@"%@",cell.movie.title);
-        [self.manager.database getMovieForID:cell.movie.idNumber.integerValue completion:^(Movie *movie) {
-            DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-            [controller setMovie:movie];
-            controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
-        }];
-    }
+    Movie *movie = (Movie *)sender;
+    DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+    [controller setMovie:movie];
+    controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -495,7 +498,20 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     AFCollectionViewCell *cell = (AFCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    [self performSegueWithIdentifier:@"showMovieDetail" sender:cell];
+    
+    // If database load is taking too long, activityIndicator will show
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                      target:self.activityIndicator
+                                                    selector:@selector(startAnimating)
+                                                    userInfo:nil
+                                                     repeats:NO];
+    [self.manager.database getMovieForID:cell.movie.idNumber.integerValue completion:^(Movie *movie) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [timer invalidate];
+            [self.activityIndicator stopAnimating];
+            [self performSegueWithIdentifier:@"showMovieDetail" sender:movie];
+        });
+    }];
 }
 
 #pragma mark - Gesture Recognizer

@@ -100,7 +100,7 @@
             
             CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
             [filter setValue:inputImage forKey:kCIInputImageKey];
-            [filter setValue:[NSNumber numberWithFloat:5.0f] forKey:@"inputRadius"];
+            [filter setValue:[NSNumber numberWithFloat:4.0f] forKey:@"inputRadius"];
             CIImage *result = [filter valueForKey:kCIOutputImageKey];
             
             CGImageRef cgImage = [context createCGImage:result fromRect:[inputImage extent]];
@@ -200,6 +200,14 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    if (!self.isFavorite) {
+        [self.favoriteButton setTintColor:[UIColor whiteColor]];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
+    } else {
+        [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+    }
+    
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = NO;
         self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
@@ -323,7 +331,7 @@
             [alert addAction:cancelButton];
             [alert addAction:yesButton];
             
-            [self presentViewController:alert animated:true completion:nil];
+            [self presentViewController:alert animated:YES completion:nil];
         }
     }];
 }

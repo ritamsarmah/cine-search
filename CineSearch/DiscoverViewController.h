@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BoxActivityIndicatorView.h"
 
 @class DetailViewController;
 @class MovieSingleton;
@@ -16,7 +17,7 @@
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *imageScrollView;
-@property (weak, nonatomic) UIActivityIndicatorView *loadingMovies;
+@property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) UILabel *bannerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITableView *movieTableView;

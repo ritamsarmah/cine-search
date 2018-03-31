@@ -77,7 +77,7 @@
                     if (movieResults == NULL) { completion([NSMutableArray array]); }
                     
                     for (id movie in movieResults) {
-                        [movies addObject:[self createMovieFromDict:movie isOnlyMovie:false]];
+                        [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
                     }
                     
                     if (movies.count > 0) {
@@ -213,7 +213,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:false]];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
                 }
                 
                 completion(movies);
@@ -246,7 +246,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:false]];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
                 }
                 completion(movies);
             }
@@ -278,7 +278,7 @@
             if ([results isKindOfClass:[NSDictionary class]]) {
                 NSDictionary *movieResults = [results objectForKey:@"results"];
                 for (id movie in movieResults) {
-                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:false]];
+                    [movies addObject:[self createMovieFromDict:movie isOnlyMovie:NO]];
                 }
                 completion(movies);
             }

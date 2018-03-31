@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Reachability.h"
+#import "BoxActivityIndicatorView.h"
 
 @class DetailViewController;
 @class MovieSingleton;
@@ -15,8 +16,7 @@
 @interface MasterViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
-@property (weak, nonatomic) UIView *loadingView;
-@property (weak, nonatomic) UIActivityIndicatorView *loadingMovies;
+@property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) NSTimer* searchTimer;
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;

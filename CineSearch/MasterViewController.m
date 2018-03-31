@@ -17,27 +17,16 @@
 
 - (void)loadView {
     [super loadView];
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    
-    CGRect size = CGRectMake(0, 0, 70, 70);
-    UIView *view = [[UIView alloc] initWithFrame:size];
-    view.backgroundColor = [UIColor darkGrayColor];
-    view.alpha = 0.7;
-    view.hidden = YES;
-    view.layer.cornerRadius = 5;
-    view.layer.masksToBounds = YES;
-    
-    [self.view addSubview:view];
+    BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
+    activityIndicator.disablesInteraction = NO;
     [self.view addSubview:activityIndicator];
-    
-    self.loadingView = view;
-    self.loadingMovies = activityIndicator;
+    self.activityIndicator = activityIndicator;
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    self.loadingView.center = self.view.center;
-    self.loadingMovies.center = self.view.center;
+    UIWindow *window = UIApplication.sharedApplication.keyWindow;
+    self.activityIndicator.center = window.center;
 }
 
 - (void)viewDidLoad {
@@ -105,8 +94,7 @@
 }
 
 - (void)displayConnectionAlert {
-    [self.loadingMovies stopAnimating];
-    self.loadingView.hidden = YES;
+    [self.activityIndicator stopAnimating];
     UIAlertController *alert = [UIAlertController
                                 alertControllerWithTitle:@"Unable to retrieve movies"
                                 message:@"Please check your internet connection and try again."
@@ -121,7 +109,7 @@
     
     [alert addAction:yesButton];
     
-    [self presentViewController:alert animated:true completion:nil];
+    [self presentViewController:alert animated:YES completion:nil];
     [self.tableView setUserInteractionEnabled:YES];
 }
 
@@ -130,17 +118,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     self.enteredSegue = YES;
     if ([[segue identifier] isEqualToString:@"showMovie"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        Movie *movie = self.movies[indexPath.row];
+        Movie *movie = (Movie *)sender;
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
         [controller setMovie:movie];
-        
-        if ([self isMovieInFavorites:[movie.idNumber integerValue]]) {
-            controller.isFavorite = YES;
-        } else {
-            controller.isFavorite = NO;
-        }
-        
+        controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
         [self.searchBar endEditing:YES];
     }
 }
@@ -151,8 +132,7 @@
     
     if (self.connectedToInternet) {
         [self.searchTimer invalidate];
-        [self.loadingMovies startAnimating];
-        self.loadingView.hidden = NO;
+        [self.activityIndicator startAnimating];
         [searchBar endEditing:YES];
         [self.tableView setUserInteractionEnabled:NO];
         [self.manager.database search:searchBar.text completion:^(NSMutableArray *movies) {
@@ -168,14 +148,12 @@
                         NSRange range = NSMakeRange(0, 1);
                         NSIndexSet *section = [NSIndexSet indexSetWithIndexesInRange:range];
                         [self.tableView reloadSections:section withRowAnimation:UITableViewRowAnimationAutomatic];
-                        [self.loadingMovies stopAnimating];
+                        [self.activityIndicator stopAnimating];
                         [self.tableView setUserInteractionEnabled:YES];
-                        self.loadingView.hidden = YES;
                     });
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.loadingMovies stopAnimating];
-                        self.loadingView.hidden = YES;
+                        [self.activityIndicator stopAnimating];
                         UIAlertController *alert = [UIAlertController
                                                     alertControllerWithTitle:@"Movie not found"
                                                     message:@"No movies matched your search"
@@ -303,6 +281,24 @@
     }];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    MovieTableViewCell *cell = (MovieTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+    
+    // If database load is taking too long, activityIndicator will show
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+                                                      target:self.activityIndicator
+                                                    selector:@selector(startAnimating)
+                                                    userInfo:nil
+                                                     repeats:NO];
+    [self.manager.database getMovieForID:cell.movieID.movieID completion:^(Movie *movie) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [timer invalidate];
+            [self.activityIndicator stopAnimating];
+            [self performSegueWithIdentifier:@"showMovie" sender:movie];
+        });
+    }];
 }
 
 - (BOOL)isMovieInFavorites:(NSInteger)movieID {
