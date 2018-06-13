@@ -62,10 +62,9 @@
         
         // Remove from favorites list
         MovieID *movieToDelete = [MovieID objectForPrimaryKey:@(self.movieID.movieID)];
-        
-        [realm beginWriteTransaction];
-        [realm deleteObject:movieToDelete];
-        [realm commitWriteTransaction];
+        [realm transactionWithBlock:^{
+            [realm deleteObject:movieToDelete];
+        }];
         
     } else {
         // Animate to red filled heart
@@ -84,9 +83,9 @@
         }];
         
         // Add to favorites list
-        [realm beginWriteTransaction];
-        [MovieID createInRealm:realm withValue:@{@"movieID": @(self.movieID.movieID)}];
-        [realm commitWriteTransaction];
+        [realm transactionWithBlock:^{
+            [MovieID createInRealm:realm withValue:@{@"movieID": @(self.movieID.movieID)}];
+        }];
         
     }
     

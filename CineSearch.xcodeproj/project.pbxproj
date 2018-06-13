@@ -27,11 +27,10 @@
 		20C7821D1FA021AA00AEA19A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC511FA014AD00D0C8B1 /* main.m */; };
 		20F5D26D1FF960DB0087C1C6 /* CastCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */; };
 		20F5D2701FF967CE0087C1C6 /* Actor.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F5D26F1FF967CE0087C1C6 /* Actor.m */; };
-		D05D3DC93CEC3DA8B3BC2401 /* libPods-CineSearch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E876B424F1AE50B8549E42 /* libPods-CineSearch.a */; };
+		41FF04661FFC0876BD5ACC11 /* Pods_CineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CDCA266CEB095EDACAD5755 /* Pods_CineSearch.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		16E876B424F1AE50B8549E42 /* libPods-CineSearch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CineSearch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2089BC3F1FA014AD00D0C8B1 /* AFTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFTableViewCell.h; sourceTree = "<group>"; };
 		2089BC401FA014AD00D0C8B1 /* AFTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFTableViewCell.m; sourceTree = "<group>"; };
 		2089BC411FA014AD00D0C8B1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -70,6 +69,7 @@
 		20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CastCollectionViewCell.m; sourceTree = "<group>"; };
 		20F5D26E1FF967CE0087C1C6 /* Actor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Actor.h; sourceTree = "<group>"; };
 		20F5D26F1FF967CE0087C1C6 /* Actor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Actor.m; sourceTree = "<group>"; };
+		2CDCA266CEB095EDACAD5755 /* Pods_CineSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CineSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		364911537F04EC940C009021 /* Pods-CineSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineSearch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		C6E5F62CA664BFE04781295D /* Pods-CineSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineSearch.release.xcconfig"; path = "Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -79,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D05D3DC93CEC3DA8B3BC2401 /* libPods-CineSearch.a in Frameworks */,
+				41FF04661FFC0876BD5ACC11 /* Pods_CineSearch.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,7 +184,7 @@
 		331EC397BAB554A702728359 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				16E876B424F1AE50B8549E42 /* libPods-CineSearch.a */,
+				2CDCA266CEB095EDACAD5755 /* Pods_CineSearch.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -201,7 +201,6 @@
 				20ED58A41DCAA778000D811A /* Frameworks */,
 				20ED58A51DCAA778000D811A /* Resources */,
 				182223C4E7645EE18D649882 /* [CP] Embed Pods Frameworks */,
-				108888466DF79FA2F19CBBFE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -218,7 +217,7 @@
 		20ED589F1DCAA778000D811A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Ritam Sarmah";
 				TargetAttributes = {
 					20ED58A61DCAA778000D811A = {
@@ -261,30 +260,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		108888466DF79FA2F19CBBFE /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		182223C4E7645EE18D649882 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/MXParallaxHeader/MXParallaxHeader.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MXParallaxHeader.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -371,6 +362,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -378,6 +370,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -426,6 +419,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -433,6 +427,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

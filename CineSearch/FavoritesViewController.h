@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "MovieSingleton.h"
+#import "BoxActivityIndicatorView.h"
 
 @class DetailViewController;
 
 @interface FavoritesViewController : UITableViewController <UIGestureRecognizerDelegate>
 
+@property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property NSMutableDictionary *moviesForID;
 @property MovieSingleton *manager;

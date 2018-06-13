@@ -20,13 +20,18 @@ static NSString * const kTableName = @"table";
 @interface FavoritesViewController ()
 
 @property (nonatomic, strong) RLMResults *array;
-@property (nonatomic, strong) RLMNotificationToken *notification;
+@property (nonatomic, strong) RLMNotificationToken *notificationToken;
 
 @end
 
 @implementation FavoritesViewController
 
 #pragma mark - View Lifecycle
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.activityIndicator.center = CGPointMake(self.view.bounds.size.width / 2,  self.view.bounds.size.height / 3);
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -56,11 +61,19 @@ static NSString * const kTableName = @"table";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
+    activityIndicator.disablesInteraction = NO;
+    [self.view addSubview:activityIndicator];
+    self.activityIndicator = activityIndicator;
+    [self.activityIndicator startAnimating];
+    
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     self.manager = [[MovieSingleton alloc] init];
     self.moviesForID = [[NSMutableDictionary alloc] init];
     self.enteredSegue = NO;
+    self.extendedLayoutIncludesOpaqueBars = YES;
     
     for (MovieID *movieID in self.array) {
         if (!self.moviesForID[@(movieID.movieID)]) {
@@ -68,6 +81,9 @@ static NSString * const kTableName = @"table";
                 [self.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.tableView reloadData];
+                    if (self.array.count == self.moviesForID.count) {
+                        [self.activityIndicator stopAnimating];
+                    }
                 });
             }];
         }
@@ -75,48 +91,55 @@ static NSString * const kTableName = @"table";
     
     // Set realm notification block
     __weak typeof(self) weakSelf = self;
-    self.notification = [self.array addNotificationBlock:^(RLMResults *data, RLMCollectionChange *changes, NSError *error) {
+    self.notificationToken = [self.array addNotificationBlock:^(RLMResults<MovieID *> *results, RLMCollectionChange *changes, NSError *error) {
         if (error) {
             NSLog(@"Failed to open Realm on background worker: %@", error);
             return;
         }
         
-        UITableView *tv = weakSelf.tableView;
+        UITableView *tableView = weakSelf.tableView;
         // Initial run of the query will pass nil for the change information
         if (!changes) {
-            [tv reloadData];
+            [tableView reloadData];
             return;
         }
         
-        for (MovieID *movieID in data) {
+        for (MovieID *movieID in results) {
             if ([weakSelf.moviesForID objectForKey:@(movieID.movieID)] == nil) {
                 [weakSelf.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
                     [weakSelf.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [weakSelf.tableView reloadData];
+                        [tableView reloadData];
                     });
                 }];
             }
         }
-        
-        // changes is non-nil, so we just need to update the tableview
-        [tv beginUpdates];
-        [tv deleteRowsAtIndexPaths:[changes deletionsInSection:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tv insertRowsAtIndexPaths:[changes insertionsInSection:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tv reloadRowsAtIndexPaths:[changes modificationsInSection:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tv endUpdates];
+
+        // Query results have changed, so apply them to the UITableView
+        [tableView beginUpdates];
+        [tableView deleteRowsAtIndexPaths:[changes deletionsInSection:0]
+                         withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView insertRowsAtIndexPaths:[changes insertionsInSection:0]
+                         withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView reloadRowsAtIndexPaths:[changes modificationsInSection:0]
+                         withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView endUpdates];
     }];
+}
+
+- (void)dealloc {
+    [self.notificationToken invalidate];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.array.count;
+    if (self.moviesForID.count == 0) return 0;
+    else return self.array.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MovieTableViewCell *cell = (MovieTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
     
     MovieID *key = self.array[indexPath.row];
     cell.movieID = key;
@@ -126,8 +149,8 @@ static NSString * const kTableName = @"table";
     [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
     [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
     
-    if (self.moviesForID[@(key.movieID)] != nil) {
-        Movie *movie = self.moviesForID[@(key.movieID)];
+    Movie *movie = self.moviesForID[@(key.movieID)];
+    if (movie != nil) {
         cell.titleLabel.text = movie.title;
         cell.releaseLabel.text = movie.releaseDate ?: @"TBA";
         cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];

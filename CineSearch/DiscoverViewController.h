@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "BoxActivityIndicatorView.h"
+#import "Reachability.h"
 
 @class DetailViewController;
 @class MovieSingleton;
 
-@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
+@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>  {
+    int x;
+    int max;
+    BOOL isAutoScrolling;
+}
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
@@ -29,7 +34,12 @@
 @property NSMutableArray *recommendedMovies;
 @property NSMutableArray *bannerMovies; // Movies for banner images
 
+@property NSArray *moviesArray;
+@property NSMutableDictionary *contentOffsetDictionary;
+@property (nonatomic) Reachability *internetReachability;
+
 @property BOOL enteredSegue;
+@property NetworkStatus lastStatus;
 
 - (void)setupImageScrollView;
 - (void)nextImage;

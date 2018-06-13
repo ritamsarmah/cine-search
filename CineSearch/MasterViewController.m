@@ -15,14 +15,6 @@
 
 @implementation MasterViewController
 
-- (void)loadView {
-    [super loadView];
-    BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
-    activityIndicator.disablesInteraction = NO;
-    [self.view addSubview:activityIndicator];
-    self.activityIndicator = activityIndicator;
-}
-
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     UIWindow *window = UIApplication.sharedApplication.keyWindow;
@@ -33,7 +25,13 @@
     [super viewDidLoad];
     self.manager = [MovieSingleton sharedManager];
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
+    self.extendedLayoutIncludesOpaqueBars = YES;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
+    activityIndicator.disablesInteraction = NO;
+    [self.view addSubview:activityIndicator];
+    self.activityIndicator = activityIndicator;
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -287,7 +285,7 @@
     MovieTableViewCell *cell = (MovieTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
     // If database load is taking too long, activityIndicator will show
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.3
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.4
                                                       target:self.activityIndicator
                                                     selector:@selector(startAnimating)
                                                     userInfo:nil

@@ -22,8 +22,8 @@
     if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.sectionInset = UIEdgeInsetsMake(10, 10, 9, 10);
-    layout.itemSize = CGSizeMake(80, 120); //(66, 99);
+    layout.sectionInset = UIEdgeInsetsMake(10, 16, 9, 10);
+    layout.itemSize = CGSizeMake(90, 135); //(66, 99);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     self.collectionView = [[AFIndexedCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
