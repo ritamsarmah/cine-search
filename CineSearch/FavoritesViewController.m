@@ -46,7 +46,7 @@ static NSString * const kTableName = @"table";
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         self.enteredSegue = NO;
     } else {
-         [self.navigationController setNavigationBarHidden:NO animated:NO];
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
     }
     
     if (@available(iOS 11.0, *)) {
@@ -75,14 +75,16 @@ static NSString * const kTableName = @"table";
     self.enteredSegue = NO;
     self.extendedLayoutIncludesOpaqueBars = YES;
     
+    self.finishedDownloadingMovies = NO;
     for (MovieID *movieID in self.array) {
         if (!self.moviesForID[@(movieID.movieID)]) {
             [self.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
                 [self.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.tableView reloadData];
                     if (self.array.count == self.moviesForID.count) {
                         [self.activityIndicator stopAnimating];
+                        self.finishedDownloadingMovies = YES;
+                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
                     }
                 });
             }];
@@ -104,6 +106,7 @@ static NSString * const kTableName = @"table";
             return;
         }
         
+        // Download newly favorited movies if needed
         for (MovieID *movieID in results) {
             if ([weakSelf.moviesForID objectForKey:@(movieID.movieID)] == nil) {
                 [weakSelf.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
@@ -114,7 +117,7 @@ static NSString * const kTableName = @"table";
                 }];
             }
         }
-
+        
         // Query results have changed, so apply them to the UITableView
         [tableView beginUpdates];
         [tableView deleteRowsAtIndexPaths:[changes deletionsInSection:0]
@@ -134,8 +137,9 @@ static NSString * const kTableName = @"table";
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (self.moviesForID.count == 0) return 0;
-    else return self.array.count;
+    // Waits for movie data to be downloaded before populating tableview
+    if (self.finishedDownloadingMovies) return self.array.count;
+    else return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -167,10 +171,10 @@ static NSString * const kTableName = @"table";
                                       duration:0.2
                                        options:UIViewAnimationOptionTransitionCrossDissolve
                                     animations:^{
-                                         cell.posterImageView.image = image;
+                                        cell.posterImageView.image = image;
                                     } completion:nil];
                 } else {
-                     cell.posterImageView.image = image;
+                    cell.posterImageView.image = image;
                 }
             }
         }];

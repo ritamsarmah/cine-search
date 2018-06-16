@@ -19,5 +19,6 @@
 @property NSMutableDictionary *moviesForID;
 @property MovieSingleton *manager;
 @property BOOL enteredSegue;
+@property BOOL finishedDownloadingMovies;
 
 @end
