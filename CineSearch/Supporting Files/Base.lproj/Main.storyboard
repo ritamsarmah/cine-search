@@ -26,7 +26,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="3Kr-AT-HEo">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="502"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <scrollView key="tableHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="fpM-KN-AhK">
+                                <scrollView key="tableHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="fpM-KN-AhK" customClass="ImageSlideshow">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="210.5"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <constraints>
@@ -59,7 +59,7 @@
                     <navigationItem key="navigationItem" title="Discover" id="Weg-R6-A8W"/>
                     <connections>
                         <outlet property="connectionLabel" destination="3Du-E3-Kbc" id="ENt-dg-wCs"/>
-                        <outlet property="imageScrollView" destination="fpM-KN-AhK" id="Mtz-Jf-2vf"/>
+                        <outlet property="imageSlideshow" destination="fpM-KN-AhK" id="WLT-L6-00i"/>
                         <outlet property="movieTableView" destination="3Kr-AT-HEo" id="1yZ-tv-pfC"/>
                         <segue destination="LId-c8-I7P" kind="showDetail" identifier="showBannerDetail" id="PGb-wc-TaV"/>
                         <segue destination="LId-c8-I7P" kind="showDetail" identifier="showMovieDetail" id="1gB-r4-ctE"/>

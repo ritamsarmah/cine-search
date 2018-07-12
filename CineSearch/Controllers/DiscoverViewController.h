@@ -8,26 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import "BoxActivityIndicatorView.h"
+#import "ImageSlideshow.h"
 #import "Reachability.h"
 
 @class DetailViewController;
 @class MovieSingleton;
 
-@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>  {
-    int x;
-    int max;
-    BOOL isAutoScrolling;
-}
+@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
-@property (weak, nonatomic) IBOutlet UIScrollView *imageScrollView;
+@property (weak, nonatomic) IBOutlet ImageSlideshow *imageSlideshow;
 @property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) UILabel *bannerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITableView *movieTableView;
 
-@property NSTimer *scrollTimer;
 @property MovieSingleton *manager;
 @property NSMutableArray *nowPlayingMovies;
 @property NSMutableArray *popularMovies;
@@ -41,9 +37,9 @@
 @property BOOL enteredSegue;
 @property NetworkStatus lastStatus;
 
-- (void)setupImageScrollView;
+- (void)setupImageSlideshow;
 - (void)nextImage;
-- (void)openMovie:(UITapGestureRecognizer *)sender;
+- (void)openBannerMovie:(UITapGestureRecognizer *)sender;
 - (BOOL)isMovieInFavorites:(NSInteger)movieID;
 
 @end
