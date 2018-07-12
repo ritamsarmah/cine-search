@@ -38,7 +38,6 @@
 @property NetworkStatus lastStatus;
 
 - (void)setupImageSlideshow;
-- (void)nextImage;
 - (void)openBannerMovie:(UITapGestureRecognizer *)sender;
 - (BOOL)isMovieInFavorites:(NSInteger)movieID;
 

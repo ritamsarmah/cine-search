@@ -76,19 +76,24 @@ static NSString * const kTableName = @"table";
     self.extendedLayoutIncludesOpaqueBars = YES;
     
     self.finishedDownloadingMovies = NO;
-    for (MovieID *movieID in self.array) {
-        if (!self.moviesForID[@(movieID.movieID)]) {
-            [self.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
-                [self.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (self.array.count == self.moviesForID.count) {
-                        [self.activityIndicator stopAnimating];
-                        self.finishedDownloadingMovies = YES;
-                        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    }
-                });
-            }];
+    if (self.array.count != 0) {
+        for (MovieID *movieID in self.array) {
+            if (!self.moviesForID[@(movieID.movieID)]) {
+                [self.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
+                    [self.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (self.array.count == self.moviesForID.count) {
+                            [self.activityIndicator stopAnimating];
+                            self.finishedDownloadingMovies = YES;
+                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        }
+                    });
+                }];
+            }
         }
+    } else {
+        [self.activityIndicator stopAnimating];
+        self.finishedDownloadingMovies = YES;
     }
     
     // Set realm notification block

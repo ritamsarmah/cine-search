@@ -14,10 +14,8 @@
 @property (nonatomic) NSTimer *scrollTimer;
 @property (nonatomic) UIViewController *interactionViewController;
 
-
 @property int currentPosition;
 @property NSTimeInterval timeInterval;
-@property CGFloat width;
 
 // Private Access
 @property (nonatomic, readwrite) BOOL isAutoScrolling;

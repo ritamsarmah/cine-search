@@ -31,16 +31,16 @@
     [_images addObject:images.firstObject];
     [_images insertObject:lastImage atIndex:0];
     
-    self.maxWidth = self.width * (self.images.count - 1);
+    self.maxWidth = self.frame.size.width * (self.images.count - 1);
 
     for (UIImage *image in self.images) {
         // Populate scrollView with imageViews containing images
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.currentPosition, 0, self.width, self.frame.size.height)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.currentPosition, 0, self.frame.size.width, self.frame.size.height)];
         
         imageView.image = image;
         imageView.tag = tagNumber;
         tagNumber++;
-        self.currentPosition += self.width;
+        self.currentPosition += self.frame.size.width;
         
         imageView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self.interactionViewController action:selector];
@@ -49,9 +49,9 @@
     }
     
     self.contentSize = CGSizeMake(self.currentPosition, self.frame.size.height);
-    self.contentOffset = CGPointMake(self.width, 0);
+    self.contentOffset = CGPointMake(self.frame.size.width, 0);
     
-    self.currentPosition = self.width * 2;
+    self.currentPosition = self.frame.size.width * 2;
     
     if (self.scrollTimer) {
         [self.scrollTimer invalidate];
@@ -65,7 +65,7 @@
     if (self.currentPosition == self.maxWidth) {
         [self setContentOffset:CGPointMake(0, 0) animated:NO];
         [UIView animateWithDuration:0.7f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            [self setContentOffset:CGPointMake(self.width, 0) animated:NO];
+            [self setContentOffset:CGPointMake(self.frame.size.width, 0) animated:NO];
         } completion:nil];
     } else {
         [UIView animateWithDuration:0.7f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -73,15 +73,15 @@
         } completion:nil];
     }
     self.isAutoScrolling = NO;
-    self.currentPosition += self.width;
+    self.currentPosition += self.frame.size.width;
 }
 
 #pragma mark - ScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.x == self.maxWidth && !self.isAutoScrolling) {
-        [scrollView setContentOffset:CGPointMake(self.width, 0) animated:NO];
+        [scrollView setContentOffset:CGPointMake(self.frame.size.width, 0) animated:NO];
     } else if (scrollView.contentOffset.x == 0 && !self.isAutoScrolling) {
-        [scrollView setContentOffset:CGPointMake(self.maxWidth - self.width, 0) animated:NO];
+        [scrollView setContentOffset:CGPointMake(self.maxWidth - self.frame.size.width, 0) animated:NO];
     } else {
         self.currentPosition = scrollView.contentOffset.x;
     }
