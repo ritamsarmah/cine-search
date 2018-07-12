@@ -85,7 +85,7 @@ static NSString * const kTableName = @"table";
                         if (self.array.count == self.moviesForID.count) {
                             [self.activityIndicator stopAnimating];
                             self.finishedDownloadingMovies = YES;
-                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+                            [self.tableView reloadData];
                         }
                     });
                 }];

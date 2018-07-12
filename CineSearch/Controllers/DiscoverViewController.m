@@ -66,7 +66,6 @@
 
     // Configure imageSlideshow parameters
     [self.imageSlideshow setHidden:YES];
-//    self.imageSlideshow.width = self.imageSlideshow.frame.size.width; // [[UIScreen mainScreen] bounds].size.width;
     self.imageSlideshow.timeInterval = 5.7;
     self.imageSlideshow.pagingEnabled = YES;
     self.imageSlideshow.interactionViewController = self;
