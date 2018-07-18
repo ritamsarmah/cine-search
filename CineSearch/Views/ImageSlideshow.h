@@ -10,14 +10,15 @@
 
 @interface ImageSlideshow : UIScrollView <UIScrollViewDelegate>
 
+/* Public Access */
 @property (nonatomic) NSMutableArray *images;
-@property (nonatomic) NSTimer *scrollTimer;
 @property (nonatomic) UIViewController *interactionViewController;
-
 @property int currentPosition;
 @property NSTimeInterval timeInterval;
+@property NSTimeInterval transitionInterval;
 
-// Private Access
+/* Private Access */
+@property (nonatomic) NSTimer *scrollTimer;
 @property (nonatomic, readwrite) BOOL isAutoScrolling;
 @property (nonatomic, readwrite) CGFloat maxWidth;
 

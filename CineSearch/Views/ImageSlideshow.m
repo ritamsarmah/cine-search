@@ -15,6 +15,9 @@
     
     if (self) {
         _isAutoScrolling = NO;
+        self.pagingEnabled = YES;
+        self.showsHorizontalScrollIndicator = NO;
+        self.showsVerticalScrollIndicator = NO;
         self.delegate = self;
     }
     
@@ -64,11 +67,11 @@
     self.isAutoScrolling = YES;
     if (self.currentPosition == self.maxWidth) {
         [self setContentOffset:CGPointMake(0, 0) animated:NO];
-        [UIView animateWithDuration:0.7f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:MIN(self.transitionInterval, self.timeInterval) delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             [self setContentOffset:CGPointMake(self.frame.size.width, 0) animated:NO];
         } completion:nil];
     } else {
-        [UIView animateWithDuration:0.7f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:MIN(self.transitionInterval, self.timeInterval) delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.contentOffset = CGPointMake(self.currentPosition, 0);
         } completion:nil];
     }
@@ -78,9 +81,9 @@
 
 #pragma mark - ScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.contentOffset.x == self.maxWidth && !self.isAutoScrolling) {
+    if (scrollView.contentOffset.x >= self.maxWidth && !self.isAutoScrolling) {
         [scrollView setContentOffset:CGPointMake(self.frame.size.width, 0) animated:NO];
-    } else if (scrollView.contentOffset.x == 0 && !self.isAutoScrolling) {
+    } else if (scrollView.contentOffset.x <= 0 && !self.isAutoScrolling) {
         [scrollView setContentOffset:CGPointMake(self.maxWidth - self.frame.size.width, 0) animated:NO];
     } else {
         self.currentPosition = scrollView.contentOffset.x;
