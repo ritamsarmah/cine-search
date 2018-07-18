@@ -56,19 +56,22 @@
 
     self.manager = [MovieSingleton sharedManager];
     self.bannerMovies = [NSMutableArray arrayWithCapacity:4];
-    self.imageScrollView.delegate = self;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.extendedLayoutIncludesOpaqueBars = YES;
-    isAutoScrolling = NO;
 
     BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
     activityIndicator.disablesInteraction = NO;
     [self.view addSubview:activityIndicator];
     self.activityIndicator = activityIndicator;
 
+    // Configure imageSlideshow parameters
+    [self.imageSlideshow setHidden:YES];
+    self.imageSlideshow.timeInterval = 5;
+    self.imageSlideshow.transitionInterval = 0.5;
+    self.imageSlideshow.pagingEnabled = YES;
+    self.imageSlideshow.interactionViewController = self;
+    
     [self.movieTableView setHidden:YES];
-    [self.imageScrollView setHidden:YES];
-
     self.movieTableView.rowHeight = 155; // CollectionViewCell Height + 20 for padding
     self.movieTableView.backgroundColor = [UIColor clearColor];
 
@@ -113,7 +116,7 @@
     switch (netStatus) {
         case NotReachable: {
             self.connectionLabel.hidden = NO;
-            self.imageScrollView.hidden = YES;
+            self.imageSlideshow.hidden = YES;
             self.movieTableView.hidden = YES;
             [self.activityIndicator stopAnimating];
             break;
@@ -175,13 +178,12 @@
     }
 
     dispatch_group_notify(movieCollectionGroup, dispatch_get_main_queue(),^{
-        [self setupImageScrollView];
+        [self setupImageSlideshow];
         [self setupMoviesTableView];
     });
 }
 
-/* TODO: Refactor, break up image creation into separate function */
-- (void)setupImageScrollView {
+- (void)setupImageSlideshow {
     NSMutableArray *images = [NSMutableArray arrayWithCapacity:6];
 
     dispatch_async(dispatch_get_global_queue(0,0), ^{
@@ -221,75 +223,24 @@
                 [images addObject:result];
             }
             if (images.count == 4) {
-                // Duplicate first and last images for circular scrollview
-                [images addObject:images[0]];
-                [images insertObject:images[3] atIndex:0];
                 break;
             }
         }
 
+        // Configure imageSlideshow with movie banners
         dispatch_async(dispatch_get_main_queue(), ^{
-            self->x = 0;
-            int tagNumber = 0;
-            self->max = [[UIScreen mainScreen] bounds].size.width * (images.count-1);
-
-            self.imageScrollView.pagingEnabled = YES;
-            for (UIImage *image in images) {
-
-                // Populate scrollView with imageViews containing backdrops
-                UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self->x, 0, [[UIScreen mainScreen] bounds].size.width, self.imageScrollView.frame.size.height)];
-
-                imageView.image = image;
-                imageView.tag = tagNumber;
-                tagNumber++;
-                self->x += [[UIScreen mainScreen] bounds].size.width;
-
-                imageView.userInteractionEnabled = YES;
-                UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(openMovie:)];
-                [imageView addGestureRecognizer:tapRecognizer];
-                [self.imageScrollView addSubview:imageView];
-            }
-
-            self.imageScrollView.contentSize=CGSizeMake(self->x, self.imageScrollView.frame.size.height);
-            self.imageScrollView.contentOffset=CGPointMake([[UIScreen mainScreen] bounds].size.width, 0);
-
-            self->x = ([[UIScreen mainScreen] bounds].size.width * 2);
-
+            [self.imageSlideshow configureImages:images withSelector:@selector(openBannerMovie:)];
             [self.activityIndicator stopAnimating];
-            [UIView transitionWithView:self.imageScrollView
+            [UIView transitionWithView:self.view
                               duration:0.3
                                options:UIViewAnimationOptionTransitionCrossDissolve
                             animations:^{
-                                [self.imageScrollView setHidden:NO];
+                                [self.imageSlideshow setHidden:NO];
                                 [self.movieTableView setHidden:NO];
                             }
                             completion:nil];
-
-            // Reset scroll timer
-            if (self.scrollTimer) {
-                [self.scrollTimer invalidate];
-            }
-            NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.7 target:self selector:@selector(nextImage) userInfo:nil repeats:YES];
-            self.scrollTimer = timer;
         });
     });
-}
-
-- (void)nextImage {
-    isAutoScrolling = YES;
-    if (x == max) {
-        [self.imageScrollView setContentOffset:CGPointMake(0, 0) animated:NO];
-        [UIView animateWithDuration:0.7f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            [self.imageScrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
-        } completion:nil];
-
-    } else {
-        [UIView animateWithDuration:0.7f delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.imageScrollView.contentOffset = CGPointMake(self->x, 0);
-        } completion:nil];
-    }
-    isAutoScrolling = NO;
-    x += [[UIScreen mainScreen] bounds].size.width;
 }
 
 // Setup of movie table view data
@@ -326,7 +277,7 @@
     [self.movieTableView reloadData];
 }
 
-- (void)openMovie:(UITapGestureRecognizer *)sender {
+- (void)openBannerMovie:(UITapGestureRecognizer *)sender {
     UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
     UIImageView *imageView = (UIImageView *)recognizer.view;
     Movie *selectedMovie = self.bannerMovies[imageView.tag-1];
@@ -364,16 +315,16 @@
     } else if ([scrollView isKindOfClass:[UITableView class]]) {
         return;
     }
-    else {
-        if (scrollView.contentOffset.x == max && !isAutoScrolling) {
-            [scrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
-        }
-        else if (scrollView.contentOffset.x == 0 && !isAutoScrolling) {
-            [scrollView setContentOffset:CGPointMake((max-[[UIScreen mainScreen] bounds].size.width),0) animated:NO];
-        } else {
-            x = scrollView.contentOffset.x;
-        }
-    }
+//    else {
+//        if (scrollView.contentOffset.x == max && !isAutoScrolling) {
+//            [scrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
+//        }
+//        else if (scrollView.contentOffset.x == 0 && !isAutoScrolling) {
+//            [scrollView setContentOffset:CGPointMake((max-[[UIScreen mainScreen] bounds].size.width),0) animated:NO];
+//        } else {
+//            x = scrollView.contentOffset.x;
+//        }
+//    }
 }
 
 - (BOOL)isMovieInFavorites:(NSInteger)movieID {
