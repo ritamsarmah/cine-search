@@ -35,6 +35,13 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationController.navigationBar.hidden = YES;
     
+    // Set actionBackgroundView shadow
+    self.actionBackgroundView.layer.masksToBounds = NO;
+    self.actionBackgroundView.layer.shadowColor = UIColor.blackColor.CGColor;
+    self.actionBackgroundView.layer.shadowOffset = CGSizeMake(0, -3);
+    self.actionBackgroundView.layer.shadowRadius = 3;
+    self.actionBackgroundView.layer.shadowOpacity = 0.3f;
+    
     // Update the user interface for the detail item.
     self.movieTitleLabel.text = self.movie.title;
     self.detailLabel.text = [NSString stringWithFormat:@"%@ ‧ %@ ‧ %@", self.movie.certification, self.movie.runtime, self.movie.releaseDate ?: @"TBA"];
@@ -160,6 +167,30 @@
     }];
 }
 
+- (void)setActionBackgroundViewShadow:(BOOL)isVisible animated:(BOOL)animated {
+    CABasicAnimation *animation  = [CABasicAnimation animation];
+    animation.duration = animated ? 0.2f : 0.f;
+    
+    if (isVisible) {
+        if (self.actionBackgroundView.layer.shadowOpacity == 0) {
+            CGFloat start = 0.0, end = 0.3;
+            animation.fromValue= @(start);
+            animation.toValue= @(end);
+            [self.actionBackgroundView.layer addAnimation:animation forKey:@"shadowOpacity"];
+            self.actionBackgroundView.layer.shadowOpacity = end;
+        }
+    }
+    else {
+        if (self.actionBackgroundView.layer.shadowOpacity != 0) {
+            CGFloat start = 0.3, end = 0.0;
+            animation.fromValue= @(start);
+            animation.toValue= @(end);
+            [self.actionBackgroundView.layer addAnimation:animation forKey:@"shadowOpacity"];
+            self.actionBackgroundView.layer.shadowOpacity = end;
+        }
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -219,6 +250,17 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (self.scrollView == scrollView) {
         self.posterImageView.alpha = scrollView.parallaxHeader.progress;
+        // Remove shadow if at bottom
+        CGFloat scrollViewHeight = scrollView.frame.size.height;
+        CGFloat scrollContentSizeHeight = scrollView.contentSize.height;
+        CGFloat scrollOffset = scrollView.contentOffset.y;
+        if (scrollOffset == 0) {
+            [self setActionBackgroundViewShadow:YES animated:NO];
+        } else if (scrollOffset + scrollViewHeight >= scrollContentSizeHeight && scrollContentSizeHeight != 0) {
+            [self setActionBackgroundViewShadow:NO animated:YES];
+        } else {
+            [self setActionBackgroundViewShadow:YES animated:YES];
+        }
     }
 }
 

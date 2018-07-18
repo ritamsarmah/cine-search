@@ -66,7 +66,8 @@
 
     // Configure imageSlideshow parameters
     [self.imageSlideshow setHidden:YES];
-    self.imageSlideshow.timeInterval = 5.7;
+    self.imageSlideshow.timeInterval = 5;
+    self.imageSlideshow.transitionInterval = 0.5;
     self.imageSlideshow.pagingEnabled = YES;
     self.imageSlideshow.interactionViewController = self;
     
