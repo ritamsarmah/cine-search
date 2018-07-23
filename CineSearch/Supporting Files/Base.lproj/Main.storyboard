@@ -26,13 +26,11 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="3Kr-AT-HEo">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="502"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <scrollView key="tableHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="fpM-KN-AhK" customClass="ImageSlideshow">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="210.5"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="byu-76-57T" customClass="SwipeView">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" secondItem="fpM-KN-AhK" secondAttribute="height" multiplier="107:60" id="AbU-Jr-aLb"/>
-                                    </constraints>
-                                </scrollView>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </view>
                                 <connections>
                                     <outlet property="dataSource" destination="Osh-Bz-Ryx" id="i15-7Q-Lqn"/>
                                     <outlet property="delegate" destination="Osh-Bz-Ryx" id="CL6-Sh-DGx"/>
@@ -59,7 +57,7 @@
                     <navigationItem key="navigationItem" title="Discover" id="Weg-R6-A8W"/>
                     <connections>
                         <outlet property="connectionLabel" destination="3Du-E3-Kbc" id="ENt-dg-wCs"/>
-                        <outlet property="imageSlideshow" destination="fpM-KN-AhK" id="WLT-L6-00i"/>
+                        <outlet property="movieCarousel" destination="byu-76-57T" id="I41-tP-wjp"/>
                         <outlet property="movieTableView" destination="3Kr-AT-HEo" id="1yZ-tv-pfC"/>
                         <segue destination="LId-c8-I7P" kind="showDetail" identifier="showBannerDetail" id="PGb-wc-TaV"/>
                         <segue destination="LId-c8-I7P" kind="showDetail" identifier="showMovieDetail" id="1gB-r4-ctE"/>
@@ -341,7 +339,6 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="LId-c8-I7P" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="r20-d9-pIY">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -725,7 +722,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a66-TQ-i2B">
-                                <rect key="frame" x="8" y="67" width="40" height="40"/>
+                                <rect key="frame" x="8" y="23" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="QMj-F4-Kup"/>
                                     <constraint firstAttribute="height" constant="40" id="Rjb-1e-kqw"/>
@@ -821,7 +818,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="USQ-ZQ-G6K"/>
         <segue reference="URd-go-6mu"/>
-        <segue reference="Czc-bV-2Qv"/>
+        <segue reference="1gB-r4-ctE"/>
         <segue reference="5gY-gu-Rvd"/>
     </inferredMetricsTieBreakers>
 </document>

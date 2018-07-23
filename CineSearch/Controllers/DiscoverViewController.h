@@ -8,17 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "BoxActivityIndicatorView.h"
-#import "ImageSlideshow.h"
 #import "Reachability.h"
+
+#import <SwipeView/SwipeView.h>
 
 @class DetailViewController;
 @class MovieSingleton;
 
-@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
+@interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, SwipeViewDelegate, SwipeViewDataSource>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
-@property (weak, nonatomic) IBOutlet ImageSlideshow *imageSlideshow;
+@property (weak, nonatomic) IBOutlet SwipeView *movieCarousel;
 @property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) UILabel *bannerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
@@ -29,6 +30,7 @@
 @property NSMutableArray *popularMovies;
 @property NSMutableArray *recommendedMovies;
 @property NSMutableArray *bannerMovies; // Movies for banner images
+@property NSMutableArray *bannerImages; // Movies for banner images
 
 @property NSArray *moviesArray;
 @property NSMutableDictionary *contentOffsetDictionary;
@@ -38,7 +40,7 @@
 @property NetworkStatus lastStatus;
 
 - (void)setupImageSlideshow;
-- (void)openBannerMovie:(UITapGestureRecognizer *)sender;
+- (void)openBannerMovie:(NSInteger)index;
 - (BOOL)isMovieInFavorites:(NSInteger)movieID;
 
 @end

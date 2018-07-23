@@ -27,7 +27,6 @@
 		20F5D26D1FF960DB0087C1C6 /* CastCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */; };
 		20F5D2701FF967CE0087C1C6 /* Actor.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F5D26F1FF967CE0087C1C6 /* Actor.m */; };
 		41FF04661FFC0876BD5ACC11 /* Pods_CineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CDCA266CEB095EDACAD5755 /* Pods_CineSearch.framework */; };
-		D0C27B3D20F7EE4C002299C4 /* ImageSlideshow.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C27B3C20F7EE4C002299C4 /* ImageSlideshow.m */; };
 		D0C27B4620F7FD61002299C4 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C27B4520F7FD61002299C4 /* Constants.m */; };
 /* End PBXBuildFile section */
 
@@ -71,8 +70,6 @@
 		2CDCA266CEB095EDACAD5755 /* Pods_CineSearch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CineSearch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		364911537F04EC940C009021 /* Pods-CineSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineSearch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch.debug.xcconfig"; sourceTree = "<group>"; };
 		C6E5F62CA664BFE04781295D /* Pods-CineSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineSearch.release.xcconfig"; path = "Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch.release.xcconfig"; sourceTree = "<group>"; };
-		D0C27B3B20F7EE4C002299C4 /* ImageSlideshow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageSlideshow.h; sourceTree = "<group>"; };
-		D0C27B3C20F7EE4C002299C4 /* ImageSlideshow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageSlideshow.m; sourceTree = "<group>"; };
 		D0C27B4420F7FD61002299C4 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		D0C27B4520F7FD61002299C4 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,8 +150,6 @@
 				208C9D882070198900E415F1 /* BoxActivityIndicatorView.m */,
 				20F5D26B1FF960DB0087C1C6 /* CastCollectionViewCell.h */,
 				20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */,
-				D0C27B3B20F7EE4C002299C4 /* ImageSlideshow.h */,
-				D0C27B3C20F7EE4C002299C4 /* ImageSlideshow.m */,
 				2089BC5C1FA014AD00D0C8B1 /* MovieTableViewCell.h */,
 				2089BC5D1FA014AD00D0C8B1 /* MovieTableViewCell.m */,
 			);
@@ -283,12 +278,16 @@
 				"${BUILT_PRODUCTS_DIR}/MXParallaxHeader/MXParallaxHeader.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeView/SwipeView.framework",
+				"${BUILT_PRODUCTS_DIR}/iCarousel/iCarousel.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MXParallaxHeader.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/iCarousel.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -320,7 +319,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0C27B3D20F7EE4C002299C4 /* ImageSlideshow.m in Sources */,
 				20C782101FA021AA00AEA19A /* AFTableViewCell.m in Sources */,
 				20C782111FA021AA00AEA19A /* DetailViewController.m in Sources */,
 				20F5D26D1FF960DB0087C1C6 /* CastCollectionViewCell.m in Sources */,

@@ -60,13 +60,12 @@
     activityIndicator.disablesInteraction = NO;
     [self.view addSubview:activityIndicator];
     self.activityIndicator = activityIndicator;
-
-    // Configure imageSlideshow parameters
-    [self.imageSlideshow setHidden:YES];
-    self.imageSlideshow.timeInterval = 5;
-    self.imageSlideshow.transitionInterval = 0.5;
-    self.imageSlideshow.pagingEnabled = YES;
-    self.imageSlideshow.interactionViewController = self;
+    
+    // Configure iCarousel
+    [self.movieCarousel setHidden:YES];
+    self.movieCarousel.dataSource = self;
+    self.movieCarousel.delegate = self;
+    self.movieCarousel.wrapEnabled = YES;
     
     [self.movieTableView setHidden:YES];
     self.movieTableView.rowHeight = 155; // CollectionViewCell Height + 20 for padding
@@ -113,7 +112,7 @@
     switch (netStatus) {
         case NotReachable: {
             self.connectionLabel.hidden = NO;
-            self.imageSlideshow.hidden = YES;
+            self.movieCarousel.hidden = YES;
             self.movieTableView.hidden = YES;
             [self.activityIndicator stopAnimating];
             break;
@@ -223,19 +222,14 @@
                 break;
             }
         }
-
-        // Configure imageSlideshow with movie banners
+        
+        // Configure carousel with movie banners
+        self.bannerImages = images;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.imageSlideshow configureImages:images withSelector:@selector(openBannerMovie:)];
+            [self.movieCarousel reloadData];
+            [self.movieCarousel setHidden:NO];
+            [self.movieTableView setHidden:NO];
             [self.activityIndicator stopAnimating];
-            [UIView transitionWithView:self.view
-                              duration:0.3
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^{
-                                [self.imageSlideshow setHidden:NO];
-                                [self.movieTableView setHidden:NO];
-                            }
-                            completion:nil];
         });
     });
 }
@@ -274,10 +268,8 @@
     [self.movieTableView reloadData];
 }
 
-- (void)openBannerMovie:(UITapGestureRecognizer *)sender {
-    UITapGestureRecognizer *recognizer = (UITapGestureRecognizer *)sender;
-    UIImageView *imageView = (UIImageView *)recognizer.view;
-    Movie *selectedMovie = self.bannerMovies[imageView.tag-1];
+- (void)openBannerMovie:(NSInteger)index {
+    Movie *selectedMovie = self.bannerMovies[index];
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.4
                                                       target:self.activityIndicator
                                                     selector:@selector(startAnimating)
@@ -312,16 +304,6 @@
     } else if ([scrollView isKindOfClass:[UITableView class]]) {
         return;
     }
-//    else {
-//        if (scrollView.contentOffset.x == max && !isAutoScrolling) {
-//            [scrollView setContentOffset:CGPointMake([[UIScreen mainScreen] bounds].size.width, 0) animated:NO];
-//        }
-//        else if (scrollView.contentOffset.x == 0 && !isAutoScrolling) {
-//            [scrollView setContentOffset:CGPointMake((max-[[UIScreen mainScreen] bounds].size.width),0) animated:NO];
-//        } else {
-//            x = scrollView.contentOffset.x;
-//        }
-//    }
 }
 
 - (BOOL)isMovieInFavorites:(NSInteger)movieID {
@@ -455,6 +437,25 @@
             [self performSegueWithIdentifier:@"showMovieDetail" sender:movie];
         });
     }];
+}
+
+#pragma mark - SwipeView
+
+- (NSInteger)numberOfItemsInSwipeView:(SwipeView *)swipeView {
+    return self.bannerImages.count;
+}
+
+- (UIView *)swipeView:(SwipeView *)swipeView viewForItemAtIndex:(NSInteger)index reusingView:(UIView *)view {
+    UIImage *image = [self.bannerImages objectAtIndex:index];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    [imageView setFrame: CGRectMake(0, 0, self.movieCarousel.frame.size.width, self.movieCarousel.frame.size.height)];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    
+    return imageView;
+}
+
+-(void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index {
+    [self openBannerMovie:index];
 }
 
 #pragma mark - Gesture Recognizer

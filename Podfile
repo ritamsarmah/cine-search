@@ -8,6 +8,7 @@ target 'CineSearch' do
   # Pods for CineSearch
 	pod 'Realm', '~> 3.7.1'
     pod 'MXParallaxHeader'
-    # pod 'ImageSlideshow'
+    pod 'iCarousel'
+    pod 'SwipeView'
 	pod 'SDWebImage'
 end
