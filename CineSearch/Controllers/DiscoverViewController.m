@@ -25,25 +25,22 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.title = @"Discover";
-    if (self.enteredSegue && self.navigationController.isNavigationBarHidden) {
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-    } else {
-        [self.navigationController setNavigationBarHidden:NO animated:NO];
-    }
-
+    
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
-
+    
+    if (self.enteredSegue && self.navigationController.isNavigationBarHidden) {
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+        self.enteredSegue = NO;
+    } else {
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
+    }
+    
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = YES;
     }
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    self.enteredSegue = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

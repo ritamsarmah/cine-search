@@ -48,7 +48,7 @@ static NSString * const kTableName = @"table";
     } else {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
     }
-    
+
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = YES;
     }

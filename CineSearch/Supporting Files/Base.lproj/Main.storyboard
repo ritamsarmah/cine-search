@@ -338,7 +338,7 @@
         <!--Navigation Controller-->
         <scene sceneID="uHO-WX-Qm2">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LId-c8-I7P" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="LId-c8-I7P" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="r20-d9-pIY">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>

@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CineSearch/Controllers/DetailViewController.m"
-            timestampString = "554079137.3939919"
+            timestampString = "554080307.281672"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "340"
-            endingLineNumber = "340"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
             landmarkName = "-openTrailer:"
             landmarkType = "7">
             <Locations>
@@ -83,7 +83,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CineSearch/Supporting Files/AppDelegate.m"
-            timestampString = "554079137.3948981"
+            timestampString = "554080307.282336"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "73"
