@@ -168,20 +168,8 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cI2-9R-ysG">
-                                                    <rect key="frame" x="312" y="69" width="48" height="36"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="36" id="CKr-GA-3aq"/>
-                                                        <constraint firstAttribute="width" constant="48" id="oMx-o6-7mD"/>
-                                                    </constraints>
-                                                    <color key="tintColor" red="1" green="0.36754447220000003" blue="0.32097727059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <state key="normal" image="HeartFilled"/>
-                                                    <connections>
-                                                        <action selector="favoritePressed:" destination="WCw-Qf-5nD" eventType="touchUpInside" id="RR6-Wt-MS1"/>
-                                                    </connections>
-                                                </button>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ODn-iV-gaA">
-                                                    <rect key="frame" x="99" y="76" width="65" height="31"/>
+                                                    <rect key="frame" x="99" y="72" width="65" height="31"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.0" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aTz-Iv-eg0">
                                                             <rect key="frame" x="28" y="6" width="32" height="20"/>
@@ -218,6 +206,18 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cI2-9R-ysG">
+                                                    <rect key="frame" x="312" y="69" width="48" height="36"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="36" id="CKr-GA-3aq"/>
+                                                        <constraint firstAttribute="width" constant="48" id="oMx-o6-7mD"/>
+                                                    </constraints>
+                                                    <color key="tintColor" red="1" green="0.36754447220000003" blue="0.32097727059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <state key="normal" image="HeartFilled"/>
+                                                    <connections>
+                                                        <action selector="favoritePressed:" destination="WCw-Qf-5nD" eventType="touchUpInside" id="RR6-Wt-MS1"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.10546340793371201" green="0.1173078790307045" blue="0.1380946934223175" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
@@ -225,12 +225,12 @@
                                                 <constraint firstItem="DwM-mV-Fj9" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" constant="9" id="5q9-Dy-PQZ"/>
                                                 <constraint firstAttribute="trailing" secondItem="DwM-mV-Fj9" secondAttribute="trailing" constant="8" id="9to-LE-BoJ"/>
                                                 <constraint firstItem="DwM-mV-Fj9" firstAttribute="leading" secondItem="auq-rg-UkV" secondAttribute="trailing" constant="18" id="Byb-4n-U9i"/>
-                                                <constraint firstItem="ODn-iV-gaA" firstAttribute="top" secondItem="vkd-hd-NwJ" secondAttribute="bottom" constant="8" id="DZB-zi-Fla"/>
+                                                <constraint firstItem="ODn-iV-gaA" firstAttribute="top" secondItem="vkd-hd-NwJ" secondAttribute="bottom" constant="4" id="DZB-zi-Fla"/>
                                                 <constraint firstItem="vkd-hd-NwJ" firstAttribute="centerY" secondItem="37f-cq-3Eg" secondAttribute="centerY" constant="-1.5" id="QfR-TY-zVm"/>
                                                 <constraint firstItem="auq-rg-UkV" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="Rg4-YQ-gyz"/>
                                                 <constraint firstItem="cI2-9R-ysG" firstAttribute="trailing" secondItem="37f-cq-3Eg" secondAttribute="trailingMargin" id="Rjl-RN-5cY"/>
                                                 <constraint firstItem="auq-rg-UkV" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" id="ZeR-qh-sNX"/>
-                                                <constraint firstItem="cI2-9R-ysG" firstAttribute="bottom" secondItem="37f-cq-3Eg" secondAttribute="bottomMargin" id="cX4-Fe-942"/>
+                                                <constraint firstItem="cI2-9R-ysG" firstAttribute="centerY" secondItem="ODn-iV-gaA" secondAttribute="centerY" id="xFA-4s-QA6"/>
                                                 <constraint firstItem="vkd-hd-NwJ" firstAttribute="leading" secondItem="auq-rg-UkV" secondAttribute="trailing" constant="18" id="xc4-5g-YQS"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -277,7 +277,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="he8-ns-rPC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="825" y="-618"/>
+            <point key="canvasLocation" x="824.79999999999995" y="-618.44077961019491"/>
         </scene>
         <!--Discover-->
         <scene sceneID="nKu-Ke-GD8">
@@ -424,20 +424,8 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mm6-Xf-tXM">
-                                            <rect key="frame" x="311" y="69" width="48" height="36"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="36" id="2gZ-SR-05n"/>
-                                                <constraint firstAttribute="width" constant="48" id="aBb-gz-Qba"/>
-                                            </constraints>
-                                            <color key="tintColor" red="1" green="0.36754447220000003" blue="0.32097727059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <state key="normal" image="HeartFilled"/>
-                                            <connections>
-                                                <action selector="favoritePressed:" destination="P4w-9E-d6x" eventType="touchUpInside" id="olm-pI-fYM"/>
-                                            </connections>
-                                        </button>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r1d-F2-Kdj">
-                                            <rect key="frame" x="100" y="76" width="65" height="31"/>
+                                            <rect key="frame" x="100" y="72" width="65" height="31"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.0" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ovf-1h-jbl">
                                                     <rect key="frame" x="28" y="6" width="32" height="20"/>
@@ -474,20 +462,32 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mm6-Xf-tXM">
+                                            <rect key="frame" x="311" y="69" width="48" height="36"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="36" id="2gZ-SR-05n"/>
+                                                <constraint firstAttribute="width" constant="48" id="aBb-gz-Qba"/>
+                                            </constraints>
+                                            <color key="tintColor" red="1" green="0.36754447220000003" blue="0.32097727059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <state key="normal" image="HeartFilled"/>
+                                            <connections>
+                                                <action selector="favoritePressed:" destination="P4w-9E-d6x" eventType="touchUpInside" id="olm-pI-fYM"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <color key="backgroundColor" red="0.1054634079" green="0.117307879" blue="0.1380946934" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstItem="mm6-Xf-tXM" firstAttribute="trailing" secondItem="JSy-bn-nYT" secondAttribute="trailingMargin" id="2bA-rf-DzZ"/>
                                         <constraint firstItem="R4W-VP-92y" firstAttribute="leading" secondItem="JSy-bn-nYT" secondAttribute="leadingMargin" id="ClQ-t5-fSI"/>
                                         <constraint firstItem="Zt7-8A-wpJ" firstAttribute="leading" secondItem="R4W-VP-92y" secondAttribute="trailing" constant="18" id="DDg-cl-gth"/>
-                                        <constraint firstItem="r1d-F2-Kdj" firstAttribute="top" secondItem="Zt7-8A-wpJ" secondAttribute="bottom" constant="8" id="Evl-Rl-ETG"/>
+                                        <constraint firstItem="r1d-F2-Kdj" firstAttribute="top" secondItem="Zt7-8A-wpJ" secondAttribute="bottom" constant="4" id="Evl-Rl-ETG"/>
                                         <constraint firstItem="fle-45-d3c" firstAttribute="leading" secondItem="R4W-VP-92y" secondAttribute="trailing" constant="18" id="JmD-tn-nhc"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="Zt7-8A-wpJ" secondAttribute="trailing" id="LoM-Dq-yWw"/>
                                         <constraint firstItem="Zt7-8A-wpJ" firstAttribute="centerY" secondItem="JSy-bn-nYT" secondAttribute="centerY" constant="-1.5" id="PZ4-Mc-6HZ"/>
                                         <constraint firstItem="R4W-VP-92y" firstAttribute="top" secondItem="JSy-bn-nYT" secondAttribute="topMargin" id="ayf-NH-Vy6"/>
                                         <constraint firstItem="fle-45-d3c" firstAttribute="top" secondItem="JSy-bn-nYT" secondAttribute="topMargin" constant="9" id="gHF-hr-BEd"/>
+                                        <constraint firstItem="mm6-Xf-tXM" firstAttribute="centerY" secondItem="r1d-F2-Kdj" secondAttribute="centerY" id="gSw-dB-4Cv"/>
                                         <constraint firstAttribute="trailing" secondItem="fle-45-d3c" secondAttribute="trailing" constant="8" id="ot4-FU-2JA"/>
-                                        <constraint firstItem="mm6-Xf-tXM" firstAttribute="bottom" secondItem="JSy-bn-nYT" secondAttribute="bottomMargin" id="sKW-Cb-Cmd"/>
                                         <constraint firstItem="r1d-F2-Kdj" firstAttribute="leading" secondItem="R4W-VP-92y" secondAttribute="trailing" constant="18" id="v2d-j8-B1c"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -514,7 +514,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mlq-9o-BBd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="750" y="1045"/>
+            <point key="canvasLocation" x="749.60000000000002" y="1044.8275862068967"/>
         </scene>
         <!--FavoritesDetail-->
         <scene sceneID="bep-Mo-AcV">
@@ -725,7 +725,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a66-TQ-i2B">
-                                <rect key="frame" x="8" y="23" width="40" height="40"/>
+                                <rect key="frame" x="8" y="67" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="QMj-F4-Kup"/>
                                     <constraint firstAttribute="height" constant="40" id="Rjb-1e-kqw"/>
@@ -819,9 +819,9 @@
         <image name="Star" width="102" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="vdv-tw-0Lh"/>
+        <segue reference="USQ-ZQ-G6K"/>
         <segue reference="URd-go-6mu"/>
-        <segue reference="1gB-r4-ctE"/>
+        <segue reference="Czc-bV-2Qv"/>
         <segue reference="5gY-gu-Rvd"/>
     </inferredMetricsTieBreakers>
 </document>

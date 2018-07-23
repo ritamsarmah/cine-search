@@ -25,6 +25,7 @@
     discoverSplitViewController.delegate = self;
     searchSplitViewController.delegate = self;
     favoritesSplitViewController.delegate = self;
+    self.isRotationEnabled = NO;
     return YES;
 }
 
@@ -65,6 +66,15 @@
     } else {
         return NO;
     }
+}
+
+#pragma mark - UI Orientation
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    if (self.isRotationEnabled) {
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end

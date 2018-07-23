@@ -6,6 +6,7 @@
 //  Copyright © 2016 Ritam Sarmah. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "DetailViewController.h"
 #import "MovieSingleton.h"
 #import "MovieID.h"
@@ -13,17 +14,22 @@
 #import <Realm/Realm.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <MXParallaxHeader/MXParallaxHeader.h>
+#import <SafariServices/SafariServices.h>
 
-@interface DetailViewController ()
+@interface DetailViewController () {
+    BOOL isRotationAllowed;
+}
 
 @property (nonatomic, strong) RLMResults *array;
 @property (nonatomic, strong) RLMNotificationToken *notification;
 
 @end
 
-@implementation DetailViewController
+@implementation DetailViewController {}
 
 - (void)configureView {
+    isRotationAllowed = NO;
+    
     // Configure buttons
     self.trailerButton.layer.cornerRadius = 5;
     self.trailerButton.layer.masksToBounds = YES;
@@ -231,6 +237,12 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    // Force portrait orientation
+    AppDelegate *shared = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    shared.isRotationEnabled = NO;
+    [[UIDevice currentDevice] setValue:@(UIInterfaceOrientationPortrait) forKey:@"orientation"];
+    [UINavigationController attemptRotationToDeviceOrientation];
+    
     if (!self.isFavorite) {
         [self.favoriteButton setTintColor:[UIColor whiteColor]];
         [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
@@ -328,15 +340,16 @@
 - (IBAction)openTrailer:(UIButton *)sender {
     [self.manager.database getTrailerForID:self.movie.idNumber completion:^(NSString *trailer) {
         if (trailer != nil) {
-            NSURL *appTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"youtube:///watch?v=%@", trailer]];
-            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", trailer]];
-            
-            if ([[UIApplication sharedApplication] canOpenURL:appTrailer]) {
-                [[UIApplication sharedApplication] openURL:appTrailer];
-            }
-            else {
-                [[UIApplication sharedApplication] openURL:webTrailer];
-            }
+//            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", trailer]];
+            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/embed/%@?rel=0", trailer]];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                AppDelegate *shared = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                shared.isRotationEnabled = YES;
+                SFSafariViewController *svc = [[SFSafariViewController alloc] initWithURL:webTrailer];
+                svc.preferredBarTintColor = [UIColor colorWithRed:0.09 green:0.10 blue:0.12 alpha:1.0];
+                [self presentViewController:svc animated:YES completion:nil];
+            });
         } else {
             UIAlertController *alert = [UIAlertController
                                         alertControllerWithTitle:@"Trailer not found"
@@ -421,6 +434,14 @@
     }
     
     return cell;
+}
+
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
