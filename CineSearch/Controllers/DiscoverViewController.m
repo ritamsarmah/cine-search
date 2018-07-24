@@ -227,6 +227,7 @@
         // Configure carousel with movie banners
         self.bannerImages = images;
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self resetTimer];
             [self.movieCarousel reloadData];
             [self.movieCarousel setHidden:NO];
             [self.movieTableView setHidden:NO];
@@ -455,8 +456,22 @@
     return imageView;
 }
 
--(void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index {
+- (void)swipeView:(SwipeView *)swipeView didSelectItemAtIndex:(NSInteger)index {
     [self openBannerMovie:index];
+}
+
+- (void)swipeViewDidEndDecelerating:(SwipeView *)swipeView {
+    [self resetTimer];
+}
+
+- (void)autoScroll {
+    NSInteger nextIndex = (self.movieCarousel.currentPage + 1) % self.movieCarousel.numberOfItems;
+    [self.movieCarousel scrollToItemAtIndex:nextIndex duration:0.7];
+}
+
+- (void)resetTimer {
+    [carouselTimer invalidate];
+    carouselTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
 }
 
 #pragma mark - Gesture Recognizer
