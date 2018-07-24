@@ -33,13 +33,25 @@
     
     if (self.enteredSegue && self.navigationController.isNavigationBarHidden) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
-        self.enteredSegue = NO;
     } else {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
     }
     
     if (@available(iOS 11.0, *)) {
         self.navigationController.navigationBar.prefersLargeTitles = YES;
+    }
+    
+    // Reset carousel if carousel visible
+    if (!self.movieCarousel.isHidden) {
+        [self resetTimer];
+        [self.movieCarousel reloadData];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (self.enteredSegue) {
+        self.enteredSegue = NO;
     }
 }
 
@@ -288,6 +300,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     self.enteredSegue = YES;
+    [carouselTimer invalidate];
     Movie *movie = (Movie *)sender;
     DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
     [controller setMovie:movie];
@@ -471,7 +484,7 @@
 
 - (void)resetTimer {
     [carouselTimer invalidate];
-    carouselTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
+    carouselTimer = [NSTimer scheduledTimerWithTimeInterval:5.5 target:self selector:@selector(autoScroll) userInfo:nil repeats:YES];
 }
 
 #pragma mark - Gesture Recognizer
