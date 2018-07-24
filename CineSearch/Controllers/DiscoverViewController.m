@@ -55,6 +55,7 @@
     self.bannerMovies = [NSMutableArray arrayWithCapacity:4];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.extendedLayoutIncludesOpaqueBars = YES;
+    self.enteredSegue = NO;
 
     BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
     activityIndicator.disablesInteraction = NO;
