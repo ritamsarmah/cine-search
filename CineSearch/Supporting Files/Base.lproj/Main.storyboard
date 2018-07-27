@@ -604,10 +604,12 @@
                                     <constraint firstItem="2sG-my-td0" firstAttribute="top" secondItem="aBR-Fq-F9l" secondAttribute="bottom" constant="8" id="yIM-oe-8eN"/>
                                 </constraints>
                             </scrollView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X0t-Bk-6kS">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X0t-Bk-6kS">
                                 <rect key="frame" x="0.0" y="549" width="375" height="69"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.1058823529" green="0.1176470588" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="69" id="zoM-nZ-CHG"/>
+                                </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5E6-X9-wdh">
                                 <rect key="frame" x="294" y="566" width="65" height="36"/>
@@ -685,9 +687,12 @@
                         </subviews>
                         <color key="backgroundColor" red="0.10588235294117647" green="0.11764705882352941" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="X0t-Bk-6kS" firstAttribute="leading" secondItem="vzD-Ts-Drd" secondAttribute="leading" id="69R-gE-eOw"/>
                             <constraint firstItem="feO-a9-lpm" firstAttribute="top" secondItem="6cM-bC-1KQ" secondAttribute="bottom" constant="16" id="7Rx-IA-dip"/>
+                            <constraint firstAttribute="trailing" secondItem="X0t-Bk-6kS" secondAttribute="trailing" id="EBU-rD-85E"/>
                             <constraint firstItem="a66-TQ-i2B" firstAttribute="top" secondItem="etQ-yj-j2h" secondAttribute="bottom" constant="3" id="Eup-ki-yks"/>
                             <constraint firstItem="6a9-dH-WUd" firstAttribute="leading" secondItem="vzD-Ts-Drd" secondAttribute="leading" id="G31-Xg-A5A"/>
+                            <constraint firstItem="feO-a9-lpm" firstAttribute="top" secondItem="X0t-Bk-6kS" secondAttribute="bottom" id="Ijp-0N-AUK"/>
                             <constraint firstItem="6cM-bC-1KQ" firstAttribute="leading" secondItem="vzD-Ts-Drd" secondAttribute="leadingMargin" id="Oc4-Wc-5Ug"/>
                             <constraint firstItem="a66-TQ-i2B" firstAttribute="leading" secondItem="vzD-Ts-Drd" secondAttribute="leading" constant="8" id="QVC-rA-Kcm"/>
                             <constraint firstItem="5E6-X9-wdh" firstAttribute="trailing" secondItem="vzD-Ts-Drd" secondAttribute="trailingMargin" id="QVi-3J-FT8"/>
