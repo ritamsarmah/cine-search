@@ -1,16 +1,14 @@
 PODS:
-  - iCarousel (1.8.3)
   - MXParallaxHeader (0.6.1)
-  - Realm (3.7.1):
-    - Realm/Headers (= 3.7.1)
-  - Realm/Headers (3.7.1)
-  - SDWebImage (4.3.3):
-    - SDWebImage/Core (= 4.3.3)
-  - SDWebImage/Core (4.3.3)
+  - Realm (3.7.5):
+    - Realm/Headers (= 3.7.5)
+  - Realm/Headers (3.7.5)
+  - SDWebImage (4.4.2):
+    - SDWebImage/Core (= 4.4.2)
+  - SDWebImage/Core (4.4.2)
   - SwipeView (1.3.2)
 
 DEPENDENCIES:
-  - iCarousel
   - MXParallaxHeader
   - Realm (~> 3.7.1)
   - SDWebImage
@@ -18,19 +16,17 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - iCarousel
     - MXParallaxHeader
     - Realm
     - SDWebImage
     - SwipeView
 
 SPEC CHECKSUMS:
-  iCarousel: d782f635afac190c49bb8ee455882284cff8b85f
   MXParallaxHeader: 858c403532ed933b381556a81ce333d7065ad182
-  Realm: 906be37d52f17f25484ac01643a7f26a9d3bfbd5
-  SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
+  Realm: c286caf4dbf346ce24aad49ca76c7ce622d4a082
+  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
 
-PODFILE CHECKSUM: 69d4714aaeae9993a3bc1c9a2cfd7d0cb2b54929
+PODFILE CHECKSUM: 7d8c9ac5d47fee6e446633df840f9acd36a8c6b5
 
 COCOAPODS: 1.5.3

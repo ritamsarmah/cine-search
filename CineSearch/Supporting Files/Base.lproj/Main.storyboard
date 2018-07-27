@@ -59,13 +59,13 @@
                         <outlet property="connectionLabel" destination="3Du-E3-Kbc" id="ENt-dg-wCs"/>
                         <outlet property="movieCarousel" destination="byu-76-57T" id="I41-tP-wjp"/>
                         <outlet property="movieTableView" destination="3Kr-AT-HEo" id="1yZ-tv-pfC"/>
-                        <segue destination="LId-c8-I7P" kind="showDetail" identifier="showBannerDetail" id="PGb-wc-TaV"/>
-                        <segue destination="LId-c8-I7P" kind="showDetail" identifier="showMovieDetail" id="1gB-r4-ctE"/>
+                        <segue destination="yQt-gz-axB" kind="showDetail" identifier="showBannerDetail" id="jKp-ti-GqQ"/>
+                        <segue destination="yQt-gz-axB" kind="showDetail" identifier="showMovieDetail" id="FiT-tN-PAG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2XG-z6-uzP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749.60000000000002" y="-1676.311844077961"/>
+            <point key="canvasLocation" x="705" y="-1307"/>
         </scene>
         <!--Master-->
         <scene sceneID="pY4-Hu-kfo">
@@ -88,7 +88,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8fS-aE-onr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-28" y="-618"/>
+            <point key="canvasLocation" x="-46" y="-630"/>
         </scene>
         <!--Favorites-->
         <scene sceneID="hUt-AR-Naq">
@@ -119,12 +119,11 @@
                     <toolbarItems/>
                     <connections>
                         <segue destination="RMx-3f-FxP" kind="relationship" relationship="masterViewController" id="BlO-5A-QYV"/>
-                        <segue destination="vC3-pB-5Vb" kind="relationship" relationship="detailViewController" id="Tll-UG-LXB"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cZU-Oi-B1e" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-860" y="-221"/>
+            <point key="canvasLocation" x="-860" y="-630"/>
         </scene>
         <!--SearchMaster-->
         <scene sceneID="g2O-cf-xJM">
@@ -270,12 +269,12 @@
                     <connections>
                         <outlet property="searchBar" destination="1Y5-tF-oFH" id="clQ-8i-spP"/>
                         <outlet property="tableView" destination="r7i-6Z-zg0" id="umj-Oq-boy"/>
-                        <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showMovie" id="5gY-gu-Rvd"/>
+                        <segue destination="yQt-gz-axB" kind="showDetail" identifier="showMovie" id="u4d-Fy-l7G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="he8-ns-rPC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="824.79999999999995" y="-618.44077961019491"/>
+            <point key="canvasLocation" x="705" y="-630"/>
         </scene>
         <!--Discover-->
         <scene sceneID="nKu-Ke-GD8">
@@ -284,28 +283,11 @@
                     <tabBarItem key="tabBarItem" title="Discover" image="Discover" id="JUD-Hf-7hp"/>
                     <connections>
                         <segue destination="H84-8d-cJv" kind="relationship" relationship="masterViewController" id="SCw-to-vQ4"/>
-                        <segue destination="LId-c8-I7P" kind="relationship" relationship="detailViewController" id="Czc-bV-2Qv"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vJt-Wh-dDm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-860" y="-1676"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="r7l-gg-dq7">
-            <objects>
-                <navigationController navigationBarHidden="YES" id="vC3-pB-5Vb" sceneMemberID="viewController">
-                    <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="DjV-YW-jjY">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="yQt-gz-axB" kind="relationship" relationship="rootViewController" id="IRH-fB-Zn7"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SLD-UC-DBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-45" y="129"/>
+            <point key="canvasLocation" x="-860" y="-1305"/>
         </scene>
         <!--Master-->
         <scene sceneID="9Yp-Yd-qLM">
@@ -331,24 +313,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wsX-K3-0Uc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-46" y="-2006"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="uHO-WX-Qm2">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="LId-c8-I7P" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="r20-d9-pIY">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="yQt-gz-axB" kind="relationship" relationship="rootViewController" id="USQ-ZQ-G6K"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SyQ-vS-DqM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-47" y="-1304"/>
+            <point key="canvasLocation" x="-47" y="-1306"/>
         </scene>
         <!--Master-->
         <scene sceneID="7gg-Pq-1DQ">
@@ -371,7 +336,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2WK-oG-4Zx" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-47" y="850"/>
+            <point key="canvasLocation" x="-47" y="63"/>
         </scene>
         <!--Favorites-->
         <scene sceneID="QBB-3w-63q">
@@ -381,12 +346,11 @@
                     <toolbarItems/>
                     <connections>
                         <segue destination="1Hn-MN-Udt" kind="relationship" relationship="masterViewController" id="DNg-Aa-dcM"/>
-                        <segue destination="Rt2-jh-XjN" kind="relationship" relationship="detailViewController" id="SXA-6M-Z5t"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Prc-ZV-f0M" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-860" y="1258"/>
+            <point key="canvasLocation" x="-860" y="63"/>
         </scene>
         <!--SearchMaster-->
         <scene sceneID="u7r-xa-wcl">
@@ -496,7 +460,7 @@
                                     <outlet property="ratingView" destination="r1d-F2-Kdj" id="tgs-oB-ocX"/>
                                     <outlet property="releaseLabel" destination="Zt7-8A-wpJ" id="ZEs-Vu-5Zw"/>
                                     <outlet property="titleLabel" destination="fle-45-d3c" id="Zvc-46-y3C"/>
-                                    <segue destination="Rt2-jh-XjN" kind="showDetail" identifier="showFavoriteMovie" id="URd-go-6mu"/>
+                                    <segue destination="yQt-gz-axB" kind="showDetail" identifier="showFavoriteMovie" id="y3O-5k-Hf6"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -511,23 +475,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mlq-9o-BBd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="749.60000000000002" y="1044.8275862068967"/>
-        </scene>
-        <!--FavoritesDetail-->
-        <scene sceneID="bep-Mo-AcV">
-            <objects>
-                <navigationController title="FavoritesDetail" navigationBarHidden="YES" id="Rt2-jh-XjN" sceneMemberID="viewController">
-                    <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="JTh-0X-6o9">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="yQt-gz-axB" kind="relationship" relationship="rootViewController" id="vdv-tw-0Lh"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kgO-FM-D6p" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-46" y="1608"/>
+            <point key="canvasLocation" x="705" y="64"/>
         </scene>
         <!--Detail-->
         <scene sceneID="vvX-ZP-cpG">
@@ -806,7 +754,7 @@
                 </view>
                 <swipeGestureRecognizer direction="right" id="one-eB-ROG"/>
             </objects>
-            <point key="canvasLocation" x="749.60000000000002" y="298.2008995502249"/>
+            <point key="canvasLocation" x="1623" y="-630"/>
         </scene>
     </scenes>
     <resources>
@@ -816,9 +764,6 @@
         <image name="Star" width="102" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="USQ-ZQ-G6K"/>
-        <segue reference="URd-go-6mu"/>
-        <segue reference="1gB-r4-ctE"/>
-        <segue reference="5gY-gu-Rvd"/>
+        <segue reference="jKp-ti-GqQ"/>
     </inferredMetricsTieBreakers>
 </document>

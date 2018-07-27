@@ -35,7 +35,11 @@ static NSString * const kTableName = @"table";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.title = @"Favorites";
+
+    if (@available(iOS 11.0, *)) {
+        self.navigationController.navigationBar.prefersLargeTitles = YES;
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
+    }
     
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
@@ -46,10 +50,6 @@ static NSString * const kTableName = @"table";
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     } else {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
-    }
-
-    if (@available(iOS 11.0, *)) {
-        self.navigationController.navigationBar.prefersLargeTitles = YES;
     }
 }
 
@@ -67,6 +67,8 @@ static NSString * const kTableName = @"table";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = @"Favorites";
     
     BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
     activityIndicator.disablesInteraction = NO;
@@ -199,7 +201,7 @@ static NSString * const kTableName = @"table";
     self.enteredSegue = YES;
     if ([[segue identifier] isEqualToString:@"showFavoriteMovie"]) {
         MovieTableViewCell *cell = (MovieTableViewCell *)sender;
-        DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+        DetailViewController *controller = segue.destinationViewController;
         [controller setMovie:self.moviesForID[@(cell.movieID.movieID)]];
     }
 }

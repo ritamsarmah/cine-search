@@ -19,69 +19,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CineSearch/Controllers/DetailViewController.m"
-            timestampString = "554143123.005643"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "339"
-            endingLineNumber = "339"
-            landmarkName = "-openTrailer:"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[DetailViewController openTrailer:]"
-                  moduleName = "CineSearch"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rs478s/Documents/Development/cine-search/CineSearch/Controllers/DetailViewController.m"
-                  timestampString = "554074312.776731"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "330"
-                  endingLineNumber = "330"
-                  offsetFromSymbolStart = "56">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__36-[DetailViewController openTrailer:]_block_invoke"
-                  moduleName = "CineSearch"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rs478s/Documents/Development/cine-search/CineSearch/Controllers/DetailViewController.m"
-                  timestampString = "554074312.779807"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "331"
-                  endingLineNumber = "331"
-                  offsetFromSymbolStart = "48">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__destroy_helper_block_.470"
-                  moduleName = "CineSearch"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rs478s/Documents/Development/cine-search/CineSearch/Controllers/DetailViewController.m"
-                  timestampString = "554074312.782586"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "330"
-                  endingLineNumber = "330"
-                  offsetFromSymbolStart = "20">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "CineSearch/Supporting Files/AppDelegate.m"
             timestampString = "554083474.022781"
             startingColumnNumber = "9223372036854775807"

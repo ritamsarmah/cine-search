@@ -24,7 +24,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.title = @"Discover";
     
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
@@ -62,6 +61,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = @"Discover";
 
     self.manager = [MovieSingleton sharedManager];
     self.bannerMovies = [NSMutableArray arrayWithCapacity:4];
@@ -241,8 +242,14 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [self resetTimer];
             [self.movieCarousel reloadData];
-            [self.movieCarousel setHidden:NO];
-            [self.movieTableView setHidden:NO];
+            [UIView transitionWithView:self.view
+                              duration:0.3
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                [self.movieCarousel setHidden:NO];
+                                [self.movieTableView setHidden:NO];
+                            }
+                            completion:nil];
             [self.activityIndicator stopAnimating];
         });
     });
@@ -289,6 +296,7 @@
                                                     selector:@selector(startAnimating)
                                                     userInfo:nil
                                                      repeats:NO];
+    [UIApplication.sharedApplication beginIgnoringInteractionEvents];
     [self.manager.database getMovieForID:selectedMovie.idNumber.integerValue completion:^(Movie *movie) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
@@ -302,9 +310,10 @@
     self.enteredSegue = YES;
     [carouselTimer invalidate];
     Movie *movie = (Movie *)sender;
-    DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+    DetailViewController *controller = segue.destinationViewController;
     [controller setMovie:movie];
     controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
+    [UIApplication.sharedApplication endIgnoringInteractionEvents];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -445,6 +454,7 @@
                                                     selector:@selector(startAnimating)
                                                     userInfo:nil
                                                      repeats:NO];
+    [UIApplication.sharedApplication beginIgnoringInteractionEvents];
     [self.manager.database getMovieForID:cell.movie.idNumber.integerValue completion:^(Movie *movie) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];

@@ -249,10 +249,6 @@
         [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
         [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
     }
-    
-    if (@available(iOS 11.0, *)) {
-        self.navigationController.navigationBar.prefersLargeTitles = NO;
-    }
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -338,9 +334,9 @@
 - (IBAction)openTrailer:(UIButton *)sender {
     [self.manager.database getTrailerForID:self.movie.idNumber completion:^(NSString *trailer) {
         if (trailer != nil) {
-//            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", trailer]];
+            //            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", trailer]];
             NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/embed/%@?rel=0", trailer]];
-
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 AppDelegate *shared = (AppDelegate *)[UIApplication sharedApplication].delegate;
                 shared.isRotationEnabled = YES;

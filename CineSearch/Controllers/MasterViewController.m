@@ -117,7 +117,7 @@
     self.enteredSegue = YES;
     if ([[segue identifier] isEqualToString:@"showMovie"]) {
         Movie *movie = (Movie *)sender;
-        DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
+        DetailViewController *controller = segue.destinationViewController;
         [controller setMovie:movie];
         controller.isFavorite = [self isMovieInFavorites:[movie.idNumber integerValue]];
         [self.searchBar endEditing:YES];
