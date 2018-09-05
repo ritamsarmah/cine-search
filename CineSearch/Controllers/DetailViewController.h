@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class MovieSingleton;
+@class MovieSearchManager;
 @class Movie;
 
 @interface DetailViewController : UIViewController <UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
@@ -19,7 +19,7 @@
 @property (weak, nonatomic) NSURL *trailerURL;
 @property (nonatomic) BOOL isFavorite;
 @property (nonatomic) BOOL castImagesFromWeb;
-@property MovieSingleton *manager;
+@property MovieSearchManager *manager;
 
 @property (weak, nonatomic) IBOutlet UILabel *movieTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *detailLabel;

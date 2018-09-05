@@ -1,14 +1,14 @@
 //
-//  MovieSingleton.m
+//  MovieSearchManager.m
 //  CineSearch
 //
 //  Created by Ritam Sarmah on 12/22/16.
 //  Copyright © 2016 Ritam Sarmah. All rights reserved.
 //
 
-#import "MovieSingleton.h"
+#import "MovieSearchManager.h"
 
-@implementation MovieSingleton
+@implementation MovieSearchManager
 
 @synthesize database;
 

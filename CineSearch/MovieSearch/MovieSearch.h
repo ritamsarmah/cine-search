@@ -14,17 +14,15 @@
 
 @property NSDictionary *genres;
 
-- (void)search:(NSString*)query completion:(void (^)(NSMutableArray*))completion;
+- (void)getMoviesForQuery:(NSString*)query completion:(void (^)(NSMutableArray*))completion;
+
+- (void)getNowPlaying:(void (^)(NSMutableArray *))completion;
+- (void)getPopular:(void (^)(NSMutableArray *))completion;
+
+// TODO: Refactor to receive MovieID
 - (void)getMovieForID:(NSInteger)idNumber completion:(void (^)(Movie *))completion;
 - (void)getTrailerForID:(NSNumber *)idNumber completion:(void (^)(NSString *))completion;
 - (void)getCastForID:(NSInteger)idNumber completion:(void (^)(NSArray *))completion;
-- (void)getNowPlaying:(void (^)(NSMutableArray *))completion;
-- (void)getPopular:(void (^)(NSMutableArray *))completion;
 - (void)getRecommendedForID:(NSInteger)idNumber completion:(void (^)(NSMutableArray *))completion;
-
-- (NSMutableURLRequest *)getRequestWithStringURL:(NSString *)stringURL;
-- (Movie *)createMovieFromDict:(NSDictionary *)movieDict isOnlyMovie:(BOOL)isOnlyMovie;
-- (NSString *)formatRuntime:(int)minutes;
-- (NSString *)formatDate:(NSString*)stringDate;
 
 @end

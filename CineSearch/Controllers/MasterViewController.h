@@ -11,7 +11,7 @@
 #import "BoxActivityIndicatorView.h"
 
 @class DetailViewController;
-@class MovieSingleton;
+@class MovieSearchManager;
 
 @interface MasterViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIGestureRecognizerDelegate>
 
@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property NSMutableArray *movies;
-@property MovieSingleton *manager;
+@property MovieSearchManager *manager;
 
 @property BOOL enteredSegue;
 

@@ -13,7 +13,7 @@
 #import <SwipeView/SwipeView.h>
 
 @class DetailViewController;
-@class MovieSingleton;
+@class MovieSearchManager;
 
 @interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, SwipeViewDelegate, SwipeViewDataSource> {
     NSTimer *carouselTimer;
@@ -27,7 +27,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITableView *movieTableView;
 
-@property MovieSingleton *manager;
+@property MovieSearchManager *manager;
 @property NSMutableArray *nowPlayingMovies;
 @property NSMutableArray *popularMovies;
 @property NSMutableArray *recommendedMovies;

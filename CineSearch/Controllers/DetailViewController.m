@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "DetailViewController.h"
-#import "MovieSingleton.h"
+#import "MovieSearchManager.h"
 #import "MovieID.h"
 #import "CastCollectionViewCell.h"
 #import <Realm/Realm.h>
@@ -199,7 +199,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.manager = [MovieSingleton sharedManager];
+    self.manager = [MovieSearchManager sharedManager];
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
     self.scrollView.delegate = self;
     self.castCollectionView.delegate = self;
@@ -248,6 +248,13 @@
     } else {
         [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
         [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     }
 }
 

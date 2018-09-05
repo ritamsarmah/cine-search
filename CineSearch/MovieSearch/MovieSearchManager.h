@@ -1,5 +1,5 @@
 //
-//  MovieSingleton.h
+//  MovieSearchManager.h
 //  CineSearch
 //
 //  Created by Ritam Sarmah on 12/22/16.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MovieSearch.h"
 
-@interface MovieSingleton : NSObject {
+@interface MovieSearchManager : NSObject {
     MovieSearch *database;
 }
 

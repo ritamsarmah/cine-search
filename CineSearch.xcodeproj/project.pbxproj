@@ -21,7 +21,7 @@
 		20C782171FA021AA00AEA19A /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC551FA014AD00D0C8B1 /* Movie.m */; };
 		20C782181FA021AA00AEA19A /* MovieID.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC571FA014AD00D0C8B1 /* MovieID.m */; };
 		20C782191FA021AA00AEA19A /* MovieSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC591FA014AD00D0C8B1 /* MovieSearch.m */; };
-		20C7821A1FA021AA00AEA19A /* MovieSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC5B1FA014AD00D0C8B1 /* MovieSingleton.m */; };
+		20C7821A1FA021AA00AEA19A /* MovieSearchManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC5B1FA014AD00D0C8B1 /* MovieSearchManager.m */; };
 		20C7821B1FA021AA00AEA19A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC421FA014AD00D0C8B1 /* AppDelegate.m */; };
 		20C7821D1FA021AA00AEA19A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC511FA014AD00D0C8B1 /* main.m */; };
 		20F5D26D1FF960DB0087C1C6 /* CastCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */; };
@@ -54,8 +54,8 @@
 		2089BC571FA014AD00D0C8B1 /* MovieID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MovieID.m; sourceTree = "<group>"; };
 		2089BC581FA014AD00D0C8B1 /* MovieSearch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovieSearch.h; sourceTree = "<group>"; };
 		2089BC591FA014AD00D0C8B1 /* MovieSearch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MovieSearch.m; sourceTree = "<group>"; };
-		2089BC5A1FA014AD00D0C8B1 /* MovieSingleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovieSingleton.h; sourceTree = "<group>"; };
-		2089BC5B1FA014AD00D0C8B1 /* MovieSingleton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MovieSingleton.m; sourceTree = "<group>"; };
+		2089BC5A1FA014AD00D0C8B1 /* MovieSearchManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovieSearchManager.h; sourceTree = "<group>"; };
+		2089BC5B1FA014AD00D0C8B1 /* MovieSearchManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MovieSearchManager.m; sourceTree = "<group>"; };
 		2089BC5C1FA014AD00D0C8B1 /* MovieTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovieTableViewCell.h; sourceTree = "<group>"; };
 		2089BC5D1FA014AD00D0C8B1 /* MovieTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MovieTableViewCell.m; sourceTree = "<group>"; };
 		2089BC5E1FA014AD00D0C8B1 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -98,6 +98,7 @@
 		2089BC3E1FA014AD00D0C8B1 /* CineSearch */ = {
 			isa = PBXGroup;
 			children = (
+				D0CC2EE02140554D005CB5BE /* MovieSearch */,
 				D0C27AE820F7ED92002299C4 /* Controllers */,
 				2089BC601FA014C100D0C8B1 /* Models */,
 				208C9D8A2070198C00E415F1 /* Views */,
@@ -115,10 +116,6 @@
 				2089BC551FA014AD00D0C8B1 /* Movie.m */,
 				2089BC561FA014AD00D0C8B1 /* MovieID.h */,
 				2089BC571FA014AD00D0C8B1 /* MovieID.m */,
-				2089BC581FA014AD00D0C8B1 /* MovieSearch.h */,
-				2089BC591FA014AD00D0C8B1 /* MovieSearch.m */,
-				2089BC5A1FA014AD00D0C8B1 /* MovieSingleton.h */,
-				2089BC5B1FA014AD00D0C8B1 /* MovieSingleton.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -195,6 +192,17 @@
 				2089BC531FA014AD00D0C8B1 /* MasterViewController.m */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		D0CC2EE02140554D005CB5BE /* MovieSearch */ = {
+			isa = PBXGroup;
+			children = (
+				2089BC581FA014AD00D0C8B1 /* MovieSearch.h */,
+				2089BC591FA014AD00D0C8B1 /* MovieSearch.m */,
+				2089BC5A1FA014AD00D0C8B1 /* MovieSearchManager.h */,
+				2089BC5B1FA014AD00D0C8B1 /* MovieSearchManager.m */,
+			);
+			path = MovieSearch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,7 +338,7 @@
 				20C782181FA021AA00AEA19A /* MovieID.m in Sources */,
 				20C782191FA021AA00AEA19A /* MovieSearch.m in Sources */,
 				20F5D2701FF967CE0087C1C6 /* Actor.m in Sources */,
-				20C7821A1FA021AA00AEA19A /* MovieSingleton.m in Sources */,
+				20C7821A1FA021AA00AEA19A /* MovieSearchManager.m in Sources */,
 				20C7821B1FA021AA00AEA19A /* AppDelegate.m in Sources */,
 				20C7821D1FA021AA00AEA19A /* main.m in Sources */,
 				D0C27B4620F7FD61002299C4 /* Constants.m in Sources */,

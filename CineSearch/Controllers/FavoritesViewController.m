@@ -78,7 +78,7 @@ static NSString * const kTableName = @"table";
     
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
-    self.manager = [[MovieSingleton alloc] init];
+    self.manager = [[MovieSearchManager alloc] init];
     self.moviesForID = [[NSMutableDictionary alloc] init];
     self.enteredSegue = NO;
     self.extendedLayoutIncludesOpaqueBars = YES;

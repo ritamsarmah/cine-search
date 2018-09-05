@@ -7,7 +7,7 @@
 //
 
 #import "MovieTableViewCell.h"
-#import "MovieSingleton.h"
+#import "MovieSearchManager.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation MovieTableViewCell

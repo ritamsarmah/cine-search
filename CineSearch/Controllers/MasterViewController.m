@@ -8,7 +8,7 @@
 
 #import "MasterViewController.h"
 #import "MovieTableViewCell.h"
-#import "MovieSingleton.h"
+#import "MovieSearchManager.h"
 #import "DetailViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Realm/Realm.h>
@@ -23,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.manager = [MovieSingleton sharedManager];
+    self.manager = [MovieSearchManager sharedManager];
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     self.extendedLayoutIncludesOpaqueBars = YES;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
@@ -133,7 +133,7 @@
         [self.activityIndicator startAnimating];
         [searchBar endEditing:YES];
         [self.tableView setUserInteractionEnabled:NO];
-        [self.manager.database search:searchBar.text completion:^(NSMutableArray *movies) {
+        [self.manager.database getMoviesForQuery:searchBar.text completion:^(NSMutableArray *movies) {
             if (movies == nil) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self displayConnectionAlert];
@@ -208,7 +208,7 @@
 
 - (void)instantSearch {
     if (self.connectedToInternet) {
-        [self.manager.database search:self.searchBar.text completion:^(NSMutableArray *movies) {
+        [self.manager.database getMoviesForQuery:self.searchBar.text completion:^(NSMutableArray *movies) {
             if (self.movies != movies) {
                 if (movies.count != 0) {
                     self.movies = movies;

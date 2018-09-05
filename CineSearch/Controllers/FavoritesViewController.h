@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MovieSingleton.h"
+#import "MovieSearchManager.h"
 #import "BoxActivityIndicatorView.h"
 
 @class DetailViewController;
@@ -17,7 +17,7 @@
 @property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property NSMutableDictionary *moviesForID;
-@property MovieSingleton *manager;
+@property MovieSearchManager *manager;
 @property BOOL enteredSegue;
 @property BOOL finishedDownloadingMovies;
 
