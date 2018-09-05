@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MovieID.h"
+#import "FavoriteButton.h"
 
 @interface MovieTableViewCell : UITableViewCell
 
@@ -16,11 +17,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *releaseLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratingLabel;
 @property (weak, nonatomic) IBOutlet UIView *ratingView;
-@property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
+@property (weak, nonatomic) IBOutlet FavoriteButton *favoriteButton;
 
 @property (nonatomic) MovieID *movieID;
 
-- (IBAction)favoritePressed:(UIButton *)sender;
+- (IBAction)favoritePressed:(FavoriteButton *)sender;
 - (BOOL)isMovieInFavorites:(NSInteger)movieID;
 
 @end

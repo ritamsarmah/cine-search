@@ -249,13 +249,7 @@
     cell.ratingLabel.text = [NSString stringWithFormat:@"%0.1f", [movie.rating doubleValue]];
     
     // Set favorites icon
-    if ([cell isMovieInFavorites:[movie.idNumber integerValue]]) {
-        [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-        [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
-    } else {
-        [cell.favoriteButton setTintColor:[UIColor whiteColor]];
-        [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
-    }
+    [cell.favoriteButton setFavorite:[cell isMovieInFavorites:[movie.idNumber integerValue]] animated:NO];
     
     // Download poster image
     cell.posterImageView.image = [UIImage imageNamed:@"BlankMoviePoster"];

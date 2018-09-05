@@ -203,7 +203,7 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cI2-9R-ysG">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cI2-9R-ysG" customClass="FavoriteButton">
                                                     <rect key="frame" x="312" y="69" width="48" height="36"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="36" id="CKr-GA-3aq"/>
@@ -423,7 +423,7 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mm6-Xf-tXM">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mm6-Xf-tXM" customClass="FavoriteButton">
                                             <rect key="frame" x="311" y="69" width="48" height="36"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="36" id="2gZ-SR-05n"/>
@@ -658,7 +658,7 @@
                                     <action selector="openTrailer:" destination="yQt-gz-axB" eventType="touchUpInside" id="1Yi-BY-a67"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0v-EE-8bh">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0v-EE-8bh" customClass="FavoriteButton">
                                 <rect key="frame" x="130" y="566" width="48" height="36"/>
                                 <color key="backgroundColor" red="0.23429971929999999" green="0.26189869640000002" blue="0.31177157160000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -668,7 +668,7 @@
                                 <color key="tintColor" red="1" green="0.36754447220000003" blue="0.32097727059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" image="HeartFilled"/>
                                 <connections>
-                                    <action selector="favoritePressed:" destination="yQt-gz-axB" eventType="touchUpInside" id="j4B-3p-xcP"/>
+                                    <action selector="favoritePressed:" destination="yQt-gz-axB" eventType="touchUpInside" id="m5z-Si-mam"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a66-TQ-i2B">
@@ -713,7 +713,7 @@
                         <outlet property="castCollectionView" destination="Bjz-5D-4dq" id="O7l-e9-PTF"/>
                         <outlet property="castCollectionViewHeight" destination="eJa-Yz-LJ7" id="SaE-We-yTI"/>
                         <outlet property="detailLabel" destination="akq-0k-HhL" id="z82-Ld-Duv"/>
-                        <outlet property="favoriteButton" destination="U0v-EE-8bh" id="eDZ-pv-syJ"/>
+                        <outlet property="favoriteButton" destination="U0v-EE-8bh" id="tE4-qD-LLc"/>
                         <outlet property="genreLabel" destination="Hlx-TV-DCv" id="lRl-gU-HqI"/>
                         <outlet property="headerView" destination="HEt-Kt-5gp" id="f0K-dH-SOU"/>
                         <outlet property="movieTitleLabel" destination="Lhs-6n-4To" id="qS0-GO-brm"/>
@@ -769,6 +769,6 @@
         <image name="Star" width="102" height="96"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="jKp-ti-GqQ"/>
+        <segue reference="y3O-5k-Hf6"/>
     </inferredMetricsTieBreakers>
 </document>

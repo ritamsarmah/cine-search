@@ -42,53 +42,21 @@
     }
 }
 
-- (IBAction)favoritePressed:(UIButton *)sender {
+- (IBAction)favoritePressed:(FavoriteButton *)sender {
     RLMRealm *realm = RLMRealm.defaultRealm;
-    if (self.favoriteButton.tintColor != [UIColor whiteColor]) {
-        // Animate to empty heart
-        [UIView animateWithDuration:0.3/2.5 animations:^{
-            sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
-            [self.favoriteButton setTintColor:[UIColor whiteColor]];
-            [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.3/2.5 animations:^{
-                sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.3/2.5 animations:^{
-                    sender.transform = CGAffineTransformIdentity;
-                }];
-            }];
+    if ([sender toggleWithAnimation:YES]) {
+        // Add to favorites list
+        [realm transactionWithBlock:^{
+            [MovieID createInRealm:realm withValue:@{@"movieID": @(self.movieID.movieID)}];
         }];
-        
+    } else {
+        // Remove from favorites list
         // Remove from favorites list
         MovieID *movieToDelete = [MovieID objectForPrimaryKey:@(self.movieID.movieID)];
         [realm transactionWithBlock:^{
             [realm deleteObject:movieToDelete];
         }];
-        
-    } else {
-        // Animate to red filled heart
-        [UIView animateWithDuration:0.3/2.5 animations:^{
-            sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
-            [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-            [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.3/2.5 animations:^{
-                sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.3/2.5 animations:^{
-                    sender.transform = CGAffineTransformIdentity;
-                }];
-            }];
-        }];
-        
-        // Add to favorites list
-        [realm transactionWithBlock:^{
-            [MovieID createInRealm:realm withValue:@{@"movieID": @(self.movieID.movieID)}];
-        }];
-        
     }
-    
 }
 
 - (BOOL)isMovieInFavorites:(NSInteger)movieID {

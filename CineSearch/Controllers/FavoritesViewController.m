@@ -163,8 +163,7 @@ static NSString * const kTableName = @"table";
     cell.tag = indexPath.row;
     
     // Set favorites icon
-    [cell.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-    [cell.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
+    [cell.favoriteButton setFavorite:YES animated:NO];
     
     Movie *movie = self.moviesForID[@(key.movieID)];
     if (movie != nil) {

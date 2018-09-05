@@ -33,8 +33,6 @@
     // Configure buttons
     self.trailerButton.layer.cornerRadius = 5;
     self.trailerButton.layer.masksToBounds = YES;
-    self.favoriteButton.layer.cornerRadius = 5;
-    self.favoriteButton.layer.masksToBounds = YES;
     self.ratingView.layer.cornerRadius = 5;
     self.ratingView.layer.masksToBounds = YES;
     
@@ -225,13 +223,7 @@
             }
         }
         
-        if (!weakSelf.isFavorite) {
-            [weakSelf.favoriteButton setTintColor:[UIColor whiteColor]];
-            [weakSelf.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
-        } else {
-            [weakSelf.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-            [weakSelf.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
-        }
+        [weakSelf.favoriteButton setFavorite:weakSelf.isFavorite animated:NO];
     }];
 }
 
@@ -241,14 +233,7 @@
     shared.isRotationEnabled = NO;
     [[UIDevice currentDevice] setValue:@(UIInterfaceOrientationPortrait) forKey:@"orientation"];
     [UINavigationController attemptRotationToDeviceOrientation];
-    
-    if (!self.isFavorite) {
-        [self.favoriteButton setTintColor:[UIColor whiteColor]];
-        [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
-    } else {
-        [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-        [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
-    }
+    [self.favoriteButton setFavorite:self.isFavorite animated:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -290,51 +275,19 @@
     [navCon popViewControllerAnimated: YES];
 }
 
-- (IBAction)favoritePressed:(UIButton *)sender {
+- (IBAction)favoritePressed:(FavoriteButton *)sender {
     RLMRealm *realm = RLMRealm.defaultRealm;
-    if (self.favoriteButton.tintColor != [UIColor whiteColor]) {
-        // Animate to empty heart
-        [UIView animateWithDuration:0.3/2.5 animations:^{
-            sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
-            [self.favoriteButton setTintColor:[UIColor whiteColor]];
-            [self.favoriteButton setImage:[UIImage imageNamed:@"HeartHollow"] forState:UIControlStateNormal];
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.3/2.5 animations:^{
-                sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.3/2.5 animations:^{
-                    sender.transform = CGAffineTransformIdentity;
-                }];
-            }];
+    if ([sender toggleWithAnimation:YES]) {
+        // Add to favorites list
+        [realm transactionWithBlock:^{
+            [MovieID createInRealm:realm withValue:@{@"movieID": @([self.movie.idNumber integerValue])}];
         }];
-        
+    } else {
         // Remove from favorites list
         MovieID *movieToDelete = [MovieID objectForPrimaryKey:@([self.movie.idNumber integerValue])];
-        
-        [realm beginWriteTransaction];
-        [realm deleteObject:movieToDelete];
-        [realm commitWriteTransaction];
-        
-    } else {
-        // Animate to red filled heart
-        [UIView animateWithDuration:0.3/2.5 animations:^{
-            sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
-            [self.favoriteButton setTintColor:[UIColor colorWithRed:1.00 green:0.32 blue:0.30 alpha:1.0]];
-            [self.favoriteButton setImage:[UIImage imageNamed:@"HeartFilled"] forState:UIControlStateNormal];
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.3/2.5 animations:^{
-                sender.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.3/2.5 animations:^{
-                    sender.transform = CGAffineTransformIdentity;
-                }];
-            }];
+        [realm transactionWithBlock:^{
+            [realm deleteObject:movieToDelete];
         }];
-        
-        // Add to favorites list
-        [realm beginWriteTransaction];
-        [MovieID createInRealm:realm withValue:@{@"movieID": @([self.movie.idNumber integerValue])}];
-        [realm commitWriteTransaction];
     }
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FavoriteButton.h"
 
 @class MovieSearchManager;
 @class Movie;
@@ -28,7 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIView *ratingView;
 @property (weak, nonatomic) IBOutlet UILabel *overviewLabel;
 @property (weak, nonatomic) IBOutlet UIButton *trailerButton;
-@property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
+@property (weak, nonatomic) IBOutlet FavoriteButton *favoriteButton;
 @property (weak, nonatomic) IBOutlet UIView *actionBackgroundView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *posterLoadingIndicator;
@@ -39,7 +40,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *castCollectionViewHeight;
 
 - (IBAction)back:(UIButton *)sender;
-- (IBAction)favoritePressed:(UIButton *)sender;
+- (IBAction)favoritePressed:(FavoriteButton *)sender;
 - (IBAction)openTrailer:(UIButton *)sender;
 
 @end

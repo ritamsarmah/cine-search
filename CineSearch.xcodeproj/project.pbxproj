@@ -28,6 +28,7 @@
 		20F5D2701FF967CE0087C1C6 /* Actor.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F5D26F1FF967CE0087C1C6 /* Actor.m */; };
 		41FF04661FFC0876BD5ACC11 /* Pods_CineSearch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CDCA266CEB095EDACAD5755 /* Pods_CineSearch.framework */; };
 		D0C27B4620F7FD61002299C4 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = D0C27B4520F7FD61002299C4 /* Constants.m */; };
+		D0CC2EE521407E7E005CB5BE /* FavoriteButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D0CC2EE421407E7E005CB5BE /* FavoriteButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,8 @@
 		C6E5F62CA664BFE04781295D /* Pods-CineSearch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CineSearch.release.xcconfig"; path = "Pods/Target Support Files/Pods-CineSearch/Pods-CineSearch.release.xcconfig"; sourceTree = "<group>"; };
 		D0C27B4420F7FD61002299C4 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		D0C27B4520F7FD61002299C4 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		D0CC2EE321407E7E005CB5BE /* FavoriteButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FavoriteButton.h; sourceTree = "<group>"; };
+		D0CC2EE421407E7E005CB5BE /* FavoriteButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FavoriteButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +150,8 @@
 				208C9D882070198900E415F1 /* BoxActivityIndicatorView.m */,
 				20F5D26B1FF960DB0087C1C6 /* CastCollectionViewCell.h */,
 				20F5D26C1FF960DB0087C1C6 /* CastCollectionViewCell.m */,
+				D0CC2EE321407E7E005CB5BE /* FavoriteButton.h */,
+				D0CC2EE421407E7E005CB5BE /* FavoriteButton.m */,
 				2089BC5C1FA014AD00D0C8B1 /* MovieTableViewCell.h */,
 				2089BC5D1FA014AD00D0C8B1 /* MovieTableViewCell.m */,
 			);
@@ -338,6 +343,7 @@
 				20C782181FA021AA00AEA19A /* MovieID.m in Sources */,
 				20C782191FA021AA00AEA19A /* MovieSearch.m in Sources */,
 				20F5D2701FF967CE0087C1C6 /* Actor.m in Sources */,
+				D0CC2EE521407E7E005CB5BE /* FavoriteButton.m in Sources */,
 				20C7821A1FA021AA00AEA19A /* MovieSearchManager.m in Sources */,
 				20C7821B1FA021AA00AEA19A /* AppDelegate.m in Sources */,
 				20C7821D1FA021AA00AEA19A /* main.m in Sources */,
