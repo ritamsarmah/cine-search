@@ -1,5 +1,5 @@
 //
-//  MasterViewController.h
+//  SearchViewController.h
 //  CineSearch
 //
 //  Created by Ritam Sarmah on 11/2/16.
@@ -13,7 +13,7 @@
 @class DetailViewController;
 @class MovieSearchManager;
 
-@interface MasterViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIGestureRecognizerDelegate>
+@interface SearchViewController : UIViewController<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 @property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;

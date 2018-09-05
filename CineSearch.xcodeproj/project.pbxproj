@@ -15,7 +15,7 @@
 		20C782111FA021AA00AEA19A /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC4B1FA014AD00D0C8B1 /* DetailViewController.m */; };
 		20C782121FA021AA00AEA19A /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC4D1FA014AD00D0C8B1 /* DiscoverViewController.m */; };
 		20C782131FA021AA00AEA19A /* FavoritesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC4F1FA014AD00D0C8B1 /* FavoritesViewController.m */; };
-		20C782141FA021AA00AEA19A /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC531FA014AD00D0C8B1 /* MasterViewController.m */; };
+		20C782141FA021AA00AEA19A /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC531FA014AD00D0C8B1 /* SearchViewController.m */; };
 		20C782151FA021AA00AEA19A /* MovieTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC5D1FA014AD00D0C8B1 /* MovieTableViewCell.m */; };
 		20C782161FA021AA00AEA19A /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC5F1FA014AD00D0C8B1 /* Reachability.m */; };
 		20C782171FA021AA00AEA19A /* Movie.m in Sources */ = {isa = PBXBuildFile; fileRef = 2089BC551FA014AD00D0C8B1 /* Movie.m */; };
@@ -47,8 +47,8 @@
 		2089BC4F1FA014AD00D0C8B1 /* FavoritesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FavoritesViewController.m; sourceTree = "<group>"; };
 		2089BC501FA014AD00D0C8B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2089BC511FA014AD00D0C8B1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2089BC521FA014AD00D0C8B1 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		2089BC531FA014AD00D0C8B1 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		2089BC521FA014AD00D0C8B1 /* SearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		2089BC531FA014AD00D0C8B1 /* SearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		2089BC541FA014AD00D0C8B1 /* Movie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Movie.h; sourceTree = "<group>"; };
 		2089BC551FA014AD00D0C8B1 /* Movie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Movie.m; sourceTree = "<group>"; };
 		2089BC561FA014AD00D0C8B1 /* MovieID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovieID.h; sourceTree = "<group>"; };
@@ -193,8 +193,8 @@
 				2089BC4D1FA014AD00D0C8B1 /* DiscoverViewController.m */,
 				2089BC4E1FA014AD00D0C8B1 /* FavoritesViewController.h */,
 				2089BC4F1FA014AD00D0C8B1 /* FavoritesViewController.m */,
-				2089BC521FA014AD00D0C8B1 /* MasterViewController.h */,
-				2089BC531FA014AD00D0C8B1 /* MasterViewController.m */,
+				2089BC521FA014AD00D0C8B1 /* SearchViewController.h */,
+				2089BC531FA014AD00D0C8B1 /* SearchViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -335,7 +335,7 @@
 				20F5D26D1FF960DB0087C1C6 /* CastCollectionViewCell.m in Sources */,
 				20C782121FA021AA00AEA19A /* DiscoverViewController.m in Sources */,
 				20C782131FA021AA00AEA19A /* FavoritesViewController.m in Sources */,
-				20C782141FA021AA00AEA19A /* MasterViewController.m in Sources */,
+				20C782141FA021AA00AEA19A /* SearchViewController.m in Sources */,
 				20C782151FA021AA00AEA19A /* MovieTableViewCell.m in Sources */,
 				208C9D892070198900E415F1 /* BoxActivityIndicatorView.m in Sources */,
 				20C782161FA021AA00AEA19A /* Reachability.m in Sources */,

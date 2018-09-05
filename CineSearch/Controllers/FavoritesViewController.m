@@ -77,7 +77,7 @@ static NSString * const kTableName = @"table";
     [self.activityIndicator startAnimating];
     
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
-    self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
+    self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:MovieID.primaryKey ascending:YES];
     self.manager = [[MovieSearchManager alloc] init];
     self.moviesForID = [[NSMutableDictionary alloc] init];
     self.enteredSegue = NO;
@@ -86,7 +86,7 @@ static NSString * const kTableName = @"table";
     self.finishedDownloadingMovies = NO;
     if (self.array.count != 0) {
         for (MovieID *movieID in self.array) {
-            if (!self.moviesForID[@(movieID.movieID)]) {
+            if (!self.moviesForID[@(movieID.value)]) {
                 [self.manager.database getMovieForID:movieID completion:^(Movie *movie) {
                     [self.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -121,7 +121,7 @@ static NSString * const kTableName = @"table";
         
         // Download newly favorited movies if needed
         for (MovieID *movieID in results) {
-            if ([weakSelf.moviesForID objectForKey:@(movieID.movieID)] == nil) {
+            if ([weakSelf.moviesForID objectForKey:@(movieID.value)] == nil) {
                 [weakSelf.manager.database getMovieForID:movieID completion:^(Movie *movie) {
                     [weakSelf.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -151,8 +151,7 @@ static NSString * const kTableName = @"table";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Waits for movie data to be downloaded before populating tableview
-    if (self.finishedDownloadingMovies) return self.array.count;
-    else return 0;
+    return (self.finishedDownloadingMovies ? self.array.count : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -165,7 +164,7 @@ static NSString * const kTableName = @"table";
     // Set favorites icon
     [cell.favoriteButton setFavorite:YES animated:NO];
     
-    Movie *movie = self.moviesForID[@(key.movieID)];
+    Movie *movie = self.moviesForID[@(key.value)];
     if (movie != nil) {
         cell.titleLabel.text = movie.title;
         cell.releaseLabel.text = movie.releaseDate ?: @"TBA";
@@ -201,7 +200,7 @@ static NSString * const kTableName = @"table";
     if ([[segue identifier] isEqualToString:@"showFavoriteMovie"]) {
         MovieTableViewCell *cell = (MovieTableViewCell *)sender;
         DetailViewController *controller = segue.destinationViewController;
-        [controller setMovie:self.moviesForID[@(cell.movieID.movieID)]];
+        [controller setMovie:self.moviesForID[@(cell.movieID.value)]];
     }
 }
 

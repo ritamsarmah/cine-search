@@ -47,12 +47,12 @@
     if ([sender toggleWithAnimation:YES]) {
         // Add to favorites list
         [realm transactionWithBlock:^{
-            [MovieID createInRealm:realm withValue:@{@"movieID": @(self.movieID.movieID)}];
+            [MovieID createInRealm:realm withValue:@{MovieID.primaryKey: @(self.movieID.value)}];
         }];
     } else {
         // Remove from favorites list
         // Remove from favorites list
-        MovieID *movieToDelete = [MovieID objectForPrimaryKey:@(self.movieID.movieID)];
+        MovieID *movieToDelete = [MovieID objectForPrimaryKey:@(self.movieID.value)];
         [realm transactionWithBlock:^{
             [realm deleteObject:movieToDelete];
         }];
@@ -63,7 +63,7 @@
     RLMResults *favorites = [MovieID allObjects];
     
     for (MovieID *realmMovieID in favorites) {
-        if (realmMovieID.movieID == movieID) {
+        if (realmMovieID.value == movieID) {
             return YES;
         }
     }

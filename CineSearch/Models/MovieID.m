@@ -10,18 +10,18 @@
 
 @implementation MovieID
 
-- (instancetype)initWithID:(NSInteger)movieID {
+- (instancetype)initWithInteger:(NSInteger)value {
     self = [super init];
     
     if (self) {
-        _movieID = movieID;
+        _value = value;
     }
     
     return self;
 }
 
 + (NSString *)primaryKey {
-    return @"movieID";
+    return @"value";
 }
 
 @end

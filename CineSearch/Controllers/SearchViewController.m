@@ -1,19 +1,19 @@
 //
-//  MasterViewController.m
+//  SearchViewController.m
 //  CineSearch
 //
 //  Created by Ritam Sarmah on 11/2/16.
 //  Copyright © 2016 Ritam Sarmah. All rights reserved.
 //
 
-#import "MasterViewController.h"
+#import "SearchViewController.h"
 #import "MovieTableViewCell.h"
 #import "MovieSearchManager.h"
 #import "DetailViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Realm/Realm.h>
 
-@implementation MasterViewController
+@implementation SearchViewController
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
@@ -241,7 +241,7 @@
     
     // Set movieID for cell
     Movie *movie = [_movies objectAtIndex:indexPath.row];
-    cell.movieID = [[MovieID alloc] initWithID:[movie.idNumber intValue]];
+    cell.movieID = [[MovieID alloc] initWithInteger:[movie.idNumber intValue]];
     
     // Set labels based on movie data
     cell.titleLabel.text = movie.title;
@@ -297,7 +297,7 @@
     RLMResults *favorites = [MovieID allObjects];
     
     for (MovieID *realmMovieID in favorites) {
-        if (realmMovieID.movieID == movieID) {
+        if (realmMovieID.value == movieID) {
             return YES;
         }
     }

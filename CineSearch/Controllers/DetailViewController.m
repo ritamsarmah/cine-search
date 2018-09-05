@@ -198,7 +198,7 @@
     [super viewDidLoad];
     
     self.manager = [MovieSearchManager sharedManager];
-    self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:@"movieID" ascending:YES];
+    self.array = [[MovieID allObjects] sortedResultsUsingKeyPath:MovieID.primaryKey ascending:YES];
     self.scrollView.delegate = self;
     self.castCollectionView.delegate = self;
     self.castCollectionView.dataSource = self;
@@ -218,7 +218,7 @@
         weakSelf.isFavorite = NO;
         
         for (MovieID *realmMovieID in weakSelf.array) {
-            if (realmMovieID.movieID == [weakSelf.movie.idNumber integerValue]) {
+            if (realmMovieID.value == [weakSelf.movie.idNumber integerValue]) {
                 weakSelf.isFavorite = YES;
             }
         }
@@ -281,7 +281,7 @@
     if ([sender toggleWithAnimation:YES]) {
         // Add to favorites list
         [realm transactionWithBlock:^{
-            [MovieID createInRealm:realm withValue:@{@"movieID": @([self.movie.idNumber integerValue])}];
+            [MovieID createInRealm:realm withValue:@{MovieID.primaryKey: @([self.movie.idNumber integerValue])}];
         }];
     } else {
         // Remove from favorites list
@@ -293,7 +293,7 @@
 }
 
 - (IBAction)openTrailer:(UIButton *)sender {
-    [self.manager.database getTrailerForID:self.movie.idNumber completion:^(NSString *trailer) {
+    [self.manager.database getTrailerForID:[self.movie getMovieID] completion:^(NSString *trailer) {
         if (trailer != nil) {
             //            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", trailer]];
             NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/embed/%@?rel=0", trailer]];

@@ -337,7 +337,7 @@
     RLMResults *favorites = [MovieID allObjects];
     
     for (MovieID *realmMovieID in favorites) {
-        if (realmMovieID.movieID == movieID) {
+        if (realmMovieID.value == movieID) {
             return YES;
         }
     }

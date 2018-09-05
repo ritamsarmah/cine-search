@@ -10,9 +10,9 @@
 
 @interface MovieID : RLMObject
 
-@property (nonatomic) NSInteger movieID;
+@property (nonatomic) NSInteger value;
 
-- (instancetype)initWithID:(NSInteger)movieID;
+- (instancetype)initWithInteger:(NSInteger)movieID;
 
 
 @end

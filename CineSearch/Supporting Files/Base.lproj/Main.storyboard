@@ -128,7 +128,7 @@
         <!--SearchMaster-->
         <scene sceneID="g2O-cf-xJM">
             <objects>
-                <viewController title="SearchMaster" id="v8E-fm-AUL" customClass="MasterViewController" sceneMemberID="viewController">
+                <viewController title="SearchMaster" id="v8E-fm-AUL" customClass="SearchViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ndb-7P-VQY"/>
                         <viewControllerLayoutGuide type="bottom" id="YNZ-0E-jDN"/>
