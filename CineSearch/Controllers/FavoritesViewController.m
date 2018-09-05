@@ -87,13 +87,13 @@ static NSString * const kTableName = @"table";
     if (self.array.count != 0) {
         for (MovieID *movieID in self.array) {
             if (!self.moviesForID[@(movieID.movieID)]) {
-                [self.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
+                [self.manager.database getMovieForID:movieID completion:^(Movie *movie) {
                     [self.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (self.array.count == self.moviesForID.count) {
                             [self.activityIndicator stopAnimating];
                             self.finishedDownloadingMovies = YES;
-                            [self.tableView reloadData];
+                            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
                         }
                     });
                 }];
@@ -122,7 +122,7 @@ static NSString * const kTableName = @"table";
         // Download newly favorited movies if needed
         for (MovieID *movieID in results) {
             if ([weakSelf.moviesForID objectForKey:@(movieID.movieID)] == nil) {
-                [weakSelf.manager.database getMovieForID:movieID.movieID completion:^(Movie *movie) {
+                [weakSelf.manager.database getMovieForID:movieID completion:^(Movie *movie) {
                     [weakSelf.moviesForID setObject:movie forKey:@([movie.idNumber integerValue])];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [tableView reloadData];

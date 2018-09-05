@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MovieID.h"
 
 @interface Movie : NSObject
 
@@ -32,5 +33,6 @@
                   backdropURL:(NSString*)backdropURL
                      idNumber:(NSNumber*)idNumber;
 
+- (MovieID *)getMovieID;
 
 @end

@@ -127,7 +127,7 @@
     // Set up cast collection view
     self.castCollectionView.backgroundColor = [UIColor clearColor];
     
-    [self.manager.database getCastForID:self.movie.idNumber.integerValue completion:^(NSArray *cast) {
+    [self.manager.database getCastForID:[self.movie getMovieID] completion:^(NSArray *cast) {
         int actorCount = (int)MIN(6, cast.count);
         self.castImageDict = [[NSMutableDictionary alloc] init];
         self.castArray = [cast subarrayWithRange:NSMakeRange(0, actorCount)];
@@ -233,6 +233,7 @@
     shared.isRotationEnabled = NO;
     [[UIDevice currentDevice] setValue:@(UIInterfaceOrientationPortrait) forKey:@"orientation"];
     [UINavigationController attemptRotationToDeviceOrientation];
+    
     [self.favoriteButton setFavorite:self.isFavorite animated:NO];
 }
 

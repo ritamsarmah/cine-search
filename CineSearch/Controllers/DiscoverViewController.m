@@ -182,7 +182,7 @@
         
         // Populate recommendedMovies array
         dispatch_group_enter(movieCollectionGroup);
-        [self.manager.database getRecommendedForID:randomID.movieID completion:^(NSMutableArray *movies) {
+        [self.manager.database getRecommendedForID:randomID completion:^(NSMutableArray *movies) {
             if (movies.count != 0) {
                 self.recommendedMovies = movies;
             }
@@ -300,7 +300,7 @@
                                                     userInfo:nil
                                                      repeats:NO];
     [UIApplication.sharedApplication beginIgnoringInteractionEvents];
-    [self.manager.database getMovieForID:selectedMovie.idNumber.integerValue completion:^(Movie *movie) {
+    [self.manager.database getMovieForID:[selectedMovie getMovieID] completion:^(Movie *movie) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
             [self.activityIndicator stopAnimating];
@@ -458,7 +458,7 @@
                                                     userInfo:nil
                                                      repeats:NO];
     [UIApplication.sharedApplication beginIgnoringInteractionEvents];
-    [self.manager.database getMovieForID:cell.movie.idNumber.integerValue completion:^(Movie *movie) {
+    [self.manager.database getMovieForID:[cell.movie getMovieID] completion:^(Movie *movie) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
             [self.activityIndicator stopAnimating];

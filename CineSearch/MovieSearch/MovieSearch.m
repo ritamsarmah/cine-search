@@ -193,7 +193,8 @@
 # pragma mark Data Requests for MovieID
 
 /* Returns movie data for ID */
-- (void)getMovieForID:(NSInteger)idNumber completion:(void (^)(Movie *))completion {
+- (void)getMovieForID:(MovieID *)movieID completion:(void (^)(Movie *))completion {
+    NSInteger idNumber = movieID.movieID;
     NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%lu?api_key=%@&append_to_response=release_dates", idNumber, key];
     
     [[NSURLSession.sharedSession dataTaskWithRequest:[self getRequestWithStringURL:stringURL]
@@ -217,8 +218,9 @@
 }
 
 /* Returns trailer video for ID */
-- (void)getTrailerForID:(NSNumber *)idNumber completion:(void (^)(NSString *))completion {
-    NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%@/videos?api_key=%@", idNumber, key];
+- (void)getTrailerForID:(MovieID *)movieID completion:(void (^)(NSString *))completion {
+    NSInteger idNumber = movieID.movieID;
+    NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%lu/videos?api_key=%@", idNumber, key];
 
     [[NSURLSession.sharedSession dataTaskWithRequest:[self getRequestWithStringURL:stringURL]
                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -242,7 +244,8 @@
     }] resume];
 }
 
-- (void)getCastForID:(NSInteger)idNumber completion:(void (^)(NSArray *))completion {
+- (void)getCastForID:(MovieID *)movieID completion:(void (^)(NSArray *))completion {
+    NSInteger idNumber = movieID.movieID;
     NSString *stringURL = [NSString stringWithFormat:@"http://api.themoviedb.org/3/movie/%lu/credits?api_key=%@", idNumber, key];
     
     [[NSURLSession.sharedSession dataTaskWithRequest:[self getRequestWithStringURL:stringURL]
@@ -272,7 +275,8 @@
 }
 
 /* Returns array of movie IDs similar to input movie ID */
--(void)getRecommendedForID:(NSInteger)idNumber completion:(void (^)(NSMutableArray *))completion {
+-(void)getRecommendedForID:(MovieID *)movieID completion:(void (^)(NSMutableArray *))completion {
+    NSInteger idNumber = movieID.movieID;
     NSString *stringURL = [NSString stringWithFormat:@"https://api.themoviedb.org/3/movie/%ld/similar?api_key=%@", idNumber, key];
     
     [[NSURLSession.sharedSession dataTaskWithRequest:[self getRequestWithStringURL:stringURL]

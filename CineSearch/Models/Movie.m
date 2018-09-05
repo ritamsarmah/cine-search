@@ -29,4 +29,8 @@
     return self;
 }
 
+- (MovieID *)getMovieID {
+    return [[MovieID alloc] initWithID:self.idNumber.integerValue];
+}
+
 @end

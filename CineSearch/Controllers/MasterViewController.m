@@ -284,7 +284,7 @@
                                                     selector:@selector(startAnimating)
                                                     userInfo:nil
                                                      repeats:NO];
-    [self.manager.database getMovieForID:cell.movieID.movieID completion:^(Movie *movie) {
+    [self.manager.database getMovieForID:cell.movieID completion:^(Movie *movie) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [timer invalidate];
             [self.activityIndicator stopAnimating];

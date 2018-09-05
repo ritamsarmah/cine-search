@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MovieID.h"
 #import "Movie.h"
 #import "Actor.h"
 
@@ -15,14 +16,12 @@
 @property NSDictionary *genres;
 
 - (void)getMoviesForQuery:(NSString*)query completion:(void (^)(NSMutableArray*))completion;
-
 - (void)getNowPlaying:(void (^)(NSMutableArray *))completion;
 - (void)getPopular:(void (^)(NSMutableArray *))completion;
 
-// TODO: Refactor to receive MovieID
-- (void)getMovieForID:(NSInteger)idNumber completion:(void (^)(Movie *))completion;
-- (void)getTrailerForID:(NSNumber *)idNumber completion:(void (^)(NSString *))completion;
-- (void)getCastForID:(NSInteger)idNumber completion:(void (^)(NSArray *))completion;
-- (void)getRecommendedForID:(NSInteger)idNumber completion:(void (^)(NSMutableArray *))completion;
+- (void)getMovieForID:(MovieID *)movieID completion:(void (^)(Movie *))completion;
+- (void)getTrailerForID:(MovieID *)movieID completion:(void (^)(NSString *))completion;
+- (void)getCastForID:(MovieID *)movieID completion:(void (^)(NSArray *))completion;
+- (void)getRecommendedForID:(MovieID *)movieID completion:(void (^)(NSMutableArray *))completion;
 
 @end
