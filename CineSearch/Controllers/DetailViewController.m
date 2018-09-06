@@ -63,6 +63,10 @@
     // Download poster image from URL
     [self.posterLoadingIndicator startAnimating];
     NSURL *posterURL = [[NSURL alloc] initWithString:self.movie.posterURL];
+    self.posterImageView.layer.shadowRadius = 5;
+    self.posterImageView.layer.shadowColor = UIColor.blackColor.CGColor;
+    self.posterImageView.layer.shadowOffset = CGSizeMake(0, 4);
+    self.posterImageView.layer.shadowOpacity = 0.4;
     
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager loadImageWithURL:posterURL options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
@@ -265,9 +269,9 @@
 
 #pragma mark - Managing the detail item
 
-- (void)setMovie:(Movie *)newMovie {
-    if (_movie != newMovie) {
-        _movie = newMovie;
+- (void)setMovie:(Movie *)movie {
+    if (_movie.idNumber != movie.idNumber) {
+        _movie = movie;
     }
 }
 
@@ -295,7 +299,6 @@
 - (IBAction)openTrailer:(UIButton *)sender {
     [self.manager.database getTrailerForID:[self.movie getMovieID] completion:^(NSString *trailer) {
         if (trailer != nil) {
-            //            NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", trailer]];
             NSURL *webTrailer = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/embed/%@?rel=0", trailer]];
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -361,30 +364,26 @@
     
     CastCollectionViewCell *cell = (CastCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    Actor *actor = self.castArray[indexPath.row];
+    
+    cell.nameLabel.text = actor.name;
+    cell.roleLabel.text = actor.role;
     cell.profileImageView.image = [UIImage imageNamed:@"BlankActor"];
-    cell.nameLabel.text = @"";
-    cell.roleLabel.text = @"";
     cell.profileImageView.contentMode = UIViewContentModeScaleAspectFill;
     cell.profileImageView.layer.cornerRadius = 6;
     cell.profileImageView.layer.masksToBounds = YES;
     
-    if (self.castArray.count != 0) {
-        Actor *actor = self.castArray[indexPath.row];
-        cell.nameLabel.text = actor.name;
-        cell.roleLabel.text = actor.role;
-        
-        NSString *key = [NSString stringWithFormat:@"%lu", indexPath.row];
-        if (self.castImageDict[key] != nil) {
-            if (self.castImagesFromWeb) {
-                [UIView transitionWithView:cell.profileImageView
-                                  duration:0.2
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{
-                                    cell.profileImageView.image = self.castImageDict[key];
-                                } completion:nil];
-            } else {
-                cell.profileImageView.image = self.castImageDict[key];
-            }
+    NSString *key = [NSString stringWithFormat:@"%lu", indexPath.row];
+    if (self.castImageDict[key] != nil) {
+        if (self.castImagesFromWeb) {
+            [UIView transitionWithView:cell.profileImageView
+                              duration:0.2
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{
+                                cell.profileImageView.image = self.castImageDict[key];
+                            } completion:nil];
+        } else {
+            cell.profileImageView.image = self.castImageDict[key];
         }
     }
     
