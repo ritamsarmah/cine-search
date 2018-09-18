@@ -32,7 +32,7 @@
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
     
-    if (self.enteredSegue && self.navigationController.isNavigationBarHidden) {
+    if (enteredSegue && self.navigationController.isNavigationBarHidden) {
         [self.navigationController setNavigationBarHidden:NO animated:YES];
     } else {
         [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -52,8 +52,8 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (self.enteredSegue) {
-        self.enteredSegue = NO;
+    if (enteredSegue) {
+        enteredSegue = NO;
     }
 }
 
@@ -71,7 +71,7 @@
     self.bannerMovies = [NSMutableArray arrayWithCapacity:4];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.extendedLayoutIncludesOpaqueBars = YES;
-    self.enteredSegue = NO;
+    enteredSegue = NO;
     
     BoxActivityIndicatorView *activityIndicator = [[BoxActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 70, 70)];
     activityIndicator.disablesInteraction = NO;
@@ -97,9 +97,9 @@
      */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     
-    self.internetReachability = [Reachability reachabilityForInternetConnection];
-    [self.internetReachability startNotifier];
-    [self updateInterfaceWithReachability:self.internetReachability];
+    internetReachability = [Reachability reachabilityForInternetConnection];
+    [internetReachability startNotifier];
+    [self updateInterfaceWithReachability:internetReachability];
 }
 
 - (void)dealloc {
@@ -118,7 +118,7 @@
 
 
 - (void)updateInterfaceWithReachability:(Reachability *)reachability {
-    if (reachability == self.internetReachability) {
+    if (reachability == internetReachability) {
         [self configureInterfaceWithReachability:reachability];
     }
 }
@@ -136,7 +136,7 @@
         }
         case ReachableViaWWAN:
         case ReachableViaWiFi: {
-            switch (self.lastStatus) {
+            switch (lastStatus) {
                 case ReachableViaWWAN:
                 case ReachableViaWiFi:
                 break;
@@ -149,7 +149,7 @@
             }
         }
     }
-    self.lastStatus = netStatus;
+    lastStatus = netStatus;
 }
 
 #pragma mark - UI/Movie methods
@@ -287,8 +287,8 @@
         }
     }
     
-    self.moviesArray = [NSArray arrayWithArray:mutableArray];
-    self.contentOffsetDictionary = [NSMutableDictionary dictionary];
+    moviesArray = [NSArray arrayWithArray:mutableArray];
+    contentOffsetDictionary = [NSMutableDictionary dictionary];
     [self.movieTableView reloadData];
 }
 
@@ -310,7 +310,7 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    self.enteredSegue = YES;
+    enteredSegue = YES;
     [carouselTimer invalidate];
     Movie *movie = (Movie *)sender;
     DetailViewController *controller = segue.destinationViewController;
@@ -326,7 +326,7 @@
         
         AFIndexedCollectionView *collectionView = (AFIndexedCollectionView *)scrollView;
         NSInteger index = collectionView.section;
-        self.contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
+        contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
         
     } else if ([scrollView isKindOfClass:[UITableView class]]) {
         return;
@@ -347,7 +347,7 @@
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self.moviesArray count];
+    return moviesArray.count;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -401,7 +401,7 @@
     [cell setCollectionViewDataSourceDelegate:self section:indexPath.section];
     NSInteger index = cell.collectionView.section;
     
-    CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
+    CGFloat horizontalOffset = [contentOffsetDictionary[[@(index) stringValue]] floatValue];
     [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
     [cell.collectionView registerClass:[AFCollectionViewCell class] forCellWithReuseIdentifier:@"CollectionViewCellIdentifier"];
 }
@@ -421,7 +421,7 @@
     imageView.clipsToBounds = YES;
     imageView.contentScaleFactor = UIViewContentModeScaleAspectFit;
     
-    NSArray *collectionViewArray = self.moviesArray[[(AFIndexedCollectionView *)collectionView section]];
+    NSArray *collectionViewArray = moviesArray[[(AFIndexedCollectionView *)collectionView section]];
     Movie *movie = collectionViewArray[indexPath.item];
     NSURL *posterURL = [NSURL URLWithString:movie.posterURL];
     

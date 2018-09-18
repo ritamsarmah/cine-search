@@ -17,15 +17,23 @@
 
 @interface DiscoverViewController : UIViewController <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate, SwipeViewDelegate, SwipeViewDataSource> {
     NSTimer *carouselTimer;
+    BOOL enteredSegue;
+    
+    NetworkStatus lastStatus;
+    Reachability *internetReachability;
+    
+    NSArray *moviesArray;
+    NSMutableDictionary *contentOffsetDictionary;
 }
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 
 @property (weak, nonatomic) IBOutlet SwipeView *movieCarousel;
-@property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;
-@property (weak, nonatomic) UILabel *bannerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *connectionLabel;
 @property (weak, nonatomic) IBOutlet UITableView *movieTableView;
+
+@property (weak, nonatomic) BoxActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) UILabel *bannerLabel;
 
 @property MovieSearchManager *manager;
 @property NSMutableArray *nowPlayingMovies;
@@ -34,12 +42,7 @@
 @property NSMutableArray *bannerMovies; // Movies for banner images
 @property NSMutableArray *bannerImages; // Movies for banner images
 
-@property NSArray *moviesArray;
-@property NSMutableDictionary *contentOffsetDictionary;
-@property (nonatomic) Reachability *internetReachability;
 
-@property BOOL enteredSegue;
-@property NetworkStatus lastStatus;
 
 - (void)setupImageSlideshow;
 - (void)openBannerMovie:(NSInteger)index;
