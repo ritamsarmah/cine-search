@@ -17,12 +17,12 @@
                         <viewControllerLayoutGuide type="top" id="20W-sl-TMF"/>
                         <viewControllerLayoutGuide type="bottom" id="NoB-KM-baT"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" misplaced="YES" id="JG8-Np-ScS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="551"/>
+                    <view key="view" contentMode="scaleToFill" id="JG8-Np-ScS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="571"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="3Kr-AT-HEo">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="522"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="502"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="byu-76-57T" customClass="SwipeView">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
@@ -70,7 +70,7 @@
             <objects>
                 <navigationController title="Master" id="RMx-3f-FxP" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translucent="NO" id="Pmd-2v-anx">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.15294117647058825" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -294,7 +294,7 @@
                     <tabBarItem key="tabBarItem" title="Discover" image="Discover" id="yo3-Rh-x9U"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" largeTitles="YES" id="o1r-DR-F0D">
-                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.15294117647058825" green="0.16470588235294117" blue="0.1803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -355,7 +355,7 @@
             <objects>
                 <tableViewController title="SearchMaster" id="1aw-Ol-giI" customClass="FavoritesViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="black" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" rowHeight="116" sectionHeaderHeight="22" sectionFooterHeight="22" id="DED-uv-W0V">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="551"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="571"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.1015415117" green="0.11338534209999999" blue="0.1341718435" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="separatorColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
